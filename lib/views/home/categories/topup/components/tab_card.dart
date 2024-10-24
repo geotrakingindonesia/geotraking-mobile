@@ -76,8 +76,10 @@ class TabCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  namaPaket,
-                  style: TextStyle(
+                  namaPaket.length > 23
+                      ? '${namaPaket.substring(0, 23)}...'
+                      : namaPaket,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,

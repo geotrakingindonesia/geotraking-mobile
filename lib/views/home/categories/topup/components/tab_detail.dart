@@ -27,7 +27,7 @@ class TabDetail extends StatelessWidget {
       case 3:
         return 'Thuraya';
       default:
-        return 'Unknown';
+        return '-';
     }
   }
 
@@ -38,7 +38,7 @@ class TabDetail extends StatelessWidget {
       case 2:
         return 'Broadband Marine';
       default:
-        return 'Unknown';
+        return '-';
     }
   }
 
@@ -49,7 +49,7 @@ class TabDetail extends StatelessWidget {
       case 2:
         return 'Internet berkecepatan tinggi dan andal untuk bisnis maritim anda. Kuota Mobile Tanpa Batas di perairan di benua.\n\nFITUR UTAMA\n- Kuota Benua Tanpa Batas\n- ⁠Penggunaan Bepergian + di Laut\n- ⁠Prioritas Jaringan\n- ⁠Dukungan Prioritas\n\nHarga diatas belum termasuk PPN 11%\n\nGEOMATIKA SATELIT INDONESIA juga menyediakan :\n•⁠  ⁠Tracking Kapal (VMS - Vessel Monitoring System)\n•⁠  ⁠⁠RPM Sensor + Traking\n•⁠  ⁠⁠Fuel Monitoring\n•⁠  ⁠⁠Satellite Phone\n•⁠  ⁠⁠AIS Station\n•⁠  ⁠⁠AIS Class B\n•  Internet Maritim';
       default:
-        return 'Unknown';
+        return '-';
     }
   }
 

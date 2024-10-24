@@ -97,60 +97,6 @@ class _ProfileTrackingOneGeosatPageState
             ),
         leading: const AppBackButton(),
       ),
-      // body: Stack(
-      //   children: [
-      //     FlutterMap(
-      //       mapController: mapController,
-      //       options: MapOptions(
-      //         initialCenter: LatLng(widget.lat, widget.lon),
-      //         initialZoom: 10,
-      //         interactionOptions: const InteractionOptions(
-      //           flags: InteractiveFlag.pinchZoom |
-      //               InteractiveFlag.drag |
-      //               InteractiveFlag.doubleTapZoom,
-      //         ),
-      //         // interactiveFlags: InteractiveFlag.pinchZoom |
-      //         //     InteractiveFlag.drag |
-      //         //     InteractiveFlag.doubleTapZoom,
-      //       ),
-      //       children: [
-      //         TileLayer(
-      //           urlTemplate: MapConfig.getUrlTemplate(_selectedMapProvider),
-      //           userAgentPackageName: 'com.example.app',
-      //         ),
-      //         MarkerLayer(markers: [
-      //           Marker(
-      //             point: LatLng(widget.lat, widget.lon),
-      //             width: 30,
-      //             height: 30,
-      //             child: _getMarkerImage(widget.timestamp),
-      //           ),
-      //         ]),
-      //         PolylineLayer(
-      //           polylines: [
-      //             Polyline(
-      //               points: _polylinePointsTraking,
-      //               color: Colors.blue,
-      //               strokeWidth: 2,
-      //             ),
-      //           ],
-      //         ),
-      //         MarkerLayer(
-      //           markers: _markersTraking,
-      //         ),
-      //       ],
-      //     ),
-      //     MapTool(
-      //       mapController: mapController,
-      //       selectedMapProvider: _selectedMapProvider,
-      //       onMapProviderChanged: (value) {
-      //         setState(() {
-      //           _selectedMapProvider = value;
-      //         });
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: Column(
         children: [
           Expanded(
