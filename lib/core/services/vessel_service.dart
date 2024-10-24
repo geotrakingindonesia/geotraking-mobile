@@ -1,0 +1,623 @@
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+
+// import 'package:geotraking/core/models/kapal_member.dart';
+import 'package:geotraking/core/models/member.dart';
+import 'package:geotraking/core/services/auth/authenticate_service.dart';
+import 'package:geotraking/core/services/connection/connection.dart';
+import 'package:intl/intl.dart';
+import 'package:mysql1/mysql1.dart';
+
+class VesselService {
+  AuthService _authService = AuthService();
+  // fungsi get data kapal(vessel) member
+  Future<List<Map<String, dynamic>>?> getDataKapal() async {
+    MemberUser? currentUser = await _authService.getCurrentUser();
+    int memberId = currentUser?.id ?? 0;
+
+    print('Current User ID: $memberId');
+
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+    var results = await conn.query('''
+    SELECT 
+      akm.id AS id,
+      akm.member_id AS member_id,
+      akm.mobile_id AS mobile_id,
+      akm.create_at AS create_at,
+      am.id AS mobileId,
+      am.idfull AS idfull,
+      am.name AS nama_kapal,
+      CASE WHEN am.lat = '' THEN 0 ELSE am.lat END AS lat,
+      CASE WHEN am.lon = '' THEN 0 ELSE am.lon END AS lon,
+      COALESCE(am.timestamp, '0000-00-00 00:00:00') AS timestamp,
+      COALESCE(am.msgTimestamp_GMT, am.timestamp, '0000-00-00 00:00:00') AS broadcast,
+      COALESCE(am.atp_start, '0000-00-00 00:00:00') AS atp_start,
+			COALESCE(am.atp_end, '0000-00-00 00:00:00') AS atp_end,
+      CASE WHEN am.heading IS NULL THEN 0.0 ELSE am.heading END AS heading,
+      CASE WHEN am.speed IS NULL THEN 0.0 ELSE am.speed END AS speed,
+      CASE WHEN am.rpm1 IS NULL THEN 0 ELSE am.rpm1 END AS rpm1,
+      CASE WHEN am.rpm2 IS NULL THEN 0 ELSE am.rpm2 END AS rpm2,
+      COALESCE(speed * 3.6, 0) AS speed_kmh,
+      COALESCE(speed * 1.9438, 0) AS speed_kn,
+      am.sn AS sn,
+      am.imei AS imei,
+      am.powerstatus AS powerstatus,
+      CASE 
+        WHEN am.externalvoltage IS NULL THEN 0 
+        ELSE am.externalvoltage
+      END AS externalvoltage,
+      mc.name AS kategori,
+      mt.name AS type,
+      c.customer_name AS custamer
+    FROM 
+      ai_kapal_member AS akm
+      LEFT JOIN ai_mobile AS am ON am.id = akm.mobile_id
+      LEFT JOIN ai_mobile_category AS mc ON mc.id = am.category_id
+      LEFT JOIN ai_mobile_type AS mt ON mt.id = am.type_id
+      LEFT JOIN ai_customer_data AS c ON c.id = am.customer
+    WHERE 
+      akm.member_id =?
+      ORDER BY 
+      am.timestamp DESC
+    ''', [memberId]);
+
+    print('search result: $results');
+
+    List<Map<String, dynamic>> kapalMemberList = [];
+
+    for (var row in results) {
+      kapalMemberList.add({
+        'id': row['id'],
+        'member_id': row['member_id'],
+        'idfull': row['idfull'],
+        'nama_kapal': row['nama_kapal'],
+        'lat': row['lat'],
+        'lon': row['lon'],
+        'kategori': row['kategori'],
+        'type': row['type'],
+        'custamer': row['custamer'],
+        'mobile_id': row['mobile_id'],
+        'sn': row['sn'],
+        'imei': row['imei'],
+        'externalvoltage': row['externalvoltage'],
+        'powerstatus': row['powerstatus'],
+        'heading': row['heading'],
+        'speed': row['speed'],
+        'speed_kmh': row['speed_kmh'],
+        'speed_kn': row['speed_kn'],
+        'rpm1': row['rpm1'],
+        'rpm2': row['rpm2'],
+        'create_at': row['create_at'],
+        'broadcast': row['broadcast'],
+        'timestamp': row['timestamp'],
+        'atp_start': row['atp_start'],
+        'atp_end': row['atp_end'],
+      });
+    }
+
+    await conn.close();
+
+    return kapalMemberList;
+  }
+
+  // fungsi get data kapal(vessel) admin(geosat)
+  Future<List<Map<String, dynamic>>?> getDataKapalGeosat() async {
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+    var results = await conn.query('''
+      SELECT 
+        m.id, 
+        m.idfull, 
+        m.sn, 
+        m.imei, 
+        m.name AS nama_kapal, 
+        mc.name AS kategori, 
+        mt.name AS type, 
+        c.customer_name AS custamer,
+        COALESCE(m.timestamp, '0000-00-00 00:00:00') AS tgl_aktifasi,
+        COALESCE(m.msgTimestamp_GMT, m.timestamp, '0000-00-00 00:00:00') AS broadcast,
+        COALESCE(m.atp_start, '0000-00-00 00:00:00') AS atp_start,
+        COALESCE(m.atp_end, '0000-00-00 00:00:00') AS atp_end,
+        CASE 
+          WHEN m.lat IS NULL OR m.lat = '' OR m.lat = 'None' THEN 0 
+          ELSE m.lat 
+        END AS lat,
+        CASE 
+          WHEN m.lon IS NULL OR m.lon = '' OR m.lon = 'None' THEN 0 
+          ELSE m.lon 
+        END AS lon,
+				COALESCE(m.heading, 0) AS heading,
+				COALESCE(m.speed, 0) AS speed, 
+        COALESCE(speed * 3.6, 0) AS speed_kmh,
+        COALESCE(speed * 1.9438, 0) AS speed_kn,  
+        CASE WHEN m.rpm1 IS NULL THEN 0 ELSE m.rpm1 END AS rpm1,
+        CASE WHEN m.rpm2 IS NULL THEN 0 ELSE m.rpm2 END AS rpm2,
+        m.powerstatus, 
+				COALESCE(m.externalvoltage, 0) AS externalvoltage
+      FROM 
+        ai_mobile m
+        LEFT JOIN ai_mobile_category mc ON m.category_id = mc.id
+        LEFT JOIN ai_mobile_type mt ON m.type_id = mt.id
+        LEFT JOIN ai_customer_data c ON m.customer = c.id
+      WHERE 
+        m.type_id IN (1, 2, 4, 5, 15)
+      ORDER BY 
+        tgl_aktifasi DESC
+    ''');
+
+    List<Map<String, dynamic>> dataKapalGeosatList = [];
+
+    if (results.isNotEmpty) {
+      for (var row in results) {
+        dataKapalGeosatList.add({
+          'id': row['id'],
+          'idfull': row['idfull'],
+          'sn': row['sn'],
+          'imei': row['imei'],
+          'nama_kapal': row['nama_kapal'],
+          'kategori': row['kategori'],
+          'type': row['type'],
+          'custamer': row['custamer'],
+          'tgl_aktifasi': row['tgl_aktifasi'],
+          'broadcast': row['broadcast'],
+          'lat': row['lat'],
+          'lon': row['lon'],
+          'speed': row['speed'],
+          'speed_kmh': row['speed_kmh'],
+          'speed_kn': row['speed_kn'],
+          'heading': row['heading'],
+          'rpm1': row['rpm1'],
+          'rpm2': row['rpm2'],
+          'powerstatus': row['powerstatus'],
+          'externalvoltage': row['externalvoltage'],
+          'atp_start': row['atp_start'],
+          'atp_end': row['atp_end'],
+        });
+      }
+    }
+
+    await conn.close();
+
+    return dataKapalGeosatList;
+  }
+
+  // fungsi get data kapal(vessel) admin(apn)
+  Future<List<Map<String, dynamic>>?> getDataKapalAPN() async {
+    var settings = Connection.getSettingsAPN();
+    var conn = await MySqlConnection.connect(settings);
+    var results = await conn.query('''
+      SELECT 
+        ai_mobile_ais.id AS mobile_id,
+        ai_mobile_category.name AS category_name,
+        ai_mobile_type.name AS type_name,
+        ai_mobile_ais.sn AS sn,
+        ai_mobile_ais.imei AS imei,
+        ai_customer_data.customer_name AS legal_name,
+        ai_customer_data.phone AS telephone_pemilik,
+        ai_mobile_ais.name AS vessel_name,
+        ai_mobile_ais.description AS description,
+        ai_mobile_ais.status AS status,
+        ai_mobile_ais.timestamp AS timestamp,
+        ai_mobile_ais.lat AS latitude,
+        ai_mobile_ais.lon AS longitude,
+        ai_mobile_ais.speed AS speed,
+        ai_mobile_ais.heading AS heading,
+        ai_mobile_ais.modemstatus AS modemstatus,
+        ai_mobile_ais.emergency AS emergency,
+        ai_mobile_ais.powerstatus AS powerstatus,
+        ai_mobile_ais.externalvoltage AS externalvoltage,
+        ai_mobile_ais.batteryhours AS battery_voltage,
+        ai_mobile_ais.atp_start AS airtime_start_date,
+        ai_mobile_ais.atp_end AS airtime_end_date,
+        ai_mobile_ais.atp_notify AS atp_notify,
+        ai_mobile_ais.regBy AS regBy,
+        ai_mobile_ais.regDate AS register_date,
+        ai_mobile_ais.isSold AS isSold,
+        ai_mobile_ais.isSabotage AS isSabotage,
+        ai_mobile_ais.isKKP AS isKKP,
+        ai_mobile_ais.broken AS broken,
+        ai_mobile_ais.foto AS foto,
+        ai_mobile_ais.isCharging AS isCharging,
+        ai_mobile_ais.idfull AS idfull,
+        ai_mobile_ais.destination AS destination,
+        ai_mobile_ais.eta AS eta,
+        ai_ais_ship_type.type AS ship_type,
+        ai_flag.country_name AS flag_country_name,
+        SUBSTRING(ai_mobile_ais.distance, 1, 4) AS distance
+      FROM 
+        ai_mobile_ais
+      LEFT JOIN 
+        ai_mobile_category ON ai_mobile_category.id = ai_mobile_ais.category_id
+      LEFT JOIN 
+        ai_mobile_type ON ai_mobile_type.id = ai_mobile_ais.type_id
+      LEFT JOIN 
+        ai_customer_data ON ai_customer_data.id = ai_mobile_ais.customer
+      LEFT JOIN 
+        ai_ais_ship_type ON ai_ais_ship_type.id = ai_mobile_ais.ship_type
+      LEFT JOIN 
+        ai_flag ON SUBSTR(ai_mobile_ais.id, 1, 3) = ai_flag.mid
+      WHERE 
+        ai_mobile_ais.timestamp >= DATE_SUB(NOW(), INTERVAL 1 WEEK) AND 
+        ai_mobile_ais.type_id IN (13, 14, 15, 16)
+      ORDER BY 
+        ai_mobile_ais.timestamp DESC;
+    ''');
+
+    List<Map<String, dynamic>> dataKapalAPNList = [];
+
+    if (results.isNotEmpty) {
+      for (var row in results) {
+        dataKapalAPNList.add({
+          'mobile_id': row['mobile_id'],
+          'category_name': row['category_name'],
+          'type_name': row['type_name'],
+          'sn': row['sn'],
+          'imei': row['imei'],
+          'legal_name': row['legal_name'],
+          'telephone_pemilik': row['telephone_pemilik'],
+          'vessel_name': row['vessel_name'],
+          'description': row['description'],
+          'status': row['status'],
+          'timestamp': row['timestamp'],
+          'latitude': row['latitude'],
+          'longitude': row['longitude'],
+          'speed': row['speed'],
+          'heading': row['heading'],
+          'modemstatus': row['modemstatus'],
+          'emergency': row['emergency'],
+          'powerstatus': row['powerstatus'],
+          'externalvoltage': row['externalvoltage'],
+          'battery_voltage': row['battery_voltage'],
+          'airtime_start_date': row['airtime_start_date'],
+          'airtime_end_date': row['airtime_end_date'],
+          'atp_notify': row['atp_notify'],
+          'regBy': row['regBy'],
+          'register_date': row['register_date'],
+          'isSold': row['isSold'],
+          'isSabotage': row['isSabotage'],
+          'isKKP': row['isKKP'],
+          'broken': row['broken'],
+          'foto': row['foto'],
+          'isCharging': row['isCharging'],
+          'idfull': row['idfull'],
+          'destination': row['destination'],
+          'eta': row['eta'],
+          'ship_type': row['ship_type'],
+          'flag_country_name': row['flag_country_name'],
+          'distance': row['distance'],
+        });
+      }
+    }
+
+    await conn.close();
+
+    return dataKapalAPNList;
+  }
+
+  // fungsi get list data airtime kapal(vessel)
+  Future<List<Map<String, dynamic>>?> getAirtimeKapal(String idfull) async {
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+    var results = await conn.query('''
+    SELECT 
+      atd.id AS id,
+      atd.airtimestart AS airtime_start,
+      atd.airtimeend AS airtime_end
+    FROM 
+      ai_trans_detail AS atd
+      LEFT JOIN ai_mobile AS am ON am.idfull = atd.deviceid
+    WHERE 
+      atd.deviceid =?
+    ORDER BY atd.airtimestart DESC
+    ''', [idfull]);
+
+    List<Map<String, dynamic>> dataAirtimeKapal = [];
+
+    if (results.isNotEmpty) {
+      for (var row in results) {
+        dataAirtimeKapal.add({
+          'id': row['id'] ?? '',
+          'airtime_start': row['airtime_start'] ?? '',
+          'airtime_end': row['airtime_end'] ?? '',
+        });
+      }
+    }
+
+    await conn.close();
+
+    return dataAirtimeKapal;
+  }
+
+  // fungsi get list data history traking kapal(vessel)
+  Future<List<Map<String, dynamic>>?> getHistoryTrakingKapal(
+      String mobileId, int limit, DateTime? fromDate) async {
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+
+    String query = '';
+    List<dynamic> params = [mobileId];
+
+    if (fromDate != null) {
+      query = '''
+      SELECT
+        varTimestamp AS timestamp,
+        msgTimestamp_GMT AS broadcast,
+        Latitude AS latitude,
+        Longitude AS longitude,
+        Speed AS speed,
+        (Speed * 3.6) AS speed_kmh,
+        (Speed * 1.9438) AS speed_kn,
+        Direction AS heading
+      FROM
+        psg_modata
+      WHERE
+        serviceID =?
+        AND varTimestamp IS NOT NULL
+        AND Speed IS NOT NULL
+        AND Direction IS NOT NULL
+        AND varTimestamp >= ?
+      ORDER BY
+        VAR_MOID DESC
+      ''';
+      params.add(fromDate.toIso8601String());
+    } else {
+      query = '''
+      SELECT
+        varTimestamp AS timestamp,
+        msgTimestamp_GMT AS broadcast,
+        Latitude AS latitude,
+        Longitude AS longitude,
+        Speed AS speed,
+        (Speed * 3.6) AS speed_kmh,
+        (Speed * 1.9438) AS speed_kn,
+        Direction AS heading
+      FROM
+        psg_modata
+      WHERE
+        serviceID =?
+        AND varTimestamp IS NOT NULL
+        AND Speed IS NOT NULL
+        AND Direction IS NOT NULL
+      ORDER BY
+        VAR_MOID DESC
+      LIMIT ?
+      ''';
+      params.add(limit);
+    }
+
+    var results = await conn.query(query, params);
+
+    List<Map<String, dynamic>> dataHistoryTrakingKapal = [];
+
+    if (results.isNotEmpty) {
+      for (var row in results) {
+        dataHistoryTrakingKapal.add({
+          'timestamp': row['timestamp'] ?? '',
+          'broadcast': row['broadcast'] ?? '',
+          'latitude': row['latitude'] ?? '',
+          'longitude': row['longitude'] ?? '',
+          'speed': row['speed'] ?? '',
+          'speed_kmh': row['speed_kmh'] ?? '',
+          'speed_kn': row['speed_kn'] ?? '',
+          'heading': row['heading'] ?? '',
+        });
+      }
+    }
+
+    await conn.close();
+
+    return dataHistoryTrakingKapal;
+  }
+
+  // fungsi cari kapal berdasarkan mobile_id
+  Future<Map<String, dynamic>?> searchDataKapal(String mobileId) async {
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+    var results = await conn.query('''
+      SELECT 
+        m.id, 
+        m.idfull, 
+        m.sn, 
+        m.imei, 
+        m.name AS nama_kapal, 
+        mc.name AS kategori, 
+        mt.name AS type, 
+        c.customer_name AS custamer,
+        COALESCE(m.timestamp, '0000-00-00 00:00:00') AS received,
+        COALESCE(m.msgTimestamp_GMT, m.timestamp, '0000-00-00 00:00:00') AS broadcast,
+				COALESCE(NULLIF(m.lat, ''), 0) AS lat,
+				COALESCE(NULLIF(m.lon, ''), 0) AS lon,
+				COALESCE(m.heading, 0) AS heading,
+				COALESCE(m.speed, 0) AS speed, 
+        COALESCE(speed * 3.6, 0) AS speed_kmh,
+        COALESCE(speed * 1.9438, 0) AS speed_kn,
+        m.powerstatus, 
+				COALESCE(m.externalvoltage, 0) AS externalvoltage,
+        m.atp_start, 
+        m.atp_end
+      FROM 
+        ai_mobile m
+        LEFT JOIN ai_mobile_category mc ON m.category_id = mc.id
+        LEFT JOIN ai_mobile_type mt ON m.type_id = mt.id
+        LEFT JOIN ai_customer_data c ON m.customer = c.id
+      WHERE 
+      m.id =?
+    ''', [mobileId]);
+
+    print('result: $results');
+
+    Map<String, dynamic>? dataKapal;
+
+    if (results.isNotEmpty) {
+      var row = results.first;
+
+      dataKapal = {
+        'id': row['id'],
+        'idfull': row['idfull'],
+        'sn': row['sn'],
+        'imei': row['imei'],
+        'nama_kapal': row['nama_kapal'],
+        'kategori': row['kategori'],
+        'type': row['type'],
+        'custamer': row['custamer'],
+        'received': row['received'],
+        'broadcast': row['broadcast'],
+        'lat': row['lat'],
+        'lon': row['lon'],
+        'heading': row['heading'],
+        'speed': row['speed'],
+        'speed_kmh': row['speed_kmh'],
+        'speed_kn': row['speed_kn'],
+        'powerstatus': row['powerstatus'],
+        'externalvoltage': row['externalvoltage'],
+        'atp_start': row['atp_start'],
+        'atp_end': row['atp_end'],
+      };
+    }
+
+    await conn.close();
+
+    return dataKapal;
+  }
+
+  // fungsi hitung jarak tempuh histori traking kapal 
+  Future<List<Map<String, dynamic>>?> getJarakTempuhHistoryTraking(
+      String mobileId, DateTime? startDate, DateTime? endDate) async {
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+
+    DateTime startDateTime = DateTime(
+      startDate!.year,
+      startDate.month,
+      startDate.day,
+      0,
+      0,
+      0,
+    );
+
+    DateTime endDateTime = DateTime(
+      endDate!.year,
+      endDate.month,
+      endDate.day,
+      23,
+      59,
+      59,
+    );
+
+    String formattedStartDate =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(startDateTime);
+    String formattedEndDate =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(endDateTime);
+
+    String query = '''
+    WITH DailyData AS (
+        SELECT 
+            DATE(varTimestamp) AS tgl_aktifasi,
+            Latitude AS latitude,
+            Longitude AS longitude,
+            Speed AS speed,
+            varTimestamp,
+            ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp ASC) AS row_num_first,
+            ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp DESC) AS row_num_last
+        FROM 
+            psg_modata
+        WHERE 
+            serviceID = ?
+            AND varTimestamp BETWEEN ? AND ?
+            AND Speed IS NOT NULL
+    ),
+    FirstData AS (
+        SELECT 
+            tgl_aktifasi,
+            latitude,
+            longitude,
+            varTimestamp AS waktu_awal,
+            row_num_first
+        FROM 
+            DailyData
+        WHERE 
+            row_num_first = 1
+    ),
+    LastData AS (
+        SELECT 
+            tgl_aktifasi,
+            latitude,
+            longitude,
+            varTimestamp AS waktu_akhir, 
+            row_num_last
+        FROM 
+            DailyData
+        WHERE 
+            row_num_last = 1
+    ),
+    DailyAverageSpeed AS (
+        SELECT 
+            tgl_aktifasi,
+            AVG(Speed) AS average_speed,
+            MAX(Speed) AS high_speed,
+            MIN(Speed) AS low_speed
+        FROM 
+            DailyData
+        WHERE 
+            Speed IS NOT NULL
+        GROUP BY 
+            tgl_aktifasi
+    )
+    SELECT 
+        fd.tgl_aktifasi,
+        fd.waktu_awal,
+        ld.waktu_akhir,
+        CONCAT(
+            TIMESTAMPDIFF(HOUR, fd.waktu_awal, ld.waktu_akhir), ' jam ',
+            MOD(TIMESTAMPDIFF(MINUTE, fd.waktu_awal, ld.waktu_akhir), 60), ' menit'
+        ) AS duration,
+        fd.latitude AS start_latitude,
+        fd.longitude AS start_longitude,
+        ld.latitude AS end_latitude,
+        ld.longitude AS end_longitude,
+        ROUND(das.average_speed * 1.9438, 1) AS average_speed_knots,
+        ROUND(das.high_speed * 1.9438, 1) AS high_speed_knots,
+        ROUND(das.low_speed * 1.9438, 1) AS low_speed_knots
+    FROM 
+        FirstData fd
+    JOIN 
+        LastData ld ON fd.tgl_aktifasi = ld.tgl_aktifasi
+    JOIN 
+        DailyAverageSpeed das ON fd.tgl_aktifasi = das.tgl_aktifasi
+    ORDER BY 
+        fd.tgl_aktifasi ASC;
+  ''';
+
+    List<dynamic> params = [
+      mobileId,
+      formattedStartDate,
+      formattedEndDate,
+    ];
+
+    var results = await conn.query(query, params);
+
+    List<Map<String, dynamic>> jarakTempuhHistoryTraking = [];
+
+    if (results.isNotEmpty) {
+      for (var row in results) {
+        jarakTempuhHistoryTraking.add({
+          'tgl_aktifasi': row['tgl_aktifasi'] ?? '',
+          'waktu_awal': row['waktu_awal'] ?? '',
+          'waktu_akhir': row['waktu_akhir'] ?? '',
+          'duration': row['duration'] ?? '',
+          'start_latitude': row['start_latitude'] ?? '',
+          'start_longitude': row['start_longitude'] ?? '',
+          'end_latitude': row['end_latitude'] ?? '',
+          'end_longitude': row['end_longitude'] ?? '',
+          'average_speed_knots': row['average_speed_knots'] ?? '',
+          'high_speed_knots': row['high_speed_knots'] ?? '',
+          'low_speed_knots': row['low_speed_knots'] ?? '',
+        });
+      }
+    }
+
+    await conn.close();
+
+    return jarakTempuhHistoryTraking;
+  }
+}
