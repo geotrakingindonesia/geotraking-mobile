@@ -13,6 +13,7 @@ class _TabFuelState extends State<TabFuel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -47,85 +48,88 @@ class _TabFuelState extends State<TabFuel> {
             ),
             SizedBox(height: 20,),
             
-            Container(
-              margin: EdgeInsets.only(left: 5),
-              child: Text(
-                'Fuel Monitoring Only',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            TabCard(
-              namaPaket: 'Fuel Monitoring',
-              kuota: 'Sensor Competible RPM, Coreolis dan Ovalgear',
-              masaAktif: 'Contact: 081234567890',
-            ),
-            TabCard(
-              namaPaket: 'Fuel Monitoring AI',
-              kuota: 'Laporan analitik menggunakan AI',
-              masaAktif: 'Contact: 081234567890',
-            ),
-            SizedBox(height: 32),
-            Container(
-              margin: EdgeInsets.only(left: 5),
-              child: Text(
-                'Fuel Monitoring With Connection',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            TabCard(
-              namaPaket: '2 Fuel Monitoring',
-              kuota: '2 Fuel Monitoring',
-              masaAktif: '2 Fuel Monitoring',
-            ),
-            TabCard(
-              namaPaket: '4 Fuel Monitoring',
-              kuota: '4 Fuel Monitoring',
-              masaAktif: '4 Fuel Monitoring',
-            ),
-            SizedBox(height: 32),
-            Container(
-              margin: EdgeInsets.only(left: 5),
-              child: Text(
-                'Calculate Fuel Monitoring',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            TabCard(
-              namaPaket: '2 Fuel Monitoring',
-              kuota: '2 Fuel Monitoring',
-              masaAktif: '2 Fuel Monitoring',
-            ),
-            TabCard(
-              namaPaket: '4 Fuel Monitoring',
-              kuota: '4 Fuel Monitoring',
-              masaAktif: '4 Fuel Monitoring',
-            ),
-            SizedBox(height: 32),
-            Container(
-              margin: EdgeInsets.only(left: 5),
-              child: Text(
-                'Fuel Monitoring With Request',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            TabCard(
-              namaPaket: '2 Fuel Monitoring',
-              kuota: '2 Fuel Monitoring',
-              masaAktif: '2 Fuel Monitoring',
-            ),
-            TabCard(
-              namaPaket: '4 Fuel Monitoring',
-              kuota: '4 Fuel Monitoring',
-              masaAktif: '4 Fuel Monitoring',
-            ),
+            Center(
+              child: Text('Coming Soon'),
+            )
+            // Container(
+            //   margin: EdgeInsets.only(left: 5),
+            //   child: Text(
+            //     'Fuel Monitoring Only',
+            //     style: TextStyle(
+            //       fontSize: 16,
+            //     ),
+            //   ),
+            // ),
+            // TabCard(
+            //   namaPaket: 'Fuel Monitoring',
+            //   kuota: 'Sensor Competible RPM, Coreolis dan Ovalgear',
+            //   masaAktif: 'Contact: 081234567890',
+            // ),
+            // TabCard(
+            //   namaPaket: 'Fuel Monitoring AI',
+            //   kuota: 'Laporan analitik menggunakan AI',
+            //   masaAktif: 'Contact: 081234567890',
+            // ),
+            // SizedBox(height: 32),
+            // Container(
+            //   margin: EdgeInsets.only(left: 5),
+            //   child: Text(
+            //     'Fuel Monitoring With Connection',
+            //     style: TextStyle(
+            //       fontSize: 16,
+            //     ),
+            //   ),
+            // ),
+            // TabCard(
+            //   namaPaket: '2 Fuel Monitoring',
+            //   kuota: '2 Fuel Monitoring',
+            //   masaAktif: '2 Fuel Monitoring',
+            // ),
+            // TabCard(
+            //   namaPaket: '4 Fuel Monitoring',
+            //   kuota: '4 Fuel Monitoring',
+            //   masaAktif: '4 Fuel Monitoring',
+            // ),
+            // SizedBox(height: 32),
+            // Container(
+            //   margin: EdgeInsets.only(left: 5),
+            //   child: Text(
+            //     'Calculate Fuel Monitoring',
+            //     style: TextStyle(
+            //       fontSize: 16,
+            //     ),
+            //   ),
+            // ),
+            // TabCard(
+            //   namaPaket: '2 Fuel Monitoring',
+            //   kuota: '2 Fuel Monitoring',
+            //   masaAktif: '2 Fuel Monitoring',
+            // ),
+            // TabCard(
+            //   namaPaket: '4 Fuel Monitoring',
+            //   kuota: '4 Fuel Monitoring',
+            //   masaAktif: '4 Fuel Monitoring',
+            // ),
+            // SizedBox(height: 32),
+            // Container(
+            //   margin: EdgeInsets.only(left: 5),
+            //   child: Text(
+            //     'Fuel Monitoring With Request',
+            //     style: TextStyle(
+            //       fontSize: 16,
+            //     ),
+            //   ),
+            // ),
+            // TabCard(
+            //   namaPaket: '2 Fuel Monitoring',
+            //   kuota: '2 Fuel Monitoring',
+            //   masaAktif: '2 Fuel Monitoring',
+            // ),
+            // TabCard(
+            //   namaPaket: '4 Fuel Monitoring',
+            //   kuota: '4 Fuel Monitoring',
+            //   masaAktif: '4 Fuel Monitoring',
+            // ),
           ],
         ),
       ),

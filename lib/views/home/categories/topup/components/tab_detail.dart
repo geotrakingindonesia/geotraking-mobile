@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
+import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/views/catalogue/components/hubungi_kami_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -277,13 +278,31 @@ class _TabDetailState extends State<TabDetail> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '${widget.kuota} | ${widget.masaAktif}',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+                Expanded(
+                  child: Text(
+                    '${widget.kuota} | ${widget.masaAktif}',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
+                // Expanded(
+                //   child: Text(
+                //     widget.harga,
+                //     style: TextStyle(
+                //       fontSize: 20,
+                //       color: Colors.black,
+                //     ),
+                //   ),
+                // ),
+                // Text(
+                //   '${widget.kuota} | ${widget.masaAktif}',
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //     color: Colors.black,
+                //   ),
+                // ),
                 Text(
                   widget.harga,
                   style: TextStyle(
@@ -381,18 +400,6 @@ class _TabDetailState extends State<TabDetail> {
                       ],
                     ),
                   ),
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: Text(
-                  //         '${fiturSatelit(widget.typeSatelit, widget.jenisSatelit)}',
-                  //         style: TextStyle(color: Colors.grey.shade700),
-                  //         softWrap: true,
-                  //         overflow: TextOverflow.visible,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                   Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
