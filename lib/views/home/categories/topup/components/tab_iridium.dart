@@ -3,6 +3,7 @@ import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/core/services/topup_service.dart';
 import 'package:geotraking/views/home/categories/topup/components/product_category.dart';
 import 'package:geotraking/views/home/categories/topup/components/tab_card.dart';
+import 'package:geotraking/views/home/categories/topup/components/tab_see_all.dart';
 
 class TabIridium extends StatefulWidget {
   const TabIridium({Key? key}) : super(key: key);
@@ -13,8 +14,7 @@ class TabIridium extends StatefulWidget {
 
 class _TabIridiumState extends State<TabIridium> {
   final TopupService _topupService = TopupService();
-  List<Map<String, dynamic>>? _topUpDataPulsa;
-  List<Map<String, dynamic>>? _topUpDataBroadband;
+  List<Map<String, dynamic>>? _topUpDataPulsaIridium;
 
   @override
   void initState() {
@@ -26,13 +26,8 @@ class _TabIridiumState extends State<TabIridium> {
     try {
       final topUpDataPulsa =
           await _topupService.getDataTopUp(typeSatelit: 1, jenisSatelit: 1);
-      final topUpDataBroandband =
-          await _topupService.getDataTopUp(typeSatelit: 1, jenisSatelit: 2);
       setState(() {
-        _topUpDataPulsa = topUpDataPulsa;
-        _topUpDataBroadband = topUpDataBroandband;
-        print('test data ${_topUpDataPulsa}');
-        print('test data ${_topUpDataBroadband}');
+        _topUpDataPulsaIridium = topUpDataPulsa;
       });
     } catch (e) {
       setState(() {
@@ -77,7 +72,9 @@ class _TabIridiumState extends State<TabIridium> {
                 ),
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               margin: EdgeInsets.only(left: 5),
               child: Text(
@@ -87,55 +84,65 @@ class _TabIridiumState extends State<TabIridium> {
                 ),
               ),
             ),
-            // Text('1. perdana prepaid iridium\n- e voucher Indonesia 350 menit(365 hari)\n- standard prepaid 100(30 hari), 200(180 hari), 400(180 hari), 600(365 hari)'),
-            _topUpDataPulsa != null
-                ? Column(
-                    children: _topUpDataPulsa!.map((topUp) {
-                      return TabCard(
-                        namaPaket: topUp['nama_paket'],
-                        kuota: topUp['kuota'],
-                        masaAktif: topUp['masa_aktif'],
-                        harga: topUp['harga'],
-                        typeSatelit: topUp['type_satelit'],
-                        jenisSatelit: topUp['jenis_satelit'],
-                      );
-                    }).toList(),
-                  )
-                : Center(child: CircularProgressIndicator()),
-            SizedBox(height: 32),
-            // _topUpDataBroadband != null && _topUpDataBroadband!.isNotEmpty
-            //     ? Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Container(
-            //             margin: EdgeInsets.only(left: 5),
-            //             child: Text(
-            //               'Broadband Marine',
-            //               style: TextStyle(
-            //                 fontSize: 16,
-            //               ),
-            //             ),
-            //           ),
-            //           Column(
-            //             children: _topUpDataBroadband!.map((topUp) {
-            //               return TabCard(
-            //                 namaPaket: topUp['nama_paket'],
-            //                 kuota: topUp['kuota'],
-            //                 masaAktif: topUp['masa_aktif'],
-            //                 harga: topUp['harga'],
-            //                 typeSatelit: topUp['type_satelit'],
-            //                 jenisSatelit: topUp['jenis_satelit'],
-            //               );
-            //             }).toList(),
-            //           ),
-            //           SizedBox(height: 32),
-            //         ],
-            //       )
-            //     : Container(),
+            _topUpDataPulsaIridium != null
+                ? _buildTopUpSection(
+                    _topUpDataPulsaIridium!, 'Pulsa Prepaid Plan')
+                : const Center(child: CircularProgressIndicator()),
+            SizedBox(height: 10),
             ProductCategory(
               categori: 'iridium',
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTopUpSection(
+      List<Map<String, dynamic>> topUpData, String title) {
+    List<Map<String, dynamic>> firstThreeItems =
+        topUpData.length > 3 ? topUpData.sublist(0, 3) : topUpData;
+
+    return Column(
+      children: [
+        Column(
+          children: firstThreeItems.map((topUp) {
+            return TabCard(
+              namaPaket: topUp['nama_paket'],
+              kuota: topUp['kuota'],
+              masaAktif: topUp['masa_aktif'],
+              harga: topUp['harga'],
+              typeSatelit: topUp['type_satelit'],
+              jenisSatelit: topUp['jenis_satelit'],
+            );
+          }).toList(),
+        ),
+        if (topUpData.length > 3)
+          TextButton(
+            onPressed: () {
+                _showAllTopUpItems(
+                    context, _topUpDataPulsaIridium!, 'Pulsa Prepaid Plan');
+            },
+            child: const Text(
+              'Lihat Semua',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.red,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  void _showAllTopUpItems(BuildContext context,
+      List<Map<String, dynamic>> topUpData, String title) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TabSeeAll(
+          topUpData: topUpData,
+          title: title,
         ),
       ),
     );

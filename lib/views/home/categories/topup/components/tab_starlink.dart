@@ -264,13 +264,11 @@ class _TabStarlinkState extends State<TabStarlink> {
                 _showAllTopUpItems(
                     context, _topUpDataStarlinkLand!, 'Starlink Land');
               }
-              //   _showAllTopUpItems(
-              //       context, _topUpDataStarlinkMaritime!, 'Starlink Maritime');
             },
             child: const Text(
               'Lihat Semua',
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 color: Colors.red,
               ),
             ),

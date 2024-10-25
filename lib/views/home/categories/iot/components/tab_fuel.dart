@@ -57,14 +57,14 @@ class _TabFuelState extends State<TabFuel> {
               ),
             ),
             TabCard(
-              namaPaket: '2 Fuel Monitoring',
-              kuota: '2 Fuel Monitoring',
-              masaAktif: '2 Fuel Monitoring',
+              namaPaket: 'Fuel Monitoring',
+              kuota: 'Sensor Competible RPM, Coreolis dan Ovalgear',
+              masaAktif: 'Contact: 081234567890',
             ),
             TabCard(
-              namaPaket: '4 Fuel Monitoring',
-              kuota: '4 Fuel Monitoring',
-              masaAktif: '4 Fuel Monitoring',
+              namaPaket: 'Fuel Monitoring AI',
+              kuota: 'Laporan analitik menggunakan AI',
+              masaAktif: 'Contact: 081234567890',
             ),
             SizedBox(height: 32),
             Container(

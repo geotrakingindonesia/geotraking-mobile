@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/custom_tab_label.dart';
-import 'package:geotraking/views/home/categories/topup/components/tab_globalstar.dart';
 import 'package:geotraking/views/home/categories/topup/components/tab_inmarsat.dart';
 import 'package:geotraking/views/home/categories/topup/components/tab_iridium.dart';
 import 'package:geotraking/views/home/categories/topup/components/tab_starlink.dart';
-import 'package:geotraking/views/home/categories/topup/components/tab_thuraya.dart';
 
 class TopupPage extends StatefulWidget {
   const TopupPage({super.key});
@@ -15,10 +13,6 @@ class TopupPage extends StatefulWidget {
 }
 
 class _TopupPageState extends State<TopupPage> {
-  // String _selectedPulsa = 'Option 0';
-  // String _selectedJenisPulsa = 'Option 0';
-  // String _selectedJenisPulsaLagi = '1 Bulan';
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -56,9 +50,7 @@ class _TopupPageState extends State<TopupPage> {
                   tabs: [
                     CustomTabLabel(label: 'Iridium'),
                     CustomTabLabel(label: 'Inmarsat'),
-                    // CustomTabLabel(label: 'Thuraya'),
                     CustomTabLabel(label: 'Starlink'),
-                    // CustomTabLabel(label: 'G-Star'),
                   ],
                 ),
               ),
@@ -66,16 +58,11 @@ class _TopupPageState extends State<TopupPage> {
           ),
         ),
         body: Container(
-          // color: AppColors.cardColor,
-          // color: Colors.red,
           child: const TabBarView(
             children: [
               TabIridium(),
               TabInmarsat(),
               TabStarlink(),
-              // TabThuraya(),
-              
-              // TabGlobalstar(),
             ],
           ),
         ),
