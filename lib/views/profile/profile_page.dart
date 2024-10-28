@@ -597,60 +597,60 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.all(16.0),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: SizedBox(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            // ProfileListTile(
-                            //   title: 'Running Hours',
-                            //   icon: Icons.lock_clock,
-                            //   onTap: () => Navigator.pushNamed(
-                            //       context, AppRoutes.logBookHasilPenangkapan),
-                            // ),
-                            // const Divider(
-                            //   thickness: 0.5,
-                            //   color: Colors.black,
-                            // ),
-                            ProfileListTile(
-                              title: Localization.jarakTempuh(widget.selectedLanguage),
-                              // title: 'Jarak Tempuh',
-                              icon: Icons.track_changes,
-                              onTap: () => Navigator.pushNamed(context,
-                                  AppRoutes.reportHistoryTrakingJarakTempuh),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Localization.logBook(widget.selectedLanguage),
-                            // 'Log Book',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(color: Colors.black54),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   margin: const EdgeInsets.all(16.0),
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 16.0, vertical: 8.0),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey.withOpacity(0.2),
+                  //     borderRadius: BorderRadius.circular(40),
+                  //   ),
+                  //   child: SizedBox(
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(10),
+                  //       child: Column(
+                  //         children: [
+                  //           // ProfileListTile(
+                  //           //   title: 'Running Hours',
+                  //           //   icon: Icons.lock_clock,
+                  //           //   onTap: () => Navigator.pushNamed(
+                  //           //       context, AppRoutes.logBookHasilPenangkapan),
+                  //           // ),
+                  //           // const Divider(
+                  //           //   thickness: 0.5,
+                  //           //   color: Colors.black,
+                  //           // ),
+                  //           ProfileListTile(
+                  //             title: Localization.jarakTempuh(widget.selectedLanguage),
+                  //             // title: 'Jarak Tempuh',
+                  //             icon: Icons.track_changes,
+                  //             onTap: () => Navigator.pushNamed(context,
+                  //                 AppRoutes.reportHistoryTrakingJarakTempuh),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 30),
+                  //   child: Align(
+                  //     alignment: Alignment.centerLeft,
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           Localization.logBook(widget.selectedLanguage),
+                  //           // 'Log Book',
+                  //           style: Theme.of(context)
+                  //               .textTheme
+                  //               .titleMedium
+                  //               ?.copyWith(color: Colors.black54),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   Container(
                     margin: const EdgeInsets.all(16.0),
                     padding: const EdgeInsets.symmetric(

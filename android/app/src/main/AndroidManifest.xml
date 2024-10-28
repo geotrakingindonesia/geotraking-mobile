@@ -1,8 +1,22 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.geosat.geotraking">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
-        android:label="geotraking"
+        android:label="Geotraking"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        
+        <meta-data
+            android:name="com.onesignal.NotificationOpened.DEFAULT"
+            android:value="DISABLE" />
+        <meta-data
+            android:name="onesignal_app_id"
+            android:value="f25fa782-d712-4633-91ea-8d6237bd8608" /> <!-- Replace with your OneSignal App ID -->
+        <meta-data
+            android:name="onesignal_google_project_number"
+            android:value="REMOTE" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -11,7 +25,8 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+            android:screenOrientation="portrait" 
+            android:windowSoftInputMode="adjustResize"> <!-- potrait agar apk tidak bisa mode landscape -->
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues

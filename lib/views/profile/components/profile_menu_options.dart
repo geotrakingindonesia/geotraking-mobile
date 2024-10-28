@@ -55,16 +55,16 @@ class _ProfileMemberMenuOptionsState extends State<ProfileMemberMenuOptions> {
               onTap: () => Navigator.pushNamed(
                   context, AppRoutes.troubleshootMemberPage),
             ),
-            const Divider(
-              thickness: 0.5,
-              color: Colors.black,
-            ),
-            ProfileListTile(
-              title: Localization.getTransaction(widget.selectedLanguage),
-              icon: FontAwesomeIcons.moneyBillWave,
-              onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.transactionPage),
-            ),
+            // const Divider(
+            //   thickness: 0.5,
+            //   color: Colors.black,
+            // ),
+            // ProfileListTile(
+            //   title: Localization.getTransaction(widget.selectedLanguage),
+            //   icon: FontAwesomeIcons.moneyBillWave,
+            //   onTap: () =>
+            //       Navigator.pushNamed(context, AppRoutes.transactionPage),
+            // ),
             
           ],
         ),

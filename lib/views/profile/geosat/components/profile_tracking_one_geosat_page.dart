@@ -12,6 +12,8 @@ import 'package:geotraking/core/constants/app_colors.dart';
 // import 'package:geotraking/core/services/kapal_member_service.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/profile/components/airtime_data_modal.dart';
+import 'package:geotraking/views/profile/components/mileage_data_modal.dart';
+import 'package:geotraking/views/profile/components/modal/weather_data_modal.dart';
 import 'package:geotraking/views/profile/components/traking_data_modal.dart';
 import 'package:geotraking/views/profile/geosat/components/vessel_data_geosat_modal.dart';
 import 'package:latlong2/latlong.dart';
@@ -53,6 +55,8 @@ class _ProfileTrackingOneGeosatPageState
   bool _showAirtimeModal = false;
   bool _showVesselModal = false;
   bool _showTrackingModal = false;
+  bool _showWeatherModal = false;
+  bool _showMileageModal = false;
 
   @override
   void initState() {
@@ -77,8 +81,8 @@ class _ProfileTrackingOneGeosatPageState
 
   Future<void> _fetchAndShowVesselData() async {
     final vesselDataList = await vesselService.getDataKapalGeosat();
-    final vesselData = vesselDataList!
-        .firstWhere((data) => data['id'] == widget.mobileId);
+    final vesselData =
+        vesselDataList!.firstWhere((data) => data['id'] == widget.mobileId);
 
     setState(() {
       kapalGeosat = vesselData;
@@ -152,6 +156,160 @@ class _ProfileTrackingOneGeosatPageState
                     });
                   },
                 ),
+                // Positioned(
+                //   bottom: 0,
+                //   left: 0,
+                //   right: 0,
+                //   child: Container(
+                //     height: MediaQuery.of(context).size.height / 3,
+                //     padding:
+                //         const EdgeInsets.only(top: 20, left: 20, right: 20),
+                //     decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       borderRadius: const BorderRadius.only(
+                //         topLeft: Radius.circular(40),
+                //         topRight: Radius.circular(40),
+                //       ),
+                //     ),
+                //     child: SingleChildScrollView(
+                //       child: Column(
+                //         children: [
+                //           Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //             children: [
+                //               Spacer(),
+                //               ElevatedButton(
+                //                 style: ElevatedButton.styleFrom(
+                //                   padding: const EdgeInsets.all(15 * 1.2),
+                //                   backgroundColor: Colors.redAccent,
+                //                 ),
+                //                 onPressed: () {
+                //                   setState(() {
+                //                     _showVesselModal = !_showVesselModal;
+                //                     _showAirtimeModal = false;
+                //                     _showTrackingModal = false;
+                //                   });
+                //                   _fetchAndShowVesselData();
+                //                 },
+                //                 child: Row(
+                //                   mainAxisAlignment: MainAxisAlignment.center,
+                //                   children: [
+                //                     Text(
+                //                       'Vessel',
+                //                       style: TextStyle(
+                //                         color: _showVesselModal
+                //                             ? Colors.black
+                //                             : Colors.white,
+                //                       ),
+                //                     ),
+                //                     SizedBox(width: 4),
+                //                     Icon(
+                //                       Icons.directions_boat,
+                //                       color: _showVesselModal
+                //                           ? Colors.black
+                //                           : Colors.white,
+                //                     ),
+                //                   ],
+                //                 ),
+                //               ),
+                //               SizedBox(width: 5),
+                //               ElevatedButton(
+                //                 style: ElevatedButton.styleFrom(
+                //                   padding: const EdgeInsets.all(15 * 1.2),
+                //                   backgroundColor: Colors.orangeAccent,
+                //                 ),
+                //                 onPressed: () {
+                //                   setState(() {
+                //                     _showTrackingModal = !_showTrackingModal;
+                //                     _showVesselModal = false;
+                //                     _showAirtimeModal = false;
+                //                   });
+                //                 },
+                //                 child: Row(
+                //                   mainAxisAlignment: MainAxisAlignment.center,
+                //                   children: [
+                //                     Text(
+                //                       'Tracking',
+                //                       style: TextStyle(
+                //                         color: _showTrackingModal
+                //                             ? Colors.black
+                //                             : Colors.white,
+                //                       ),
+                //                     ),
+                //                     SizedBox(width: 4),
+                //                     Icon(
+                //                       Icons.location_searching,
+                //                       color: _showTrackingModal
+                //                           ? Colors.black
+                //                           : Colors.white,
+                //                     ),
+                //                   ],
+                //                 ),
+                //               ),
+                //               SizedBox(width: 5),
+                //               ElevatedButton(
+                //                 style: ElevatedButton.styleFrom(
+                //                   padding: const EdgeInsets.all(15 * 1.2),
+                //                   backgroundColor: Colors.blueAccent,
+                //                 ),
+                //                 onPressed: () {
+                //                   setState(() {
+                //                     _showAirtimeModal = !_showAirtimeModal;
+                //                     _showTrackingModal = false;
+                //                     _showVesselModal = false;
+                //                   });
+                //                 },
+                //                 child: Row(
+                //                   mainAxisAlignment: MainAxisAlignment.center,
+                //                   children: [
+                //                     Text(
+                //                       'Airtime',
+                //                       style: TextStyle(
+                //                         color: _showAirtimeModal
+                //                             ? Colors.black
+                //                             : Colors.white,
+                //                       ),
+                //                     ),
+                //                     SizedBox(width: 4),
+                //                     Icon(
+                //                       Icons.timer,
+                //                       color: _showAirtimeModal
+                //                           ? Colors.black
+                //                           : Colors.white,
+                //                     ),
+                //                   ],
+                //                 ),
+                //               ),
+                //               SizedBox(width: 5),
+                //               Spacer(),
+                //             ],
+                //           ),
+                //           Divider(thickness: 1, color: Colors.black54),
+                //           if (_showVesselModal)
+                //             VesselDataGeosatModal(
+                //               kapalGeosat: kapalGeosat,
+                //             ),
+                //           if (_showTrackingModal)
+                //             TrakingDataModal(
+                //               mobileId: widget.mobileId ?? '',
+                //               onTrackVessel: _onTrackVessel,
+                //               onClearHistory: () {
+                //                 setState(() {
+                //                   _polylinePointsTraking.clear();
+                //                   _markersTraking.clear();
+                //                 });
+                //               },
+                //             ),
+                //           if (_showAirtimeModal)
+                //             AirtimeDataModal(
+                //               future:
+                //                   vesselService.getAirtimeKapal(widget.idFull),
+                //             ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   bottom: 0,
                   left: 0,
@@ -167,13 +325,14 @@ class _ProfileTrackingOneGeosatPageState
                         topRight: Radius.circular(40),
                       ),
                     ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Column(
+                      children: [
+                        // Bagian yang bisa di-scroll secara horizontal
+                        SingleChildScrollView(
+                          scrollDirection:
+                              Axis.horizontal, // Scroll hanya pada tombol
+                          child: Row(
                             children: [
-                              Spacer(),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.all(15 * 1.2),
@@ -184,11 +343,12 @@ class _ProfileTrackingOneGeosatPageState
                                     _showVesselModal = !_showVesselModal;
                                     _showAirtimeModal = false;
                                     _showTrackingModal = false;
+                                    _showWeatherModal = false;
+                                    _showMileageModal = false;
                                   });
                                   _fetchAndShowVesselData();
                                 },
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       'Vessel',
@@ -219,10 +379,11 @@ class _ProfileTrackingOneGeosatPageState
                                     _showTrackingModal = !_showTrackingModal;
                                     _showVesselModal = false;
                                     _showAirtimeModal = false;
+                                    _showWeatherModal = false;
+                                    _showMileageModal = false;
                                   });
                                 },
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       'Tracking',
@@ -253,10 +414,11 @@ class _ProfileTrackingOneGeosatPageState
                                     _showAirtimeModal = !_showAirtimeModal;
                                     _showTrackingModal = false;
                                     _showVesselModal = false;
+                                    _showWeatherModal = false;
+                                    _showMileageModal = false;
                                   });
                                 },
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       'Airtime',
@@ -276,107 +438,125 @@ class _ProfileTrackingOneGeosatPageState
                                   ],
                                 ),
                               ),
-                              Spacer(),
+                              SizedBox(width: 5),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  backgroundColor: Colors.green,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _showWeatherModal = !_showWeatherModal;
+                                    _showAirtimeModal = false;
+                                    _showTrackingModal = false;
+                                    _showVesselModal = false;
+                                    _showMileageModal = false;
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Weather',
+                                      style: TextStyle(
+                                        color: _showWeatherModal
+                                            ? Colors.black
+                                            : Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(width: 4),
+                                    Icon(
+                                      Icons.cloud,
+                                      color: _showWeatherModal
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  backgroundColor: Colors.pink,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _showMileageModal = !_showMileageModal;
+                                    _showAirtimeModal = false;
+                                    _showTrackingModal = false;
+                                    _showVesselModal = false;
+                                    _showWeatherModal = false;
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Mileage',
+                                      style: TextStyle(
+                                        color: _showMileageModal
+                                            ? Colors.black
+                                            : Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(width: 4),
+                                    Icon(
+                                      Icons.track_changes,
+                                      color: _showMileageModal
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
-                          Divider(thickness: 1, color: Colors.black54),
-                          if (_showVesselModal)
-                            VesselDataGeosatModal(
-                              kapalGeosat: kapalGeosat,
+                        ),
+                        Divider(thickness: 1, color: Colors.black54),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                if (_showVesselModal)
+                                  VesselDataGeosatModal(
+                                      kapalGeosat: kapalGeosat),
+                                if (_showTrackingModal)
+                                  TrakingDataModal(
+                                    mobileId: widget.mobileId ?? '',
+                                    onTrackVessel: _onTrackVessel,
+                                    onClearHistory: () {
+                                      setState(() {
+                                        _polylinePointsTraking.clear();
+                                        _markersTraking.clear();
+                                      });
+                                    },
+                                  ),
+                                if (_showAirtimeModal)
+                                  AirtimeDataModal(
+                                    future: vesselService
+                                        .getAirtimeKapal(widget.idFull),
+                                  ),
+                                if (_showWeatherModal)
+                                  WeatherDataModal(
+                                    vesselData: kapalGeosat,
+                                  ),
+                                if (_showMileageModal)
+                                  MileageDataModal(
+                                    mobileId: widget.mobileId ?? '',
+                                    namaKapal: kapalGeosat!['nama_kapal'],
+                                  ),
+                              ],
                             ),
-                          if (_showTrackingModal)
-                            TrakingDataModal(
-                              mobileId: widget.mobileId ?? '',
-                              onTrackVessel: _onTrackVessel,
-                              onClearHistory: () {
-                                setState(() {
-                                  _polylinePointsTraking.clear();
-                                  _markersTraking.clear();
-                                });
-                              },
-                            ),
-                          if (_showAirtimeModal)
-                            AirtimeDataModal(
-                              future:
-                                  vesselService.getAirtimeKapal(widget.idFull),
-                            ),
-                        ],
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),
         ],
       ),
-      // bottomNavigationBar: Visibility(
-      //   child: BottomNavigationBar(
-      //     type: BottomNavigationBarType.fixed,
-      //     items: const <BottomNavigationBarItem>[
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.directions_boat),
-      //         label: 'Vessel',
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.location_searching),
-      //         label: 'Traking',
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.timer),
-      //         label: 'Airtime',
-      //       ),
-      //     ],
-      //     selectedItemColor: Colors.black,
-      //     unselectedItemColor: Colors.black,
-      //     onTap: (index) async {
-      //       if (index == 1) {
-      //         await showModalBottomSheet(
-      //           context: context,
-      //           isScrollControlled: true,
-      //           builder: (context) {
-      //             double keyboardHeight =
-      //                 MediaQuery.of(context).viewInsets.bottom;
-      //             double paddingBottom =
-      //                 keyboardHeight > 0 ? keyboardHeight + 10 : 10;
-      //             return Padding(
-      //               padding: EdgeInsets.only(bottom: paddingBottom),
-      //               child: TrakingDataModal(
-      //                 mobileId: widget.mobileId ?? '',
-      //                 onTrackVessel: _onTrackVessel,
-      //                 onClearHistory: () {
-      //                   setState(() {
-      //                     _polylinePointsTraking.clear();
-      //                     _markersTraking.clear();
-      //                   });
-      //                 },
-      //               ),
-      //             );
-      //           },
-      //           constraints: BoxConstraints(
-      //             maxWidth: MediaQuery.of(context).size.width,
-      //             maxHeight: MediaQuery.of(context).size.height / 2,
-      //           ),
-      //         );
-      //       } else {
-      //         showModalBottomSheet(
-      //           context: context,
-      //           isScrollControlled: true,
-      //           builder: (context) {
-      //             return index == 0
-      //                 ? VesselDataGeosatModal(kapalGeosat: kapalGeosat!)
-      //                 : AirtimeDataModal(
-      //                     // future: kapalMemberService
-      //                     future: vesselService.getAirtimeKapal(widget.idFull));
-      //           },
-      //           constraints: BoxConstraints(
-      //               maxWidth: MediaQuery.of(context).size.width,
-      //               maxHeight: MediaQuery.of(context).size.height / 3),
-      //         );
-      //       }
-      //     },
-      //   ),
-      // ),
     );
   }
 }

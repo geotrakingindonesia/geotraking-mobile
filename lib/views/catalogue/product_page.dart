@@ -68,6 +68,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.0),
         child: ClipRRect(
