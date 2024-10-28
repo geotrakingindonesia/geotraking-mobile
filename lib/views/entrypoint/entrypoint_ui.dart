@@ -330,16 +330,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:geotraking/core/models/member.dart';
 import 'package:geotraking/core/services/auth/authenticate_service.dart';
 import 'package:geotraking/views/auth/login_page.dart';
 import 'package:geotraking/views/catalogue/product_page.dart';
 import 'package:geotraking/views/chat/chat_page.dart';
 import 'package:geotraking/views/entrypoint/components/custom_button_app_navigation.dart';
 import 'package:geotraking/views/home/home_page.dart';
+import 'package:geotraking/views/profile/components/profile_tracking_page.dart';
+import 'package:geotraking/views/profile/geosat/profile_tracking_geosat_page.dart';
 import 'package:geotraking/views/profile/profile_page.dart';
 import 'package:geotraking/views/traking/traking_page.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -355,10 +356,8 @@ class _EntryPointUIState extends State<EntryPointUI> {
   bool _isLoggedIn = false;
   bool _isFirstLaunch = true;
   int _selectedIndex = 0;
+  MemberUser? _user;
   String _selectedLanguage = 'English';
-  String _appVersion = '';
-  String _playStoreUrl =
-      'https://play.google.com/store/apps/details?id=com.geosat.geotraking';
 
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
@@ -368,75 +367,113 @@ class _EntryPointUIState extends State<EntryPointUI> {
     _checkLoggedIn();
     _checkFirstLaunch();
     _loadLanguageFromSharedPreferences();
-    _getAppVersion();
   }
 
-  _checkLoggedIn() async {
+  // _checkLoggedIn() async {
+  //   final authService = AuthService();
+  //   final user = await authService.getCurrentUser();
+
+  //   if (user != null) {
+  //     print('User ID: ${user.id}');
+  //     print('Name: ${user.name}');
+  //     print('Is Admin: ${user.isAdmin}');
+
+  //     setState(() {
+  //     _isLoggedIn = true;
+  //     _user = user;
+  //   });
+  //   }
+
+  //   if (Platform.isAndroid) {
+  //     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  //     final device = androidInfo.device;
+  //     final model = androidInfo.model;
+  //     final brand = androidInfo.brand;
+  //     final host = androidInfo.host;
+
+  //     print('Running on Android');
+  //     print('Device: $device');
+  //     print('Model: $model');
+  //     print('Brand: $brand');
+  //     print('Host: $host');
+
+  //     if (user != null) {
+  //       setState(() {
+  //         _isLoggedIn = true;
+  //       });
+
+  //       await authService.saveLoginHistory(user.id, device, model, brand, host);
+  //     } else {
+  //       await authService.saveLoginHistory(0, device, model, brand, host);
+  //     }
+  //   } else if (Platform.isIOS) {
+  //     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  //     final deviceIos = iosInfo.name;
+  //     final modelIos = iosInfo.model;
+
+  //     print('Running on iOS');
+  //     print('Device: $deviceIos');
+  //     print('Model: $modelIos');
+
+  //     if (user != null) {
+  //       setState(() {
+  //         _isLoggedIn = true;
+  //       });
+
+  //       await authService.saveLoginHistory(
+  //           user.id, deviceIos, modelIos, '', '');
+  //     } else {
+  //       await authService.saveLoginHistory(0, deviceIos, modelIos, '', '');
+  //     }
+  //   }
+  // }
+
+  void _checkLoggedIn() async {
     final authService = AuthService();
     final user = await authService.getCurrentUser();
 
     if (user != null) {
       print('User ID: ${user.id}');
       print('Name: ${user.name}');
-      print('Email: ${user.email}');
-      print('No HP: ${user.noHp}');
       print('Is Admin: ${user.isAdmin}');
-      print('Avatar: ${user.avatar}');
-    }
-
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      final device = androidInfo.device;
-      final model = androidInfo.model;
-      final brand = androidInfo.brand;
-      final host = androidInfo.host;
-
-      print('Running on Android');
-      print('Device: $device');
-      print('Model: $model');
-      print('Brand: $brand');
-      print('Host: $host');
-
-      if (user != null) {
-        setState(() {
-          _isLoggedIn = true;
-        });
-
-        await authService.saveLoginHistory(user.id, device, model, brand, host);
-      } else {
-        await authService.saveLoginHistory(0, device, model, brand, host);
-      }
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      final deviceIos = iosInfo.name;
-      final modelIos = iosInfo.model;
-
-      print('Running on iOS');
-      print('Device: $deviceIos');
-      print('Model: $modelIos');
-
-      if (user != null) {
-        setState(() {
-          _isLoggedIn = true;
-        });
-
-        await authService.saveLoginHistory(
-            user.id, deviceIos, modelIos, '', '');
-      } else {
-        await authService.saveLoginHistory(0, deviceIos, modelIos, '', '');
-      }
-    }
-  }
-
-  _getAppVersion() async {
-    try {
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
       setState(() {
-        _appVersion = packageInfo.version;
+        _isLoggedIn = true;
+        _user = user;
       });
-      print('App Version: $_appVersion');
-    } catch (e) {
-      print('Failed to get app version: $e');
+
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        await authService.saveLoginHistory(
+          user.id,
+          androidInfo.device,
+          androidInfo.model,
+          androidInfo.brand,
+          androidInfo.host,
+        );
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        await authService.saveLoginHistory(
+          user.id,
+          iosInfo.name,
+          iosInfo.model,
+          '',
+          '',
+        );
+      }
+    } else {
+      setState(() {
+        _isLoggedIn = false;
+      });
+
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        await authService.saveLoginHistory(0, androidInfo.device,
+            androidInfo.model, androidInfo.brand, androidInfo.host);
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        await authService.saveLoginHistory(
+            0, iosInfo.name, iosInfo.model, '', '');
+      }
     }
   }
 
@@ -498,7 +535,13 @@ class _EntryPointUIState extends State<EntryPointUI> {
               HomePage(selectedLanguage: _selectedLanguage),
               ProductPage(),
               ChatPage(),
-              TrakingPage(),
+              if (_isLoggedIn)
+                _user!.isAdmin == 0
+                    ? ProfileTrackingPage()
+                    : ProfileTrackingGeosatPage()
+              else
+                Center(child: Text('Silakan login terlebih dahulu')),
+              // TrakingPage(),
               _isLoggedIn
                   ? ProfilePage(selectedLanguage: _selectedLanguage)
                   : LoginPage(),

@@ -12,11 +12,11 @@ import 'package:geotraking/core/constants/app_colors.dart';
 // import 'package:geotraking/core/models/kapal_member.dart';
 // import 'package:geotraking/core/services/kapal_member_service.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
-import 'package:geotraking/views/profile/components/airtime_data_modal.dart';
-import 'package:geotraking/views/profile/components/mileage_data_modal.dart';
+import 'package:geotraking/views/profile/components/modal/airtime_data_modal.dart';
+import 'package:geotraking/views/profile/components/modal/mileage_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/weather_data_modal.dart';
-import 'package:geotraking/views/profile/components/traking_data_modal.dart';
-import 'package:geotraking/views/profile/components/vessel_data_modal.dart';
+import 'package:geotraking/views/profile/components/modal/traking_data_modal.dart';
+import 'package:geotraking/views/profile/components/modal/vessel_data_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latlong2/latlong.dart';
 

@@ -28,16 +28,16 @@ class ProfileAdminMenuOptions extends StatelessWidget {
             // SizedBox(
             //   height: 5,
             // ),
-            const Divider(
-              thickness: 0.5,
-              color: Colors.black,
-            ),
-            ProfileListTile(
-              title: Localization.getTrackKapalKu(selectedLanguage),
-              icon: FontAwesomeIcons.locationCrosshairs,
-              onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.myProfileTrackKapalGeosat),
-            ),
+            // const Divider(
+            //   thickness: 0.5,
+            //   color: Colors.black,
+            // ),
+            // ProfileListTile(
+            //   title: Localization.getTrackKapalKu(selectedLanguage),
+            //   icon: FontAwesomeIcons.locationCrosshairs,
+            //   onTap: () =>
+            //       Navigator.pushNamed(context, AppRoutes.myProfileTrackKapalGeosat),
+            // ),
             // SizedBox(
             //   height: 5,
             // ),
