@@ -327,15 +327,38 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.scaffoldWithBoxBackground,
-      appBar: AppBar(
-        title: Text(Localization.getTrackKapalKu(_selectedLanguage)),
-        titleTextStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Colors.black,
-            ),
-        leading: const AppBackButton(),
-        actions: [
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.scaffoldWithBoxBackground,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50.0),
+          child: ClipRRect(
+            child: AppBar(
+              title: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Geo',
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                    TextSpan(
+                      text: 'Traking',
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                color: Color.fromARGB(255, 13, 124, 102),
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                  ],
+                ),
+              ),
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              actions: [
           IconButton(
             icon: Icon(
               _isSidebarVisible ? Icons.cancel : Icons.search,
@@ -345,514 +368,1067 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
           ),
         ],
         backgroundColor: Colors.white,
-      ),
-      body: Stack(
-        children: [
-          FlutterMap(
-            options: const MapOptions(
-              initialCenter: LatLng(-4.4511412299261, 111.082877130109),
-              initialZoom: 4,
-              interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.pinchZoom |
-                    InteractiveFlag.drag |
-                    InteractiveFlag.doubleTapZoom,
-              ),
-              // interactiveFlags: InteractiveFlag.pinchZoom |
-              //     InteractiveFlag.drag |
-              //     InteractiveFlag.doubleTapZoom,
             ),
-            mapController: mapController,
-            children: [
-              TileLayer(
-                urlTemplate: MapConfig.getUrlTemplate(_selectedMapProvider),
-                userAgentPackageName: 'com.example.app',
+          ),
+        ),
+        // appBar: AppBar(
+        //   title: Text(Localization.getTrackKapalKu(_selectedLanguage)),
+        //   titleTextStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
+        //         color: Colors.black,
+        //       ),
+        //   leading: const AppBackButton(),
+        //   actions: [
+        //     IconButton(
+        //       icon: Icon(
+        //         _isSidebarVisible ? Icons.cancel : Icons.search,
+        //         color: Colors.black,
+        //       ),
+        //       onPressed: _toggleSidebar,
+        //     ),
+        //   ],
+        //   backgroundColor: Colors.white,
+        // ),
+        body: Stack(
+          children: [
+            FlutterMap(
+              options: const MapOptions(
+                initialCenter: LatLng(-4.4511412299261, 111.082877130109),
+                initialZoom: 4,
+                interactionOptions: const InteractionOptions(
+                  flags: InteractiveFlag.pinchZoom |
+                      InteractiveFlag.drag |
+                      InteractiveFlag.doubleTapZoom,
+                ),
+                // interactiveFlags: InteractiveFlag.pinchZoom |
+                //     InteractiveFlag.drag |
+                //     InteractiveFlag.doubleTapZoom,
               ),
-              PolylineLayer<Object>(
-                polylines: _isShowBasarnas ? _polylinesBasarnas : [],
-              ),
-              PolylineLayer<Object>(
-                polylines: _isShowPortPelabuhan ? _polylinesPortPelabuhan : [],
-              ),
-              PolygonLayer<Object>(
-                polygons: _isShowWpp ? _polygons : [],
-              ),
+              mapController: mapController,
+              children: [
+                TileLayer(
+                  urlTemplate: MapConfig.getUrlTemplate(_selectedMapProvider),
+                  userAgentPackageName: 'com.example.app',
+                ),
+                PolylineLayer<Object>(
+                  polylines: _isShowBasarnas ? _polylinesBasarnas : [],
+                ),
+                PolylineLayer<Object>(
+                  polylines:
+                      _isShowPortPelabuhan ? _polylinesPortPelabuhan : [],
+                ),
+                PolygonLayer<Object>(
+                  polygons: _isShowWpp ? _polygons : [],
+                ),
 
-              // PolylineLayer(
-              //     polylines: _isShowBasarnas ? _polylinesBasarnas : []),
-              // PolylineLayer(
-              //     polylines:
-              //         _isShowPortPelabuhan ? _polylinesPortPelabuhan : []),
-              // PolygonLayer(polygons: _isShowWpp ? _polygons : []),
-              MarkerLayer(
-                markers: _isShowBasarnas
-                    ? _basarnasList.map((basarnas) {
-                        return Marker(
-                          child: IconButton(
-                            icon: FaIcon(
-                              FontAwesomeIcons.lifeRing,
-                              color: Colors.black54,
-                              size: 14,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _selectedBasarnas = basarnas;
-                              });
-                            },
-                          ),
-                          point: LatLng(basarnas.lat, basarnas.lon),
-                        );
-                      }).toList()
-                    : [],
-              ),
-              MarkerLayer(
-                markers: _isShowPortPelabuhan
-                    ? _portPelabuhanList.map((portPelabuhan) {
-                        return Marker(
-                          child: IconButton(
-                            icon: FaIcon(
-                              FontAwesomeIcons.towerObservation,
-                              color: Colors.brown.withOpacity(0.4),
-                              size: 14,
-                            ),
-                            onPressed: () async {
-                              _selectedPortPelabuhan = portPelabuhan;
-                              portRi = await _portPelabuhanService
-                                  .getDetailDataPortPelabuhan(
-                                      portPelabuhan.kodePelabuhan);
-                              setState(() {});
-                            },
-                          ),
-                          point: LatLng(portPelabuhan.lat, portPelabuhan.lon),
-                        );
-                      }).toList()
-                    : [],
-              ),
-              MarkerLayer(
-                markers: _kapalMemberList.map((kapalMember) {
-                  bool isSelected = _selectedKapalMember == kapalMember;
-                  return Marker(
-                    width: 30,
-                    height: 30,
-                    point: LatLng(double.parse(kapalMember['lat']),
-                        double.parse(kapalMember['lon'])),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedKapalMember = kapalMember;
-                        });
-                      },
-                      child: Stack(
-                        children: [
-                          MarkerImageWidget(
-                            timestamp: kapalMember['timestamp'],
-                            heading: kapalMember['heading'],
-                          ),
-                          if (isSelected)
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              top: 0,
-                              bottom: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.red, width: 2),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
+                // PolylineLayer(
+                //     polylines: _isShowBasarnas ? _polylinesBasarnas : []),
+                // PolylineLayer(
+                //     polylines:
+                //         _isShowPortPelabuhan ? _polylinesPortPelabuhan : []),
+                // PolygonLayer(polygons: _isShowWpp ? _polygons : []),
+                MarkerLayer(
+                  markers: _isShowBasarnas
+                      ? _basarnasList.map((basarnas) {
+                          return Marker(
+                            child: IconButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.lifeRing,
+                                color: Colors.black54,
+                                size: 14,
                               ),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedBasarnas = basarnas;
+                                });
+                              },
                             ),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-              if (_isShowNamaKapal)
+                            point: LatLng(basarnas.lat, basarnas.lon),
+                          );
+                        }).toList()
+                      : [],
+                ),
+                MarkerLayer(
+                  markers: _isShowPortPelabuhan
+                      ? _portPelabuhanList.map((portPelabuhan) {
+                          return Marker(
+                            child: IconButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.towerObservation,
+                                color: Colors.brown.withOpacity(0.4),
+                                size: 14,
+                              ),
+                              onPressed: () async {
+                                _selectedPortPelabuhan = portPelabuhan;
+                                portRi = await _portPelabuhanService
+                                    .getDetailDataPortPelabuhan(
+                                        portPelabuhan.kodePelabuhan);
+                                setState(() {});
+                              },
+                            ),
+                            point: LatLng(portPelabuhan.lat, portPelabuhan.lon),
+                          );
+                        }).toList()
+                      : [],
+                ),
                 MarkerLayer(
                   markers: _kapalMemberList.map((kapalMember) {
                     bool isSelected = _selectedKapalMember == kapalMember;
                     return Marker(
-                      width: 120,
+                      width: 30,
                       height: 30,
                       point: LatLng(double.parse(kapalMember['lat']),
                           double.parse(kapalMember['lon'])),
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Center(
-                          child: Text(
-                            kapalMember['nama_kapal'],
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: Colors.black),
-                          ),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedKapalMember = kapalMember;
+                          });
+                        },
+                        child: Stack(
+                          children: [
+                            MarkerImageWidget(
+                              timestamp: kapalMember['timestamp'],
+                              heading: kapalMember['heading'],
+                            ),
+                            if (isSelected)
+                              Positioned(
+                                left: 0,
+                                right: 0,
+                                top: 0,
+                                bottom: 0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.red, width: 2),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     );
                   }).toList(),
                 ),
-              PolylineLayer(
-                polylines: [
-                  Polyline(
-                    points: _polylinePointsTraking,
-                    color: Colors.blue,
-                    strokeWidth: 2,
-                  ),
-                ],
-              ),
-              MarkerLayer(
-                markers: _markersTraking,
-              ),
-            ],
-          ),
-          MapTool(
-            mapController: mapController,
-            selectedMapProvider: _selectedMapProvider,
-            onMapProviderChanged: (value) {
-              setState(() {
-                _selectedMapProvider = value;
-              });
-            },
-          ),
-          Positioned(
-            top: 16,
-            left: 16,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black38,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.lifeRing,
-                      size: 20,
-                      color:
-                          _isShowBasarnas ? Colors.blue.shade300 : Colors.white,
-                    ),
-                    onPressed: () {
-                      // show && hidden basarnas
-                      setState(() {
-                        _isShowBasarnas = !_isShowBasarnas;
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(height: 2),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black38,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.towerObservation,
-                      size: 20,
-                      color: _isShowPortPelabuhan
-                          ? Colors.blue.shade300
-                          : Colors.white,
-                    ),
-                    onPressed: () {
-                      // show && hidden port ri
-                      setState(() {
-                        _isShowPortPelabuhan = !_isShowPortPelabuhan;
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(height: 2),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black38,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.mapLocationDot,
-                      size: 20,
-                      color: _isShowWpp ? Colors.blue.shade300 : Colors.white,
-                    ),
-                    onPressed: () {
-                      // show && hidden zona wpp
-                      setState(() {
-                        _isShowWpp = !_isShowWpp;
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(height: 2),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black38,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.ship,
-                      size: 20,
-                      color: _isShowNamaKapal
-                          ? Colors.blue.shade300
-                          : Colors.white,
-                    ),
-                    onPressed: () {
-                      // show && hidden zona wpp
-                      setState(() {
-                        _isShowNamaKapal = !_isShowNamaKapal;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SelectedBasarnasInfo(
-            selectedBasarnas: _selectedBasarnas,
-            onClose: () {
-              setState(() {
-                _selectedBasarnas = null;
-              });
-            },
-          ),
-          SelectedPelabuhanInfo(
-            selectedPortPelabuhan: _selectedPortPelabuhan,
-            portRi: portRi,
-            onClose: () {
-              setState(() {
-                _selectedPortPelabuhan = null;
-              });
-            },
-          ),
-          _isLoading ? LoadingMap() : Container(),
-          if (_isSidebarVisible)
-            Positioned(
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: MediaQuery.of(context).size.width * 0.6,
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Search Vessel..',
-                          labelStyle: TextStyle(color: Colors.black),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
+                if (_isShowNamaKapal)
+                  MarkerLayer(
+                    markers: _kapalMemberList.map((kapalMember) {
+                      bool isSelected = _selectedKapalMember == kapalMember;
+                      return Marker(
+                        width: 120,
+                        height: 30,
+                        point: LatLng(double.parse(kapalMember['lat']),
+                            double.parse(kapalMember['lon'])),
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
-                            borderSide: BorderSide(color: Colors.black),
+                          child: Center(
+                            child: Text(
+                              kapalMember['nama_kapal'],
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
                         ),
-                        onChanged: (query) {
-                          setState(() {
-                            _searchQuery = query;
-                            _filteredVesselList;
-                          });
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        _searchQuery.isEmpty
-                            ? 'Vessel: ${_kapalMemberList.length}'
-                            : _filteredVesselList.isEmpty
-                                ? 'Not found.'
-                                : 'Vessel found: ${_filteredVesselList.length}',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        itemCount: _kapalMemberList.length,
-                        itemBuilder: (context, index) {
-                          final vessel = _kapalMemberList[index];
-                          final isSelected = _selectedKapalMember != null &&
-                              vessel['mobile_id'] ==
-                                  _selectedKapalMember!['mobile_id'];
-
-                          if (_searchQuery.isEmpty ||
-                              vessel['nama_kapal']
-                                  .toLowerCase()
-                                  .contains(_searchQuery.toLowerCase())) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 16),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 12),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? Colors.blue[100]
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedKapalMember = vessel;
-                                    _animateMoveTo(LatLng(
-                                      double.parse(vessel['lat']),
-                                      double.parse(vessel['lon']),
-                                    ));
-                                  });
-                                  _toggleSidebar();
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: cardVesselColor(
-                                                vessel['timestamp']),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(40)),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 4),
-                                          child: Text(
-                                            vessel['mobile_id'],
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            vessel['nama_kapal'],
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      timeago.format(
-                                        DateTime.parse(vessel['timestamp']),
-                                      ),
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        },
-                      ),
+                      );
+                    }).toList(),
+                  ),
+                PolylineLayer(
+                  polylines: [
+                    Polyline(
+                      points: _polylinePointsTraking,
+                      color: Colors.blue,
+                      strokeWidth: 2,
                     ),
                   ],
                 ),
-              ),
+                MarkerLayer(
+                  markers: _markersTraking,
+                ),
+              ],
             ),
-        ],
-      ),
-      bottomNavigationBar: Visibility(
-        visible: _selectedKapalMember != null,
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.directions_boat),
-              label: 'Vessel',
+            MapTool(
+              mapController: mapController,
+              selectedMapProvider: _selectedMapProvider,
+              onMapProviderChanged: (value) {
+                setState(() {
+                  _selectedMapProvider = value;
+                });
+              },
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.location_searching),
-              label: 'Traking',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.timer),
-              label: 'Airtime',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.close),
-              label: 'Close',
-            ),
-          ],
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.black,
-          onTap: (index) async {
-            if (index == 3) {
-              // Close button
-              setState(() {
-                _selectedKapalMember = null;
-              });
-            } else if (index == 1) {
-              await showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) {
-                  double keyboardHeight =
-                      MediaQuery.of(context).viewInsets.bottom;
-                  double paddingBottom =
-                      keyboardHeight > 0 ? keyboardHeight + 10 : 10;
-
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: paddingBottom),
-                    child: TrakingDataModal(
-                      mobileId: _selectedKapalMember!['mobile_id'],
-                      onTrackVessel: _onTrackVessel,
-                      onClearHistory: () {
+            Positioned(
+              top: 16,
+              left: 16,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black38,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        FontAwesomeIcons.lifeRing,
+                        size: 20,
+                        color: _isShowBasarnas
+                            ? Colors.blue.shade300
+                            : Colors.white,
+                      ),
+                      onPressed: () {
+                        // show && hidden basarnas
                         setState(() {
-                          _polylinePointsTraking.clear();
-                          _markersTraking.clear();
+                          _isShowBasarnas = !_isShowBasarnas;
                         });
                       },
                     ),
-                  );
-                },
-                constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width,
-                    maxHeight: MediaQuery.of(context).size.height / 2),
-              );
-            } else {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) {
-                  return index == 0
-                      ? VesselDataModal(vesselData: _selectedKapalMember!)
-                      : AirtimeDataModal(
-                          future: vesselService.getAirtimeKapal(
-                              _selectedKapalMember!['idfull'] ?? ''));
-                },
-                constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width,
-                    maxHeight: MediaQuery.of(context).size.height / 3),
-              );
-            }
-          },
+                  ),
+                  SizedBox(height: 2),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black38,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        FontAwesomeIcons.towerObservation,
+                        size: 20,
+                        color: _isShowPortPelabuhan
+                            ? Colors.blue.shade300
+                            : Colors.white,
+                      ),
+                      onPressed: () {
+                        // show && hidden port ri
+                        setState(() {
+                          _isShowPortPelabuhan = !_isShowPortPelabuhan;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black38,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        FontAwesomeIcons.mapLocationDot,
+                        size: 20,
+                        color: _isShowWpp ? Colors.blue.shade300 : Colors.white,
+                      ),
+                      onPressed: () {
+                        // show && hidden zona wpp
+                        setState(() {
+                          _isShowWpp = !_isShowWpp;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black38,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        FontAwesomeIcons.ship,
+                        size: 20,
+                        color: _isShowNamaKapal
+                            ? Colors.blue.shade300
+                            : Colors.white,
+                      ),
+                      onPressed: () {
+                        // show && hidden zona wpp
+                        setState(() {
+                          _isShowNamaKapal = !_isShowNamaKapal;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SelectedBasarnasInfo(
+              selectedBasarnas: _selectedBasarnas,
+              onClose: () {
+                setState(() {
+                  _selectedBasarnas = null;
+                });
+              },
+            ),
+            SelectedPelabuhanInfo(
+              selectedPortPelabuhan: _selectedPortPelabuhan,
+              portRi: portRi,
+              onClose: () {
+                setState(() {
+                  _selectedPortPelabuhan = null;
+                });
+              },
+            ),
+            _isLoading ? LoadingMap() : Container(),
+            if (_isSidebarVisible)
+              Positioned(
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Search Vessel..',
+                            labelStyle: TextStyle(color: Colors.black),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40)),
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40)),
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                          ),
+                          onChanged: (query) {
+                            setState(() {
+                              _searchQuery = query;
+                              _filteredVesselList;
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _searchQuery.isEmpty
+                              ? 'Vessel: ${_kapalMemberList.length}'
+                              : _filteredVesselList.isEmpty
+                                  ? 'Not found.'
+                                  : 'Vessel found: ${_filteredVesselList.length}',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: _kapalMemberList.length,
+                          itemBuilder: (context, index) {
+                            final vessel = _kapalMemberList[index];
+                            final isSelected = _selectedKapalMember != null &&
+                                vessel['mobile_id'] ==
+                                    _selectedKapalMember!['mobile_id'];
+
+                            if (_searchQuery.isEmpty ||
+                                vessel['nama_kapal']
+                                    .toLowerCase()
+                                    .contains(_searchQuery.toLowerCase())) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 16),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.blue[100]
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedKapalMember = vessel;
+                                      _animateMoveTo(LatLng(
+                                        double.parse(vessel['lat']),
+                                        double.parse(vessel['lon']),
+                                      ));
+                                    });
+                                    _toggleSidebar();
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: cardVesselColor(
+                                                  vessel['timestamp']),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(40)),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 4),
+                                            child: Text(
+                                              vessel['mobile_id'],
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          SizedBox(width: 8),
+                                          Expanded(
+                                            child: Text(
+                                              vessel['nama_kapal'],
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        timeago.format(
+                                          DateTime.parse(vessel['timestamp']),
+                                        ),
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
+        bottomNavigationBar: Visibility(
+          visible: _selectedKapalMember != null,
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.directions_boat),
+                label: 'Vessel',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.location_searching),
+                label: 'Traking',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.timer),
+                label: 'Airtime',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.close),
+                label: 'Close',
+              ),
+            ],
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Colors.black,
+            onTap: (index) async {
+              if (index == 3) {
+                // Close button
+                setState(() {
+                  _selectedKapalMember = null;
+                });
+              } else if (index == 1) {
+                await showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    double keyboardHeight =
+                        MediaQuery.of(context).viewInsets.bottom;
+                    double paddingBottom =
+                        keyboardHeight > 0 ? keyboardHeight + 10 : 10;
+
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: paddingBottom),
+                      child: TrakingDataModal(
+                        mobileId: _selectedKapalMember!['mobile_id'],
+                        onTrackVessel: _onTrackVessel,
+                        onClearHistory: () {
+                          setState(() {
+                            _polylinePointsTraking.clear();
+                            _markersTraking.clear();
+                          });
+                        },
+                      ),
+                    );
+                  },
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width,
+                      maxHeight: MediaQuery.of(context).size.height / 2),
+                );
+              } else {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    return index == 0
+                        ? VesselDataModal(vesselData: _selectedKapalMember!)
+                        : AirtimeDataModal(
+                            future: vesselService.getAirtimeKapal(
+                                _selectedKapalMember!['idfull'] ?? ''));
+                  },
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width,
+                      maxHeight: MediaQuery.of(context).size.height / 3),
+                );
+              }
+            },
+          ),
         ),
       ),
     );
+    // return Scaffold(
+    //   backgroundColor: AppColors.scaffoldWithBoxBackground,
+    //   appBar: AppBar(
+    //     title: Text(Localization.getTrackKapalKu(_selectedLanguage)),
+    //     titleTextStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
+    //           color: Colors.black,
+    //         ),
+    //     leading: const AppBackButton(),
+    //     actions: [
+    //       IconButton(
+    //         icon: Icon(
+    //           _isSidebarVisible ? Icons.cancel : Icons.search,
+    //           color: Colors.black,
+    //         ),
+    //         onPressed: _toggleSidebar,
+    //       ),
+    //     ],
+    //     backgroundColor: Colors.white,
+    //   ),
+    //   body: Stack(
+    //     children: [
+    //       FlutterMap(
+    //         options: const MapOptions(
+    //           initialCenter: LatLng(-4.4511412299261, 111.082877130109),
+    //           initialZoom: 4,
+    //           interactionOptions: const InteractionOptions(
+    //             flags: InteractiveFlag.pinchZoom |
+    //                 InteractiveFlag.drag |
+    //                 InteractiveFlag.doubleTapZoom,
+    //           ),
+    //           // interactiveFlags: InteractiveFlag.pinchZoom |
+    //           //     InteractiveFlag.drag |
+    //           //     InteractiveFlag.doubleTapZoom,
+    //         ),
+    //         mapController: mapController,
+    //         children: [
+    //           TileLayer(
+    //             urlTemplate: MapConfig.getUrlTemplate(_selectedMapProvider),
+    //             userAgentPackageName: 'com.example.app',
+    //           ),
+    //           PolylineLayer<Object>(
+    //             polylines: _isShowBasarnas ? _polylinesBasarnas : [],
+    //           ),
+    //           PolylineLayer<Object>(
+    //             polylines: _isShowPortPelabuhan ? _polylinesPortPelabuhan : [],
+    //           ),
+    //           PolygonLayer<Object>(
+    //             polygons: _isShowWpp ? _polygons : [],
+    //           ),
+
+    //           // PolylineLayer(
+    //           //     polylines: _isShowBasarnas ? _polylinesBasarnas : []),
+    //           // PolylineLayer(
+    //           //     polylines:
+    //           //         _isShowPortPelabuhan ? _polylinesPortPelabuhan : []),
+    //           // PolygonLayer(polygons: _isShowWpp ? _polygons : []),
+    //           MarkerLayer(
+    //             markers: _isShowBasarnas
+    //                 ? _basarnasList.map((basarnas) {
+    //                     return Marker(
+    //                       child: IconButton(
+    //                         icon: FaIcon(
+    //                           FontAwesomeIcons.lifeRing,
+    //                           color: Colors.black54,
+    //                           size: 14,
+    //                         ),
+    //                         onPressed: () {
+    //                           setState(() {
+    //                             _selectedBasarnas = basarnas;
+    //                           });
+    //                         },
+    //                       ),
+    //                       point: LatLng(basarnas.lat, basarnas.lon),
+    //                     );
+    //                   }).toList()
+    //                 : [],
+    //           ),
+    //           MarkerLayer(
+    //             markers: _isShowPortPelabuhan
+    //                 ? _portPelabuhanList.map((portPelabuhan) {
+    //                     return Marker(
+    //                       child: IconButton(
+    //                         icon: FaIcon(
+    //                           FontAwesomeIcons.towerObservation,
+    //                           color: Colors.brown.withOpacity(0.4),
+    //                           size: 14,
+    //                         ),
+    //                         onPressed: () async {
+    //                           _selectedPortPelabuhan = portPelabuhan;
+    //                           portRi = await _portPelabuhanService
+    //                               .getDetailDataPortPelabuhan(
+    //                                   portPelabuhan.kodePelabuhan);
+    //                           setState(() {});
+    //                         },
+    //                       ),
+    //                       point: LatLng(portPelabuhan.lat, portPelabuhan.lon),
+    //                     );
+    //                   }).toList()
+    //                 : [],
+    //           ),
+    //           MarkerLayer(
+    //             markers: _kapalMemberList.map((kapalMember) {
+    //               bool isSelected = _selectedKapalMember == kapalMember;
+    //               return Marker(
+    //                 width: 30,
+    //                 height: 30,
+    //                 point: LatLng(double.parse(kapalMember['lat']),
+    //                     double.parse(kapalMember['lon'])),
+    //                 child: GestureDetector(
+    //                   onTap: () {
+    //                     setState(() {
+    //                       _selectedKapalMember = kapalMember;
+    //                     });
+    //                   },
+    //                   child: Stack(
+    //                     children: [
+    //                       MarkerImageWidget(
+    //                         timestamp: kapalMember['timestamp'],
+    //                         heading: kapalMember['heading'],
+    //                       ),
+    //                       if (isSelected)
+    //                         Positioned(
+    //                           left: 0,
+    //                           right: 0,
+    //                           top: 0,
+    //                           bottom: 0,
+    //                           child: Container(
+    //                             decoration: BoxDecoration(
+    //                               border:
+    //                                   Border.all(color: Colors.red, width: 2),
+    //                               borderRadius: BorderRadius.circular(15),
+    //                             ),
+    //                           ),
+    //                         ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //               );
+    //             }).toList(),
+    //           ),
+    //           if (_isShowNamaKapal)
+    //             MarkerLayer(
+    //               markers: _kapalMemberList.map((kapalMember) {
+    //                 bool isSelected = _selectedKapalMember == kapalMember;
+    //                 return Marker(
+    //                   width: 120,
+    //                   height: 30,
+    //                   point: LatLng(double.parse(kapalMember['lat']),
+    //                       double.parse(kapalMember['lon'])),
+    //                   child: Container(
+    //                     padding: const EdgeInsets.all(5),
+    //                     decoration: BoxDecoration(
+    //                       color: Colors.white.withOpacity(0.3),
+    //                       borderRadius: BorderRadius.circular(15),
+    //                     ),
+    //                     child: Center(
+    //                       child: Text(
+    //                         kapalMember['nama_kapal'],
+    //                         overflow: TextOverflow.ellipsis,
+    //                         style: TextStyle(color: Colors.black),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 );
+    //               }).toList(),
+    //             ),
+    //           PolylineLayer(
+    //             polylines: [
+    //               Polyline(
+    //                 points: _polylinePointsTraking,
+    //                 color: Colors.blue,
+    //                 strokeWidth: 2,
+    //               ),
+    //             ],
+    //           ),
+    //           MarkerLayer(
+    //             markers: _markersTraking,
+    //           ),
+    //         ],
+    //       ),
+    //       MapTool(
+    //         mapController: mapController,
+    //         selectedMapProvider: _selectedMapProvider,
+    //         onMapProviderChanged: (value) {
+    //           setState(() {
+    //             _selectedMapProvider = value;
+    //           });
+    //         },
+    //       ),
+    //       Positioned(
+    //         top: 16,
+    //         left: 16,
+    //         child: Column(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             Container(
+    //               decoration: BoxDecoration(
+    //                 color: Colors.black38,
+    //                 borderRadius: BorderRadius.circular(5),
+    //               ),
+    //               child: IconButton(
+    //                 icon: Icon(
+    //                   FontAwesomeIcons.lifeRing,
+    //                   size: 20,
+    //                   color:
+    //                       _isShowBasarnas ? Colors.blue.shade300 : Colors.white,
+    //                 ),
+    //                 onPressed: () {
+    //                   // show && hidden basarnas
+    //                   setState(() {
+    //                     _isShowBasarnas = !_isShowBasarnas;
+    //                   });
+    //                 },
+    //               ),
+    //             ),
+    //             SizedBox(height: 2),
+    //             Container(
+    //               decoration: BoxDecoration(
+    //                 color: Colors.black38,
+    //                 borderRadius: BorderRadius.circular(5),
+    //               ),
+    //               child: IconButton(
+    //                 icon: Icon(
+    //                   FontAwesomeIcons.towerObservation,
+    //                   size: 20,
+    //                   color: _isShowPortPelabuhan
+    //                       ? Colors.blue.shade300
+    //                       : Colors.white,
+    //                 ),
+    //                 onPressed: () {
+    //                   // show && hidden port ri
+    //                   setState(() {
+    //                     _isShowPortPelabuhan = !_isShowPortPelabuhan;
+    //                   });
+    //                 },
+    //               ),
+    //             ),
+    //             SizedBox(height: 2),
+    //             Container(
+    //               decoration: BoxDecoration(
+    //                 color: Colors.black38,
+    //                 borderRadius: BorderRadius.circular(5),
+    //               ),
+    //               child: IconButton(
+    //                 icon: Icon(
+    //                   FontAwesomeIcons.mapLocationDot,
+    //                   size: 20,
+    //                   color: _isShowWpp ? Colors.blue.shade300 : Colors.white,
+    //                 ),
+    //                 onPressed: () {
+    //                   // show && hidden zona wpp
+    //                   setState(() {
+    //                     _isShowWpp = !_isShowWpp;
+    //                   });
+    //                 },
+    //               ),
+    //             ),
+    //             SizedBox(height: 2),
+    //             Container(
+    //               decoration: BoxDecoration(
+    //                 color: Colors.black38,
+    //                 borderRadius: BorderRadius.circular(5),
+    //               ),
+    //               child: IconButton(
+    //                 icon: Icon(
+    //                   FontAwesomeIcons.ship,
+    //                   size: 20,
+    //                   color: _isShowNamaKapal
+    //                       ? Colors.blue.shade300
+    //                       : Colors.white,
+    //                 ),
+    //                 onPressed: () {
+    //                   // show && hidden zona wpp
+    //                   setState(() {
+    //                     _isShowNamaKapal = !_isShowNamaKapal;
+    //                   });
+    //                 },
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //       SelectedBasarnasInfo(
+    //         selectedBasarnas: _selectedBasarnas,
+    //         onClose: () {
+    //           setState(() {
+    //             _selectedBasarnas = null;
+    //           });
+    //         },
+    //       ),
+    //       SelectedPelabuhanInfo(
+    //         selectedPortPelabuhan: _selectedPortPelabuhan,
+    //         portRi: portRi,
+    //         onClose: () {
+    //           setState(() {
+    //             _selectedPortPelabuhan = null;
+    //           });
+    //         },
+    //       ),
+    //       _isLoading ? LoadingMap() : Container(),
+    //       if (_isSidebarVisible)
+    //         Positioned(
+    //           right: 0,
+    //           top: 0,
+    //           bottom: 0,
+    //           width: MediaQuery.of(context).size.width * 0.6,
+    //           child: AnimatedContainer(
+    //             duration: Duration(milliseconds: 300),
+    //             color: Colors.white,
+    //             child: Column(
+    //               children: [
+    //                 Padding(
+    //                   padding: const EdgeInsets.all(16.0),
+    //                   child: TextField(
+    //                     decoration: InputDecoration(
+    //                       labelText: 'Search Vessel..',
+    //                       labelStyle: TextStyle(color: Colors.black),
+    //                       border: OutlineInputBorder(
+    //                         borderRadius: BorderRadius.all(Radius.circular(40)),
+    //                       ),
+    //                       enabledBorder: OutlineInputBorder(
+    //                         borderRadius: BorderRadius.all(Radius.circular(40)),
+    //                         borderSide: BorderSide(color: Colors.black),
+    //                       ),
+    //                       focusedBorder: OutlineInputBorder(
+    //                         borderRadius: BorderRadius.all(Radius.circular(40)),
+    //                         borderSide: BorderSide(color: Colors.black),
+    //                       ),
+    //                     ),
+    //                     onChanged: (query) {
+    //                       setState(() {
+    //                         _searchQuery = query;
+    //                         _filteredVesselList;
+    //                       });
+    //                     },
+    //                   ),
+    //                 ),
+    //                 Padding(
+    //                   padding: const EdgeInsets.all(8.0),
+    //                   child: Text(
+    //                     _searchQuery.isEmpty
+    //                         ? 'Vessel: ${_kapalMemberList.length}'
+    //                         : _filteredVesselList.isEmpty
+    //                             ? 'Not found.'
+    //                             : 'Vessel found: ${_filteredVesselList.length}',
+    //                     style: TextStyle(fontSize: 16, color: Colors.black),
+    //                   ),
+    //                 ),
+    //                 Expanded(
+    //                   child: ListView.builder(
+    //                     controller: _scrollController,
+    //                     itemCount: _kapalMemberList.length,
+    //                     itemBuilder: (context, index) {
+    //                       final vessel = _kapalMemberList[index];
+    //                       final isSelected = _selectedKapalMember != null &&
+    //                           vessel['mobile_id'] ==
+    //                               _selectedKapalMember!['mobile_id'];
+
+    //                       if (_searchQuery.isEmpty ||
+    //                           vessel['nama_kapal']
+    //                               .toLowerCase()
+    //                               .contains(_searchQuery.toLowerCase())) {
+    //                         return Container(
+    //                           margin: EdgeInsets.symmetric(
+    //                               vertical: 4, horizontal: 16),
+    //                           padding: EdgeInsets.symmetric(
+    //                               vertical: 8, horizontal: 12),
+    //                           decoration: BoxDecoration(
+    //                             color: isSelected
+    //                                 ? Colors.blue[100]
+    //                                 : Colors.white,
+    //                             borderRadius: BorderRadius.circular(8),
+    //                             boxShadow: [
+    //                               BoxShadow(
+    //                                 color: Colors.grey.withOpacity(0.3),
+    //                                 spreadRadius: 2,
+    //                                 blurRadius: 5,
+    //                                 offset: Offset(0, 2),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                           child: InkWell(
+    //                             onTap: () {
+    //                               setState(() {
+    //                                 _selectedKapalMember = vessel;
+    //                                 _animateMoveTo(LatLng(
+    //                                   double.parse(vessel['lat']),
+    //                                   double.parse(vessel['lon']),
+    //                                 ));
+    //                               });
+    //                               _toggleSidebar();
+    //                             },
+    //                             child: Column(
+    //                               crossAxisAlignment: CrossAxisAlignment.start,
+    //                               children: [
+    //                                 Row(
+    //                                   children: [
+    //                                     Container(
+    //                                       decoration: BoxDecoration(
+    //                                         color: cardVesselColor(
+    //                                             vessel['timestamp']),
+    //                                         borderRadius: BorderRadius.all(
+    //                                             Radius.circular(40)),
+    //                                       ),
+    //                                       padding: const EdgeInsets.symmetric(
+    //                                           horizontal: 8, vertical: 4),
+    //                                       child: Text(
+    //                                         vessel['mobile_id'],
+    //                                         style: TextStyle(
+    //                                             fontSize: 10,
+    //                                             color: Colors.black,
+    //                                             fontWeight: FontWeight.bold),
+    //                                       ),
+    //                                     ),
+    //                                     SizedBox(width: 8),
+    //                                     Expanded(
+    //                                       child: Text(
+    //                                         vessel['nama_kapal'],
+    //                                         style: TextStyle(
+    //                                             fontSize: 13,
+    //                                             color: Colors.black),
+    //                                       ),
+    //                                     ),
+    //                                   ],
+    //                                 ),
+    //                                 SizedBox(height: 4),
+    //                                 Text(
+    //                                   timeago.format(
+    //                                     DateTime.parse(vessel['timestamp']),
+    //                                   ),
+    //                                   style: TextStyle(
+    //                                       fontSize: 12, color: Colors.grey),
+    //                                 ),
+    //                               ],
+    //                             ),
+    //                           ),
+    //                         );
+    //                       } else {
+    //                         return Container();
+    //                       }
+    //                     },
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //     ],
+    //   ),
+    //   bottomNavigationBar: Visibility(
+    //     visible: _selectedKapalMember != null,
+    //     child: BottomNavigationBar(
+    //       type: BottomNavigationBarType.fixed,
+    //       items: const <BottomNavigationBarItem>[
+    //         BottomNavigationBarItem(
+    //           icon: Icon(Icons.directions_boat),
+    //           label: 'Vessel',
+    //         ),
+    //         BottomNavigationBarItem(
+    //           icon: Icon(Icons.location_searching),
+    //           label: 'Traking',
+    //         ),
+    //         BottomNavigationBarItem(
+    //           icon: Icon(Icons.timer),
+    //           label: 'Airtime',
+    //         ),
+    //         BottomNavigationBarItem(
+    //           icon: Icon(Icons.close),
+    //           label: 'Close',
+    //         ),
+    //       ],
+    //       selectedItemColor: Colors.black,
+    //       unselectedItemColor: Colors.black,
+    //       onTap: (index) async {
+    //         if (index == 3) {
+    //           // Close button
+    //           setState(() {
+    //             _selectedKapalMember = null;
+    //           });
+    //         } else if (index == 1) {
+    //           await showModalBottomSheet(
+    //             context: context,
+    //             isScrollControlled: true,
+    //             builder: (context) {
+    //               double keyboardHeight =
+    //                   MediaQuery.of(context).viewInsets.bottom;
+    //               double paddingBottom =
+    //                   keyboardHeight > 0 ? keyboardHeight + 10 : 10;
+
+    //               return Padding(
+    //                 padding: EdgeInsets.only(bottom: paddingBottom),
+    //                 child: TrakingDataModal(
+    //                   mobileId: _selectedKapalMember!['mobile_id'],
+    //                   onTrackVessel: _onTrackVessel,
+    //                   onClearHistory: () {
+    //                     setState(() {
+    //                       _polylinePointsTraking.clear();
+    //                       _markersTraking.clear();
+    //                     });
+    //                   },
+    //                 ),
+    //               );
+    //             },
+    //             constraints: BoxConstraints(
+    //                 maxWidth: MediaQuery.of(context).size.width,
+    //                 maxHeight: MediaQuery.of(context).size.height / 2),
+    //           );
+    //         } else {
+    //           showModalBottomSheet(
+    //             context: context,
+    //             isScrollControlled: true,
+    //             builder: (context) {
+    //               return index == 0
+    //                   ? VesselDataModal(vesselData: _selectedKapalMember!)
+    //                   : AirtimeDataModal(
+    //                       future: vesselService.getAirtimeKapal(
+    //                           _selectedKapalMember!['idfull'] ?? ''));
+    //             },
+    //             constraints: BoxConstraints(
+    //                 maxWidth: MediaQuery.of(context).size.width,
+    //                 maxHeight: MediaQuery.of(context).size.height / 3),
+    //           );
+    //         }
+    //       },
+    //     ),
+    //   ),
+    // );
   }
 }

@@ -1282,6 +1282,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -1546,11 +1547,29 @@ class DetailPage extends StatelessWidget {
     OpenFile.open(file.path);
   }
 
+  List<FlSpot> _createChartData() {
+    List<FlSpot> spots = [];
+    for (int index = 0; index < data!.length; index++) {
+      final item = data![index];
+      double distanceNmi = calculateDistanceNmi(
+        double.parse(item['start_latitude']),
+        double.parse(item['start_longitude']),
+        double.parse(item['end_latitude']),
+        double.parse(item['end_longitude']),
+      );
+
+      spots.add(FlSpot(index.toDouble(), distanceNmi));
+    }
+    return spots;
+  }
+
   @override
   Widget build(BuildContext context) {
     double totalDistance = _calculateTotalDistance();
     Map<String, int> totalTime = _calculateTotalTime();
     double averageSpeed = _calculateAverageSpeed();
+    List<String> labels =
+        List.generate(data!.length, (index) => 'H${index + 1}');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -1740,7 +1759,7 @@ class DetailPage extends StatelessWidget {
                         );
 
                         double rerataSpeed = item['average_speed_knots'] ?? '-';
-                        String distanceText = (rerataSpeed < 0.4)
+                        String distanceText = (rerataSpeed < 0.1)
                             ? '- nmi'
                             : '${distanceNmi.toStringAsFixed(2)} nmi';
 

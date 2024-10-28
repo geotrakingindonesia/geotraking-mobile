@@ -540,7 +540,24 @@ class _EntryPointUIState extends State<EntryPointUI> {
                     ? ProfileTrackingPage()
                     : ProfileTrackingGeosatPage()
               else
-                Center(child: Text('Silakan login terlebih dahulu')),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/login.png',
+                        width: 250,
+                        height: 250,
+                      ),
+                      // SizedBox(height: 16),
+                      Text(
+                        'Silakan login terlebih dahulu',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              // Center(child: Text('Silakan login terlebih dahulu')),
               // TrakingPage(),
               _isLoggedIn
                   ? ProfilePage(selectedLanguage: _selectedLanguage)

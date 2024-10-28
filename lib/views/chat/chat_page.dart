@@ -361,30 +361,30 @@ class _ChatPageState extends State<ChatPage> {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
             elevation: 0,
-            actions: [
-              if (_isLoggedIn)
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 127, 183, 126),
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.add, color: Colors.white),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RequestVessel(),
-                          ),
-                        );
-                      },
-                      tooltip: 'Ajukan chat kapal',
-                    ),
-                  ),
-                ),
-            ],
+            // actions: [
+            //   if (_isLoggedIn)
+            //     Padding(
+            //       padding: const EdgeInsets.only(right: 15),
+            //       child: Container(
+            //         decoration: BoxDecoration(
+            //           color: Color.fromARGB(255, 127, 183, 126),
+            //           shape: BoxShape.circle,
+            //         ),
+            //         child: IconButton(
+            //           icon: Icon(Icons.add, color: Colors.white),
+            //           onPressed: () {
+            //             Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                 builder: (context) => RequestVessel(),
+            //               ),
+            //             );
+            //           },
+            //           tooltip: 'Ajukan chat kapal',
+            //         ),
+            //       ),
+            //     ),
+            // ],
           ),
         ),
       ),

@@ -35,16 +35,16 @@ class _ProfileMemberMenuOptionsState extends State<ProfileMemberMenuOptions> {
               onTap: () =>
                   Navigator.pushNamed(context, AppRoutes.myProfileKapal),
             ),
-            const Divider(
-              thickness: 0.5,
-              color: Colors.black,
-            ),
-            ProfileListTile(
-              title: Localization.getTrackKapalKu(widget.selectedLanguage),
-              icon: FontAwesomeIcons.locationCrosshairs,
-              onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.myProfileTrackKapal),
-            ),
+            // const Divider(
+            //   thickness: 0.5,
+            //   color: Colors.black,
+            // ),
+            // ProfileListTile(
+            //   title: Localization.getTrackKapalKu(widget.selectedLanguage),
+            //   icon: FontAwesomeIcons.locationCrosshairs,
+            //   onTap: () =>
+            //       Navigator.pushNamed(context, AppRoutes.myProfileTrackKapal),
+            // ),
             const Divider(
               thickness: 0.5,
               color: Colors.black,
