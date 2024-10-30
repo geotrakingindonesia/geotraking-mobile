@@ -1282,17 +1282,17 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
+import 'package:geotraking/views/profile/report/jaraktempuh/components/mileage_location_page.dart';
 import 'package:geotraking/views/profile/report/jaraktempuh/components/tab_card.dart';
 import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:open_file/open_file.dart';
 import 'dart:math';
 
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 
@@ -1349,22 +1349,6 @@ class DetailPage extends StatelessWidget {
     }
     return totalDistance;
   }
-
-  // double _calculateTotalDistance() {
-  //   double totalDistance = 0;
-  //   if (data != null) {
-  //     for (var item in data!) {
-  //       double distanceNmi = calculateDistanceNmi(
-  //         double.parse(item['start_latitude']),
-  //         double.parse(item['start_longitude']),
-  //         double.parse(item['end_latitude']),
-  //         double.parse(item['end_longitude']),
-  //       );
-  //       totalDistance += distanceNmi;
-  //     }
-  //   }
-  //   return totalDistance;
-  // }
 
   double _calculateAverageSpeed() {
     double totalSpeed = 0;
@@ -1547,29 +1531,11 @@ class DetailPage extends StatelessWidget {
     OpenFile.open(file.path);
   }
 
-  List<FlSpot> _createChartData() {
-    List<FlSpot> spots = [];
-    for (int index = 0; index < data!.length; index++) {
-      final item = data![index];
-      double distanceNmi = calculateDistanceNmi(
-        double.parse(item['start_latitude']),
-        double.parse(item['start_longitude']),
-        double.parse(item['end_latitude']),
-        double.parse(item['end_longitude']),
-      );
-
-      spots.add(FlSpot(index.toDouble(), distanceNmi));
-    }
-    return spots;
-  }
-
   @override
   Widget build(BuildContext context) {
     double totalDistance = _calculateTotalDistance();
     Map<String, int> totalTime = _calculateTotalTime();
     double averageSpeed = _calculateAverageSpeed();
-    List<String> labels =
-        List.generate(data!.length, (index) => 'H${index + 1}');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -1648,6 +1614,27 @@ class DetailPage extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,
+                                ),
+                              ),
+                              Spacer(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black54, 
+                                  shape: BoxShape.circle, 
+                                ),
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.location_on,
+                                    color: Colors.white60,
+                                    size: 24,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => MileageLocationPage(data: data,)),
+                                    );
+                                  },
+                                  tooltip: 'Go to Location',
                                 ),
                               ),
                             ],
