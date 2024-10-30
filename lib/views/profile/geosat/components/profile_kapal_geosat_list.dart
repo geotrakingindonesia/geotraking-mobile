@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:geotraking/core/services/kapal_geosat_service.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/profile/components/profile_kapal_preview_tile.dart';
-import 'package:geotraking/views/profile/geosat/components/profile_kapal_geosat_preview_tile.dart';
+// import 'package:geotraking/views/profile/geosat/components/profile_kapal_geosat_preview_tile.dart';
 
 class ProfileKapalGeosatList extends StatefulWidget {
   const ProfileKapalGeosatList({Key? key}) : super(key: key);

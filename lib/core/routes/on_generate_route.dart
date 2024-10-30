@@ -35,7 +35,7 @@ import 'package:geotraking/views/profile/geosat/profile_kapal_geosat_page.dart';
 import 'package:geotraking/views/profile/geosat/profile_tracking_geosat_page.dart';
 import 'package:geotraking/views/profile/log/logbook_hasil_penangkapan_page.dart';
 import 'package:geotraking/views/profile/log/logbook_history_hasil_penangkapan_page.dart';
-import 'package:geotraking/views/profile/report/jaraktempuh/jaraktempuh_page.dart';
+// import 'package:geotraking/views/profile/report/jaraktempuh/jaraktempuh_page.dart';
 // import 'package:geotraking/views/profile/history/history_page.dart';
 // import 'package:geotraking/views/profile/profile_page.dart';
 import 'package:geotraking/views/profile/support/support_page.dart';
@@ -176,8 +176,8 @@ class RouteGenerator {
       case AppRoutes.logBookHistoryHasilPenangkapan:
         return CupertinoPageRoute(builder: (_) => LogbookHistoryHasilPenangkapanPage());
       
-      case AppRoutes.reportHistoryTrakingJarakTempuh:
-        return CupertinoPageRoute(builder: (_) => JaraktempuhPage());
+      // case AppRoutes.reportHistoryTrakingJarakTempuh:
+      //   return CupertinoPageRoute(builder: (_) => JaraktempuhPage());
       
       
       case AppRoutes.legendInformation:

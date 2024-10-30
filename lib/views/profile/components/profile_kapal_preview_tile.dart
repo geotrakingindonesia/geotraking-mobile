@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_shake_animated/flutter_shake_animated.dart';
+// import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
 import 'package:geotraking/core/components/card_vessel_color.dart';
 import 'package:geotraking/core/components/marker_image_widget.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
-import 'package:geotraking/core/models/member.dart';
-import 'package:geotraking/core/services/auth/authenticate_service.dart';
+// import 'package:geotraking/core/models/member.dart';
+// import 'package:geotraking/core/services/auth/authenticate_service.dart';
 // import 'package:geotraking/core/services/status_payment_member_service.dart';
 import 'package:geotraking/core/services/trouble_member_service.dart';
 import 'package:geotraking/core/utils/validators.dart';

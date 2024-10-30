@@ -1,72 +1,11 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, depend_on_referenced_packages, unnecessary_string_interpolations, prefer_const_constructors, prefer_const_constructors_in_immutables
-
 import 'package:flutter/material.dart';
-import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
-// import 'package:geotraking/core/models/news.dart';
-import 'package:geotraking/core/routes/app_routes.dart';
-// import 'package:geotraking/core/services/news_service.dart';
 import 'package:geotraking/views/home/components/news_detail_page.dart';
 import 'package:intl/intl.dart';
 
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
-
-// class NewsPacks extends StatelessWidget {
-//   NewsPacks({
-//     Key? key,
-//   }) : super(key: key);
-
-//   final NewsService newsService = NewsService();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         const SizedBox(height: 5),
-//         TitleAndActionButton(
-//           title: 'Our Galleries',
-//           onTap: () => Navigator.pushNamed(context, AppRoutes.home),
-//         ),
-//         const SizedBox(height: 5),
-//         FutureBuilder<List<News>>(
-//           future: newsService.fetchAllNews(),
-//           builder: (context, snapshot) {
-//             if (snapshot.hasData) {
-//               return SingleChildScrollView(
-//                 scrollDirection: Axis.horizontal,
-//                 child: Row(
-//                   children: snapshot.data!
-//                       .map((news) => Padding(
-//                             padding: const EdgeInsets.only(right: 5),
-//                             child: NewsPackCard(
-//                               title: news.title,
-//                               image: news.image,
-//                               pubdate: news.pubdate,
-//                               link: news.link,
-//                             ),
-//                           ))
-//                       .toList(),
-//                 ),
-//               );
-//             } else if (snapshot.hasError) {
-//               return Text('${snapshot.error}');
-//             }
-//             return Opacity(
-//               opacity:
-//                   snapshot.connectionState == ConnectionState.waiting ? 1 : 0,
-//               child: Container(
-//                 width: 20,
-//                 height: 20,
-//                 color: Colors.white,
-//               ),
-//             );
-//           },
-//         ),
-//       ],
-//     );
-//   }
-// }
 
 class NewsPacks extends StatefulWidget {
   final String selectedLanguage;
@@ -79,33 +18,10 @@ class NewsPacks extends StatefulWidget {
 }
 
 class _NewsPacksState extends State<NewsPacks> {
-  // String _selectedLanguage = 'English';
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _loadLanguageFromSharedPreferences();
-  // }
-
-  // _loadLanguageFromSharedPreferences() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final language = prefs.getString('language');
-  //   if (language != null) {
-  //     setState(() {
-  //       _selectedLanguage = language;
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 5),
-        // TitleAndActionButton(
-        //   title: Localization.getGallery(widget.selectedLanguage),
-        //   onTap: () => Navigator.pushNamed(context, AppRoutes.home),
-        // ),
         const SizedBox(height: 5),
         FutureBuilder<List<dynamic>>(
           future: _loadGalleryData(),

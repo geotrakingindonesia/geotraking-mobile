@@ -340,7 +340,7 @@ import 'package:geotraking/views/home/home_page.dart';
 import 'package:geotraking/views/profile/components/profile_tracking_page.dart';
 import 'package:geotraking/views/profile/geosat/profile_tracking_geosat_page.dart';
 import 'package:geotraking/views/profile/profile_page.dart';
-import 'package:geotraking/views/traking/traking_page.dart';
+// import 'package:geotraking/views/traking/traking_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';

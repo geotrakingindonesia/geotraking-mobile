@@ -3,7 +3,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/models/catalog_model.dart';
 import 'package:geotraking/core/models/product.dart';
 import 'package:geotraking/views/catalogue/components/product_detail_page.dart';
@@ -45,10 +44,6 @@ class _ProductPacksState extends State<ProductPacks> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // TitleAndActionButton(
-        //   title: Localization.getCatalogue(widget.selectedLanguage),
-        //   onTap: () => {},
-        // ),
         const SizedBox(height: 5),
         FutureBuilder<List<Product>>(
           future: futureProducts,

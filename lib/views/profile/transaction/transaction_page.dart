@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/localization_language.dart';
-import 'package:geotraking/core/constants/app_colors.dart';
+// import 'package:geotraking/core/constants/app_colors.dart';
 import 'package:geotraking/views/profile/transaction/components/custom_tab_label.dart';
-import 'package:geotraking/views/profile/transaction/components/tab_paidoff.dart';
-import 'package:geotraking/views/profile/transaction/components/tab_process.dart';
+// import 'package:geotraking/views/profile/transaction/components/tab_paidoff.dart';
+// import 'package:geotraking/views/profile/transaction/components/tab_process.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TransactionPage extends StatefulWidget {
@@ -87,10 +87,10 @@ class _TransactionPageState extends State<TransactionPage> {
             children: [
               // TabProcess(),
               // TabPaidOff(),
-              Text('Ongoing'),
-              Text('Ongoing'),
-              Text('Ongoing'),
-              Text('Ongoin'),
+              Text('Coming Soon'),
+              Text('Coming Soon'),
+              Text('Coming Soon'),
+              Text('Coming Soon'),
             ],
           ),
         ),

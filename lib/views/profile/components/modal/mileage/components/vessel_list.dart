@@ -226,12 +226,14 @@
 //   }
 // }
 
+// ignore_for_file: unused_field
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/services/auth/authenticate_service.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
-import 'package:geotraking/views/profile/report/jaraktempuh/components/vessel_preview_tile.dart';
+import 'package:geotraking/views/profile/components/modal/mileage/components/vessel_preview_tile.dart';
 
 class VesselList extends StatefulWidget {
   const VesselList({Key? key}) : super(key: key);

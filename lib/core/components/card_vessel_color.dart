@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart';
 
 Color cardVesselColor(String timestamp) {
   final parsedTimestamp = DateTime.parse(timestamp);
@@ -49,14 +48,3 @@ Color reportVesselColor(String speed) {
     return Color.fromARGB(255, 127, 183, 126);
   }
 }
-
-// Color cardWeatherVessel(String receivedDate) {
-//   DateTime dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(receivedDate);
-//   int hour = dateTime.hour;
-
-//   if (hour >= 18 || hour < 6) {
-//     return Color.fromARGB(255, 27, 38, 44);
-//   } else {
-//     return Color.fromARGB(255, 50, 130, 184);
-//   }
-// }

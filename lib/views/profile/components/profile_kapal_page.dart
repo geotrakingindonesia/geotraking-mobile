@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/localization_language.dart';
-import 'package:geotraking/core/constants/app_colors.dart';
+// import 'package:geotraking/core/constants/app_colors.dart';
 import 'package:geotraking/views/profile/components/profile_kapal_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';

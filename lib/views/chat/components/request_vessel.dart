@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
@@ -5,6 +7,8 @@ import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 
 class RequestVessel extends StatefulWidget {
+  const RequestVessel({super.key});
+
   @override
   _RequestVesselState createState() => _RequestVesselState();
 }
@@ -69,7 +73,7 @@ class _RequestVesselState extends State<RequestVessel> {
                     [],
                 onChanged: (value) {
                   setState(() {
-                    selectedVessels = value ?? [];
+                    selectedVessels = value;
                   });
                 },
                 popupProps: PopupPropsMultiSelection.bottomSheet(

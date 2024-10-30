@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
-import 'package:geotraking/views/home/categories/iot/components/tab_card.dart';
+// import 'package:geotraking/views/home/categories/iot/components/tab_card.dart';
 
 class TabRpm extends StatefulWidget {
   const TabRpm({Key? key}) : super(key: key);

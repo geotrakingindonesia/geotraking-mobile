@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
-import 'package:geotraking/views/profile/components/tab_download_history_tracking.dart';
-import 'package:intl/intl.dart';
+import 'package:geotraking/views/profile/components/modal/traking/components/tab_download_history_tracking.dart';
+// import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, prefer_const_constructors
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/models/basarnas.dart';

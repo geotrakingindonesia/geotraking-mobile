@@ -1286,8 +1286,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
-import 'package:geotraking/views/profile/report/jaraktempuh/components/mileage_location_page.dart';
-import 'package:geotraking/views/profile/report/jaraktempuh/components/tab_card.dart';
+import 'package:geotraking/views/profile/components/modal/mileage/components/mileage_location_page.dart';
+import 'package:geotraking/views/profile/components/modal/mileage/components/tab_card.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:open_file/open_file.dart';
@@ -1296,14 +1296,14 @@ import 'dart:math';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 
-class DetailPage extends StatelessWidget {
+class MileageDetailPage extends StatelessWidget {
   final List<Map<String, dynamic>>? data;
   final DateTime? startDate;
   final DateTime? endDate;
   final String? vesselName;
   final String? mobileId;
 
-  DetailPage(
+  MileageDetailPage(
       {Key? key,
       this.data,
       this.startDate,
@@ -1314,7 +1314,7 @@ class DetailPage extends StatelessWidget {
 
   double calculateDistanceNmi(
       double startLat, double startLon, double endLat, double endLon) {
-    const R = 3440.07;
+    const R = 3440.07; // jari jari bumi dlm mil laut
     double lat1 = startLat * pi / 180;
     double lon1 = startLon * pi / 180;
     double lat2 = endLat * pi / 180;
@@ -1330,13 +1330,37 @@ class DetailPage extends StatelessWidget {
     return R * c;
   }
 
+  // double _calculateTotalDistance() {
+  //   double totalDistance = 0;
+  //   if (data != null) {
+  //     for (var item in data!) {
+  //       double rerataSpeed =
+  //           double.parse(item['average_speed_knots'].toString());
+  //       if (rerataSpeed >= 0.4) {
+  //         double distanceNmi = calculateDistanceNmi(
+  //           double.parse(item['start_latitude']),
+  //           double.parse(item['start_longitude']),
+  //           double.parse(item['end_latitude']),
+  //           double.parse(item['end_longitude']),
+  //         );
+  //         totalDistance += distanceNmi;
+  //       }
+  //     }
+  //   }
+  //   return totalDistance;
+  // }
+
   double _calculateTotalDistance() {
     double totalDistance = 0;
+
     if (data != null) {
-      for (var item in data!) {
+      for (var index = 0; index < data!.length; index++) {
+        var item = data![index];
         double rerataSpeed =
             double.parse(item['average_speed_knots'].toString());
-        if (rerataSpeed >= 0.4) {
+
+        // Hitung jarak dari titik awal ke titik akhir untuk item saat ini
+        if (rerataSpeed >= 0.1) {
           double distanceNmi = calculateDistanceNmi(
             double.parse(item['start_latitude']),
             double.parse(item['start_longitude']),
@@ -1344,9 +1368,22 @@ class DetailPage extends StatelessWidget {
             double.parse(item['end_longitude']),
           );
           totalDistance += distanceNmi;
+
+          // Jika ada item berikutnya, hitung jarak dari titik akhir item saat ini ke titik awal item berikutnya
+          if (index < data!.length - 1) {
+            var nextItem = data![index + 1];
+            double distanceToNextStart = calculateDistanceNmi(
+              double.parse(item['end_latitude']),
+              double.parse(item['end_longitude']),
+              double.parse(nextItem['start_latitude']),
+              double.parse(nextItem['start_longitude']),
+            );
+            totalDistance += distanceToNextStart;
+          }
         }
       }
     }
+
     return totalDistance;
   }
 
@@ -1499,18 +1536,51 @@ class DetailPage extends StatelessWidget {
                 data!.length,
                 (index) {
                   final item = data![index];
+                  // double distanceNmi = calculateDistanceNmi(
+                  //   double.parse(item['start_latitude']),
+                  //   double.parse(item['start_longitude']),
+                  //   double.parse(item['end_latitude']),
+                  //   double.parse(item['end_longitude']),
+                  // );
+                  // DateTime startTime = item['waktu_awal'];
+                  // DateTime endTime = item['waktu_akhir'];
+
+                  // Hitung jarak dari titik awal ke titik akhir untuk item saat ini
                   double distanceNmi = calculateDistanceNmi(
                     double.parse(item['start_latitude']),
                     double.parse(item['start_longitude']),
                     double.parse(item['end_latitude']),
                     double.parse(item['end_longitude']),
                   );
+
+                  // Menyiapkan nilai untuk rerata speed
+                  double rerataSpeed = item['average_speed_knots'] ?? -1;
+                  double distanceTextValue =
+                      (rerataSpeed < 0.1) ? 0.0 : distanceNmi;
+
                   DateTime startTime = item['waktu_awal'];
                   DateTime endTime = item['waktu_akhir'];
 
+                  // Cek jika ada item berikutnya untuk menghitung jarak
+                  double distanceToNextStart = 0.0;
+                  if (index < data!.length - 1) {
+                    final nextItem = data![index + 1];
+                    distanceToNextStart = calculateDistanceNmi(
+                      double.parse(item['end_latitude']),
+                      double.parse(item['end_longitude']),
+                      double.parse(nextItem['start_latitude']),
+                      double.parse(nextItem['start_longitude']),
+                    );
+                  }
+
+                  // Jumlahkan distanceText dengan distanceToNextStart
+                  double totalDistance =
+                      distanceTextValue + distanceToNextStart;
+
                   return [
                     '${DateFormat('dd MMM yyyy').format(item['tgl_aktifasi'])} ${DateFormat('hh:mm a').format(startTime)} - ${DateFormat('hh:mm a').format(endTime)}',
-                    distanceNmi.toStringAsFixed(2),
+                    // distanceNmi.toStringAsFixed(2),
+                    totalDistance.toStringAsFixed(2),
                     item['duration'],
                     item['average_speed_knots'].toString(),
                   ];
@@ -1619,8 +1689,8 @@ class DetailPage extends StatelessWidget {
                               Spacer(),
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.black54, 
-                                  shape: BoxShape.circle, 
+                                  color: Colors.black54,
+                                  shape: BoxShape.circle,
                                 ),
                                 child: IconButton(
                                   icon: Icon(
@@ -1631,7 +1701,11 @@ class DetailPage extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => MileageLocationPage(data: data,)),
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MileageLocationPage(
+                                                data: data,
+                                              )),
                                     );
                                   },
                                   tooltip: 'Go to Location',
@@ -1733,11 +1807,100 @@ class DetailPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Expanded(
+                  //   child: ListView.builder(
+                  //     itemCount: data!.length,
+                  //     itemBuilder: (context, index) {
+                  //       final item = data![index];
+                  //       double distanceNmi = calculateDistanceNmi(
+                  //         double.parse(item['start_latitude']),
+                  //         double.parse(item['start_longitude']),
+                  //         double.parse(item['end_latitude']),
+                  //         double.parse(item['end_longitude']),
+                  //       );
+
+                  //       double rerataSpeed = item['average_speed_knots'] ?? '-';
+                  //       String distanceText = (rerataSpeed < 0.1)
+                  //           ? '- nmi'
+                  //           : '${distanceNmi.toStringAsFixed(2)} nmi';
+
+                  //       DateTime startTime = item['waktu_awal'];
+                  //       DateTime endTime = item['waktu_akhir'];
+
+                  //       return TabCard(
+                  //         tanggalBerlayar:
+                  //             '${DateFormat('dd MMM yyyy').format((item['tgl_aktifasi']))} ${DateFormat('hh:mm a').format((startTime))} - ${DateFormat('hh:mm a').format((endTime))}',
+                  //         jarak: distanceText,
+                  //         lamaBerlayar: '${item['duration']}',
+                  //         rerataSpeed:
+                  //             'avg speed ${item['average_speed_knots']} knots',
+                  //         highSpeed: '${item['high_speed_knots']} knots',
+                  //         lowSpeed: '${item['low_speed_knots']} knots',
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
+                  // Expanded(
+                  //   child: ListView.builder(
+                  //     itemCount: data!.length,
+                  //     itemBuilder: (context, index) {
+                  //       final item = data![index];
+
+                  //       // Hitung jarak dari titik awal ke titik akhir untuk item saat ini
+                  //       double distanceNmi = calculateDistanceNmi(
+                  //         double.parse(item['start_latitude']),
+                  //         double.parse(item['start_longitude']),
+                  //         double.parse(item['end_latitude']),
+                  //         double.parse(item['end_longitude']),
+                  //       );
+
+                  //       // Menyiapkan nilai untuk rerata speed
+                  //       double rerataSpeed = item['average_speed_knots'] ?? -1;
+                  //       String distanceText = (rerataSpeed < 0.1)
+                  //           ? '- nmi'
+                  //           : '${distanceNmi.toStringAsFixed(2)} nmi';
+
+                  //       DateTime startTime = item['waktu_awal'];
+                  //       DateTime endTime = item['waktu_akhir'];
+
+                  //       // Cek jika ada item berikutnya untuk menghitung jarak
+                  //       double distanceToNextStart = 0.0;
+                  //       if (index < data!.length - 1) {
+                  //         final nextItem = data![index + 1];
+                  //         distanceToNextStart = calculateDistanceNmi(
+                  //           double.parse(item['end_latitude']),
+                  //           double.parse(item['end_longitude']),
+                  //           double.parse(nextItem['start_latitude']),
+                  //           double.parse(nextItem['start_longitude']),
+                  //         );
+                  //       }
+
+                  //       String combinedDistanceText = distanceToNextStart > 0
+                  //           ? '$distanceText (to next: ${distanceToNextStart.toStringAsFixed(2)} nmi)'
+                  //           : distanceText;
+
+                  //       return TabCard(
+                  //         tanggalBerlayar:
+                  //             '${DateFormat('dd MMM yyyy').format((item['tgl_aktifasi']))} ${DateFormat('hh:mm a').format((startTime))} - ${DateFormat('hh:mm a').format((endTime))}',
+                  //         // jarak: '$distanceText',
+                  //         jarak: '$combinedDistanceText',
+                  //         lamaBerlayar: '${item['duration']}',
+                  //         rerataSpeed:
+                  //             'avg speed ${item['average_speed_knots']} knots',
+                  //         highSpeed: '${item['high_speed_knots']} knots',
+                  //         lowSpeed: '${item['low_speed_knots']} knots',
+                  //         // lowSpeed: '(to next: ${distanceToNextStart.toStringAsFixed(2)} nmi)',
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: data!.length,
                       itemBuilder: (context, index) {
                         final item = data![index];
+
+                        // Hitung jarak dari titik awal ke titik akhir untuk item saat ini
                         double distanceNmi = calculateDistanceNmi(
                           double.parse(item['start_latitude']),
                           double.parse(item['start_longitude']),
@@ -1745,18 +1908,34 @@ class DetailPage extends StatelessWidget {
                           double.parse(item['end_longitude']),
                         );
 
-                        double rerataSpeed = item['average_speed_knots'] ?? '-';
-                        String distanceText = (rerataSpeed < 0.1)
-                            ? '- nmi'
-                            : '${distanceNmi.toStringAsFixed(2)} nmi';
+                        // Menyiapkan nilai untuk rerata speed
+                        double rerataSpeed = item['average_speed_knots'] ?? -1;
+                        double distanceTextValue =
+                            (rerataSpeed < 0.1) ? 0.0 : distanceNmi;
 
                         DateTime startTime = item['waktu_awal'];
                         DateTime endTime = item['waktu_akhir'];
 
+                        // Cek jika ada item berikutnya untuk menghitung jarak
+                        double distanceToNextStart = 0.0;
+                        if (index < data!.length - 1) {
+                          final nextItem = data![index + 1];
+                          distanceToNextStart = calculateDistanceNmi(
+                            double.parse(item['end_latitude']),
+                            double.parse(item['end_longitude']),
+                            double.parse(nextItem['start_latitude']),
+                            double.parse(nextItem['start_longitude']),
+                          );
+                        }
+
+                        // Jumlahkan distanceText dengan distanceToNextStart
+                        double totalDistance =
+                            distanceTextValue + distanceToNextStart;
+
                         return TabCard(
                           tanggalBerlayar:
                               '${DateFormat('dd MMM yyyy').format((item['tgl_aktifasi']))} ${DateFormat('hh:mm a').format((startTime))} - ${DateFormat('hh:mm a').format((endTime))}',
-                          jarak: distanceText,
+                          jarak: '${totalDistance.toStringAsFixed(2)} nmi',
                           lamaBerlayar: '${item['duration']}',
                           rerataSpeed:
                               'avg speed ${item['average_speed_knots']} knots',

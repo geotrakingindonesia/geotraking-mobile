@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/card_vessel_color.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
-import 'package:geotraking/views/profile/report/jaraktempuh/components/detail_page.dart';
+import 'package:geotraking/views/profile/components/modal/mileage/components/mileage_detail_page.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class VesselPreviewTile extends StatefulWidget {
@@ -250,7 +250,7 @@ class _VesselPreviewTile extends State<VesselPreviewTile> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DetailPage(
+                            builder: (context) => MileageDetailPage(
                               data: _historyData,
                               startDate: _startDate,
                               endDate: _endDate,

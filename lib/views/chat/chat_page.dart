@@ -285,12 +285,14 @@
 //   }
 // }
 
+// ignore_for_file: unused_field, prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 // import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/models/member.dart';
 import 'package:geotraking/core/services/auth/authenticate_service.dart';
 // import 'package:geotraking/core/services/vessel/vessel_service.dart';
-import 'package:geotraking/views/chat/components/request_vessel.dart';
+// import 'package:geotraking/views/chat/components/request_vessel.dart';
 import 'package:geotraking/views/chat/components/tab_detail.dart';
 
 class ChatPage extends StatefulWidget {

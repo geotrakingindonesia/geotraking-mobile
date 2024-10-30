@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/routes/app_routes.dart';
-import 'package:geotraking/core/services/vessel_service.dart';
 
 import 'profile_list_tile.dart';
 

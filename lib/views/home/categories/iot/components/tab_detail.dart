@@ -34,8 +34,8 @@ class TabDetail extends StatefulWidget {
 }
 
 class _TabDetailState extends State<TabDetail> {
-  bool _isShowDeskripsi = false;
-  bool _isShowKategoriPaket = false;
+  // bool _isShowDeskripsi = false;
+  // bool _isShowKategoriPaket = false;
 
   @override
   Widget build(BuildContext context) {

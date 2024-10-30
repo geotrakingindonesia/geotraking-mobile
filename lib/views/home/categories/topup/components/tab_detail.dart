@@ -1,11 +1,13 @@
+// ignore_for_file: prefer_const_constructors_in_immutables, library_private_types_in_public_api, prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
-import 'package:geotraking/core/constants/app_defaults.dart';
+// import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/views/catalogue/components/hubungi_kami_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TabDetail extends StatefulWidget {
-  TabDetail({
+  TabDetail({super.key, 
     required this.namaPaket,
     required this.kuota,
     required this.masaAktif,
@@ -122,138 +124,6 @@ class _TabDetailState extends State<TabDetail> {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   backgroundColor: Colors.white,
-    //   appBar: AppBar(
-    //     title: Text('Detail Paket'),
-    //     leading: const AppBackButton(),
-    //     backgroundColor: Colors.white,
-    //     elevation: 0,
-    //     titleTextStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-    //           color: Colors.black,
-    //         ),
-    //   ),
-    //   body: Padding(
-    //     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Text(
-    //           namaPaket,
-    //           style: TextStyle(fontSize: 16, color: Colors.black),
-    //         ),
-    //         SizedBox(height: 8),
-    //         Row(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: [
-    //             Text(
-    //               kuota,
-    //               style: TextStyle(
-    //                 fontSize: 24,
-    //                 fontWeight: FontWeight.bold,
-    //               ),
-    //             ),
-    //             Text(
-    //               harga,
-    //               style: TextStyle(
-    //                 fontSize: 24,
-    //                 fontWeight: FontWeight.bold,
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //         SizedBox(height: 8),
-    //         Container(
-    //           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    //           decoration: BoxDecoration(
-    //             color: Colors.orange.withOpacity(0.7),
-    //             borderRadius: BorderRadius.circular(8),
-    //           ),
-    //           child: Text(
-    //             typeSatelit == 3
-    //                 ? '${jenisSatelitLabel(typeSatelit, jenisSatelit)}'
-    //                 : '${typeSatelitLabel(typeSatelit)} - ${jenisSatelitLabel(typeSatelit, jenisSatelit)}',
-    //           ),
-    //         ),
-    //         SizedBox(height: 16),
-    //         Container(
-    //           padding: EdgeInsets.all(16),
-    //           decoration: BoxDecoration(
-    //             color: Colors.white,
-    //             borderRadius: BorderRadius.circular(12),
-    //             boxShadow: [
-    //               BoxShadow(
-    //                 color: Colors.grey.withOpacity(0.5),
-    //                 spreadRadius: 2,
-    //                 blurRadius: 7,
-    //                 offset: Offset(0, 3),
-    //               ),
-    //             ],
-    //           ),
-    //           child: Column(
-    //             children: [
-    //               Row(
-    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                 children: [
-    //                   Row(
-    //                     children: [
-    //                       Icon(Icons.hourglass_bottom),
-    //                       SizedBox(width: 8),
-    //                       Text(
-    //                         'Masa Aktif',
-    //                         style: TextStyle(
-    //                           fontWeight: FontWeight.bold,
-    //                         ),
-    //                       ),
-    //                     ],
-    //                   ),
-    //                   Text(
-    //                     masaAktif,
-    //                     style: TextStyle(
-    //                       fontWeight: FontWeight.bold,
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //               Divider(),
-    //               Row(
-    //                 crossAxisAlignment: CrossAxisAlignment.start,
-    //                 children: [
-    //                   Text(
-    //                     'Deskripsi',
-    //                     style: TextStyle(
-    //                       fontWeight: FontWeight.bold,
-    //                       color: Colors.blueGrey,
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //               SizedBox(height: 8),
-    //               Text(
-    //                 '${deskSatelit(typeSatelit)}',
-    //                 style: TextStyle(color: Colors.grey.shade700),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    //   bottomNavigationBar: SafeArea(
-    //     child: HubungiKamiButton(
-    //       onHubungiKamiButtonTap: () async {
-    //         String whatsAppUrl =
-    //             'https://wa.me/6281908192559?text=Hallo+Geomatika+Satelit+Indonesia';
-    //         if (await canLaunchUrl(Uri.parse(whatsAppUrl))) {
-    //           await launchUrl(Uri.parse(whatsAppUrl));
-    //         } else {
-    //           throw 'Could not launch $whatsAppUrl';
-    //         }
-    //       },
-    //     ),
-    //   ),
-    // );
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -287,22 +157,6 @@ class _TabDetailState extends State<TabDetail> {
                     ),
                   ),
                 ),
-                // Expanded(
-                //   child: Text(
-                //     widget.harga,
-                //     style: TextStyle(
-                //       fontSize: 20,
-                //       color: Colors.black,
-                //     ),
-                //   ),
-                // ),
-                // Text(
-                //   '${widget.kuota} | ${widget.masaAktif}',
-                //   style: TextStyle(
-                //     fontSize: 20,
-                //     color: Colors.black,
-                //   ),
-                // ),
                 Text(
                   widget.harga,
                   style: TextStyle(
@@ -312,19 +166,6 @@ class _TabDetailState extends State<TabDetail> {
                 ),
               ],
             ),
-            // SizedBox(height: 8),
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            //   decoration: BoxDecoration(
-            //     color: Colors.orange.withOpacity(0.7),
-            //     borderRadius: BorderRadius.circular(8),
-            //   ),
-            //   child: Text(
-            //     typeSatelit == 3
-            //         ? '${jenisSatelitLabel(typeSatelit, jenisSatelit)}'
-            //         : '${typeSatelitLabel(typeSatelit)} - ${jenisSatelitLabel(typeSatelit, jenisSatelit)}',
-            //   ),
-            // ),
             SizedBox(height: 16),
             Container(
               padding: EdgeInsets.all(16),

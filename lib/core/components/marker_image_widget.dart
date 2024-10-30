@@ -67,13 +67,13 @@ class MarkerImageWidget extends StatelessWidget {
 
     double parseHeading(String? heading) {
       if (heading == null || heading.isEmpty) {
-        return 0.0; // Default to 0 if heading is null or empty
+        return 0.0; // default 0 jika heading null or empty
       }
       try {
         return double.parse(heading);
       } catch (e) {
         print('Error parsing heading: $e');
-        return 0.0; // Default to 0 if parsing fails
+        return 0.0; // default 0 jika parsing err
       }
     }
 

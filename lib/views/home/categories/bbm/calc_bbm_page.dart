@@ -1,9 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api, unnecessary_brace_in_string_interps
+// ignore_for_file: library_private_types_in_public_api, unnecessary_brace_in_string_interps, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/custom_tab_label.dart';
-import 'package:geotraking/core/components/localization_language.dart';
+// import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/constants/app_colors.dart';
 import 'package:geotraking/views/home/categories/bbm/components/bbm_kapal.dart';
 import 'package:geotraking/views/home/categories/bbm/components/bbm_kapal_jam.dart';
@@ -58,14 +58,6 @@ class _CalculateBbmPageState extends State<CalculateBbmPage> {
               ),
             ),
           ),
-          // bottom: const TabBar(
-          //   physics: NeverScrollableScrollPhysics(),
-          //   tabs: [
-          //     CustomTabLabel(label: 'Solar Manual'),
-          //     CustomTabLabel(label: 'Cara Cepat'),
-          //     CustomTabLabel(label: 'Per-Jam'),
-          //   ],
-          // ),
         ),
         body: Container(
           color: AppColors.cardColor,
