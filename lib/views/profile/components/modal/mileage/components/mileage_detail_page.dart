@@ -1332,23 +1332,74 @@ class MileageDetailPage extends StatelessWidget {
   }
 
 // Fungsi untuk menghitung total jarak tempuh
-  double calculateTotalDistance(List<Map<String, dynamic>> data) {
+  // double calculateTotalDistance(List<Map<String, dynamic>> data) {
+  //   double totalDistance = 0;
+
+  //   for (int i = 0; i < data.length - 1; i++) {
+  //     var current = data[i];
+  //     var next = data[i + 1];
+
+  //     double speed = double.parse(current['speed_kn'].toString());
+
+  //     // Hanya hitung jika kecepatan lebih dari 0.1 knots
+  //     if (speed > 0.1) {
+  //       double startLat = double.parse(current['latitude'].toString());
+  //       double startLon = double.parse(current['longitude'].toString());
+  //       double endLat = double.parse(next['latitude'].toString());
+  //       double endLon = double.parse(next['longitude'].toString());
+
+  //       // Tambahkan jarak antara titik saat ini dan titik berikutnya
+  //       double distanceNmi =
+  //           calculateDistanceNmi(startLat, startLon, endLat, endLon);
+  //       totalDistance += distanceNmi;
+  //     }
+  //   }
+
+  //   return totalDistance;
+  // }
+
+// // Fungsi untuk menghitung total jarak tempuh
+//   double calculateTotalDistance(List<Map<String, dynamic>> locations) {
+//     double totalDistance = 0;
+
+//     for (int i = 0; i < locations.length - 1; i++) {
+//       var current = locations[i];
+//       var next = locations[i + 1];
+
+//       // Mengambil latitude dan longitude, dengan konversi ke double jika perlu
+//       double startLat = double.tryParse(current['latitude'].toString()) ?? 0.0;
+//       double startLon = double.tryParse(current['longitude'].toString()) ?? 0.0;
+//       double endLat = double.tryParse(next['latitude'].toString()) ?? 0.0;
+//       double endLon = double.tryParse(next['longitude'].toString()) ?? 0.0;
+
+//       // Hitung jarak
+//       double distanceNmi =
+//           calculateDistanceNmi(startLat, startLon, endLat, endLon);
+//       totalDistance += distanceNmi;
+//     }
+
+//     return totalDistance;
+//   }
+
+// Fungsi untuk menghitung total jarak tempuh
+  double calculateTotalDistance(List<Map<String, dynamic>> locations) {
     double totalDistance = 0;
 
-    for (int i = 0; i < data.length - 1; i++) {
-      var current = data[i];
-      var next = data[i + 1];
+    for (int i = 0; i < locations.length - 1; i++) {
+      var current = locations[i];
+      var next = locations[i + 1];
 
-      double speed = double.parse(current['speed_kn'].toString());
+      // Mengambil latitude dan longitude, dengan konversi ke double jika perlu
+      double startLat = double.tryParse(current['latitude'].toString()) ?? 0.0;
+      double startLon = double.tryParse(current['longitude'].toString()) ?? 0.0;
+      double endLat = double.tryParse(next['latitude'].toString()) ?? 0.0;
+      double endLon = double.tryParse(next['longitude'].toString()) ?? 0.0;
 
-      // Hanya hitung jika kecepatan lebih dari 0.1 knots
-      if (speed > 0.1) {
-        double startLat = double.parse(current['latitude'].toString());
-        double startLon = double.parse(current['longitude'].toString());
-        double endLat = double.parse(next['latitude'].toString());
-        double endLon = double.parse(next['longitude'].toString());
+      // Mengambil speed_kn, dengan konversi ke double jika perlu
+      double speed = double.tryParse(current['speed_kn'].toString()) ?? 0.0;
 
-        // Tambahkan jarak antara titik saat ini dan titik berikutnya
+      // Hitung jarak hanya jika speed_kn >= 0.1
+      if (speed >= 0.1) {
         double distanceNmi =
             calculateDistanceNmi(startLat, startLon, endLat, endLon);
         totalDistance += distanceNmi;
@@ -1357,6 +1408,234 @@ class MileageDetailPage extends StatelessWidget {
 
     return totalDistance;
   }
+
+// Fungsi untuk memproses data kapal
+  // List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+  //   Map<String, DateTime> minTimestamps = {};
+  //   Map<String, DateTime> maxTimestamps = {};
+  //   Map<String, double> totalSpeeds = {};
+  //   Map<String, int> entryCounts = {};
+  //   Map<String, double> minSpeeds = {};
+  //   Map<String, double> maxSpeeds = {};
+  //   Map<String, List<Map<String, dynamic>>> dailyLocations = {};
+
+  //   // Proses data untuk mendapatkan min dan max timestamp, kecepatan, dan lokasi untuk setiap tanggal
+  //   for (var row in data) {
+  //     String receivedString = row['received'];
+  //     DateTime received;
+
+  //     // Coba parsing tanggal
+  //     try {
+  //       received = DateTime.parse(receivedString);
+  //     } catch (e) {
+  //       print('Error parsing date: $receivedString');
+  //       continue; // Lewati jika tidak bisa diparse
+  //     }
+
+  //     String dateKey = DateFormat('yyyy-MM-dd').format(received);
+
+  //     // Update min dan max timestamp untuk setiap tanggal
+  //     if (!minTimestamps.containsKey(dateKey) ||
+  //         received.isBefore(minTimestamps[dateKey]!)) {
+  //       minTimestamps[dateKey] = received;
+  //     }
+  //     if (!maxTimestamps.containsKey(dateKey) ||
+  //         received.isAfter(maxTimestamps[dateKey]!)) {
+  //       maxTimestamps[dateKey] = received;
+  //     }
+
+  //     // Simpan lokasi untuk menghitung jarak
+  //     if (!dailyLocations.containsKey(dateKey)) {
+  //       dailyLocations[dateKey] = [];
+  //     }
+  //     dailyLocations[dateKey]!.add({
+  //       'latitude': double.tryParse(row['latitude'].toString()) ?? 0.0,
+  //       'longitude': double.tryParse(row['longitude'].toString()) ?? 0.0,
+  //       'received': received,
+  //       'speed_kn': double.tryParse(row['speed_kn'].toString()) ?? 0.0,
+  //     });
+
+  //     // Jumlahkan kecepatan dan hitung entri untuk perhitungan kecepatan rata-rata
+  //     double speed = double.tryParse(row['speed_kn'].toString()) ?? 0.0;
+  //     totalSpeeds[dateKey] = (totalSpeeds[dateKey] ?? 0.0) + speed;
+  //     entryCounts[dateKey] =
+  //         (entryCounts[dateKey] ?? 1) + 1; // Hindari pembagian dengan nol
+
+  //     // Update kecepatan min dan max
+  //     if (!minSpeeds.containsKey(dateKey) || speed < minSpeeds[dateKey]!) {
+  //       minSpeeds[dateKey] = speed;
+  //     }
+  //     if (!maxSpeeds.containsKey(dateKey) || speed > maxSpeeds[dateKey]!) {
+  //       maxSpeeds[dateKey] = speed;
+  //     }
+  //   }
+
+  //   // Siapkan data yang telah diproses untuk ditampilkan
+  //   List<Map<String, String>> processedData = [];
+  //   for (var date in minTimestamps.keys) {
+  //     String formattedDate =
+  //         DateFormat('dd MMM yyyy').format(minTimestamps[date]!);
+  //     String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+  //     String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+  //     // Hitung durasi
+  //     Duration duration = maxTimestamps[date]!.difference(minTimestamps[date]!);
+  //     String formattedDuration =
+  //         '${duration.inHours} jam ${duration.inMinutes.remainder(60)} menit';
+
+  //     // Hitung kecepatan rata-rata
+  //     double totalSpeed = totalSpeeds[date] ?? 0.0;
+  //     int count = entryCounts[date] ?? 1; // Hindari pembagian dengan nol
+  //     double averageSpeed = totalSpeed / count;
+  //     String formattedAverageSpeed =
+  //         'avg speed ${averageSpeed.toStringAsFixed(2)} knots';
+
+  //     // Dapatkan kecepatan min dan max
+  //     double minSpeed = minSpeeds[date] ?? 0.0;
+  //     double maxSpeed = maxSpeeds[date] ?? 0.0;
+
+  //     // Hitung total jarak untuk hari ini
+  //     double totalDistance = calculateTotalDistance(dailyLocations[date]!);
+
+  //     processedData.add({
+  //       'formattedDate': formattedDate,
+  //       'jamAwal': jamAwal,
+  //       'jamAkhir': jamAkhir,
+  //       'duration': formattedDuration,
+  //       'averageSpeed': formattedAverageSpeed,
+  //       'minSpeed': '${minSpeed.toStringAsFixed(2)} knots',
+  //       'maxSpeed': '${maxSpeed.toStringAsFixed(2)} knots',
+  //       'totalDistance': (totalDistance > 0.0)
+  //           ? '${totalDistance.toStringAsFixed(2)} nmi'
+  //           : 'N/A',
+  //     });
+  //   }
+  //   return processedData;
+  // }
+
+  // // Fungsi untuk menghitung total jarak tempuh
+//   double calculateTotalDistance(List<Map<String, dynamic>> locations) {
+//     double totalDistance = 0;
+
+//     for (int i = 0; i < locations.length - 1; i++) {
+//       var current = locations[i];
+//       var next = locations[i + 1];
+
+//       // Mengambil latitude dan longitude, dengan konversi ke double jika perlu
+//       double startLat = double.tryParse(current['latitude'].toString()) ?? 0.0;
+//       double startLon = double.tryParse(current['longitude'].toString()) ?? 0.0;
+//       double endLat = double.tryParse(next['latitude'].toString()) ?? 0.0;
+//       double endLon = double.tryParse(next['longitude'].toString()) ?? 0.0;
+
+//       // Mengambil kecepatan dan pastikan dalam bentuk double
+//       double speedCurrent =
+//           double.tryParse(current['speed_kn'].toString()) ?? 0.0;
+//       double speedNext = double.tryParse(next['speed_kn'].toString()) ?? 0.0;
+
+//       // Hitung jarak hanya jika kedua kecepatan lebih dari 0.1 knots
+//       if (speedCurrent > 0.1 && speedNext > 0.1) {
+//         double distanceNmi =
+//             calculateDistanceNmi(startLat, startLon, endLat, endLon);
+//         totalDistance += distanceNmi;
+//       }
+//     }
+
+//     return totalDistance;
+//   }
+
+// // Fungsi untuk memproses data kapal
+//   List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+//     Map<String, DateTime> minTimestamps = {};
+//     Map<String, DateTime> maxTimestamps = {};
+//     Map<String, double> totalSpeeds = {};
+//     Map<String, int> entryCounts = {};
+//     Map<String, double> minSpeeds = {};
+//     Map<String, double> maxSpeeds = {};
+//     Map<String, List<Map<String, dynamic>>> dailyLocations = {};
+
+//     // Proses data untuk mendapatkan min dan max timestamp, kecepatan, dan lokasi untuk setiap tanggal
+//     for (var row in data) {
+//       DateTime received = DateTime.parse(row['received']);
+//       String dateKey = DateFormat('yyyy-MM-dd').format(received);
+
+//       // Update min dan max timestamp untuk setiap tanggal
+//       if (!minTimestamps.containsKey(dateKey) ||
+//           received.isBefore(minTimestamps[dateKey]!)) {
+//         minTimestamps[dateKey] = received;
+//       }
+//       if (!maxTimestamps.containsKey(dateKey) ||
+//           received.isAfter(maxTimestamps[dateKey]!)) {
+//         maxTimestamps[dateKey] = received;
+//       }
+
+//       // Simpan lokasi untuk menghitung jarak
+//       if (!dailyLocations.containsKey(dateKey)) {
+//         dailyLocations[dateKey] = [];
+//       }
+//       dailyLocations[dateKey]!.add({
+//         'latitude': double.tryParse(row['latitude'].toString()) ?? 0.0,
+//         'longitude': double.tryParse(row['longitude'].toString()) ?? 0.0,
+//         'received': received,
+//         'speed_kn': double.tryParse(row['speed_kn'].toString()) ?? 0.0,
+//       });
+
+//       // Jumlahkan kecepatan dan hitung entri untuk perhitungan kecepatan rata-rata
+//       double speed = double.tryParse(row['speed_kn'].toString()) ?? 0.0;
+//       totalSpeeds[dateKey] = (totalSpeeds[dateKey] ?? 0.0) + speed;
+//       entryCounts[dateKey] =
+//           (entryCounts[dateKey] ?? 1) + 1; // Hindari pembagian dengan nol
+
+//       // Update kecepatan min dan max
+//       if (!minSpeeds.containsKey(dateKey) || speed < minSpeeds[dateKey]!) {
+//         minSpeeds[dateKey] = speed;
+//       }
+//       if (!maxSpeeds.containsKey(dateKey) || speed > maxSpeeds[dateKey]!) {
+//         maxSpeeds[dateKey] = speed;
+//       }
+//     }
+
+//     // Siapkan data yang telah diproses untuk ditampilkan
+//     List<Map<String, String>> processedData = [];
+//     for (var date in minTimestamps.keys) {
+//       String formattedDate =
+//           DateFormat('dd MMM yyyy').format(minTimestamps[date]!);
+//       String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+//       String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+//       // Hitung durasi
+//       Duration duration = maxTimestamps[date]!.difference(minTimestamps[date]!);
+//       String formattedDuration =
+//           '${duration.inHours} jam ${duration.inMinutes.remainder(60)} menit';
+
+//       // Hitung kecepatan rata-rata
+//       double totalSpeed = totalSpeeds[date] ?? 0.0;
+//       int count = entryCounts[date] ?? 1; // Hindari pembagian dengan nol
+//       double averageSpeed = totalSpeed / count;
+//       String formattedAverageSpeed =
+//           'avg speed ${averageSpeed.toStringAsFixed(2)} knots';
+
+//       // Dapatkan kecepatan min dan max
+//       double minSpeed = minSpeeds[date] ?? 0.0;
+//       double maxSpeed = maxSpeeds[date] ?? 0.0;
+
+//       // Hitung total jarak untuk hari ini
+//       double totalDistance = calculateTotalDistance(dailyLocations[date]!);
+
+//       processedData.add({
+//         'formattedDate': formattedDate,
+//         'jamAwal': jamAwal,
+//         'jamAkhir': jamAkhir,
+//         'duration': formattedDuration,
+//         'averageSpeed': formattedAverageSpeed,
+//         'minSpeed': '${minSpeed.toStringAsFixed(2)} knots',
+//         'maxSpeed': '${maxSpeed.toStringAsFixed(2)} knots',
+//         'totalDistance': (totalDistance > 0.0)
+//             ? '${totalDistance.toStringAsFixed(2)} nmi'
+//             : 'N/A',
+//       });
+//     }
+//     return processedData;
+//   }
 
   // Menghitung jumlah hari unik dari data
   int calculateUniqueDays(List<Map<String, dynamic>> data) {
@@ -1395,56 +1674,832 @@ class MileageDetailPage extends StatelessWidget {
     return 0;
   }
 
-  List<Map<String, dynamic>> groupAndCalculateMileage(List<dynamic> data) {
-    Map<String, Map<String, dynamic>> groupedData = {};
+  // List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+  //   Map<String, DateTime> minTimestamps = {};
+  //   Map<String, DateTime> maxTimestamps = {};
 
-    // Mengelompokkan data berdasarkan tanggal
-    for (var item in data) {
-      // Format tanggal dari 'received' menjadi string yang lebih sederhana
-      String dateKey = DateFormat('yyyy-MM-dd').format(item['received']);
+  //   // Process the data to get min and max timestamps for each date
+  //   for (var row in data) {
+  //     DateTime received = row['received'];
+  //     String dateKey = DateFormat('yyyy-MM-dd').format(received);
 
-      // Jika kunci tanggal belum ada, inisialisasi
-      if (!groupedData.containsKey(dateKey)) {
-        groupedData[dateKey] = {
-          'start_time':
-              item['received'], // Menggunakan received sebagai waktu awal
-          'end_time': item['received'], // Awalnya sama dengan received
-          'total_distance': 0.0, // Total jarak
-        };
+  //     // Update min and max timestamps for each date
+  //     if (!minTimestamps.containsKey(dateKey) ||
+  //         received.isBefore(minTimestamps[dateKey]!)) {
+  //       minTimestamps[dateKey] = received;
+  //     }
+
+  //     if (!maxTimestamps.containsKey(dateKey) ||
+  //         received.isAfter(maxTimestamps[dateKey]!)) {
+  //       maxTimestamps[dateKey] = received;
+  //     }
+  //   }
+
+  //   // Prepare processed data for display
+  //   List<Map<String, String>> processedData = [];
+  //   for (var date in minTimestamps.keys) {
+  //     String formattedDate =
+  //         DateFormat('dd MMM yyyy').format(DateTime.parse(date));
+  //     String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+  //     String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+  //     processedData.add({
+  //       'formattedDate': formattedDate,
+  //       'jamAwal': jamAwal,
+  //       'jamAkhir': jamAkhir,
+  //     });
+  //   }
+
+  //   return processedData;
+  // }
+
+  // List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+  //   Map<String, DateTime> minTimestamps = {};
+  //   Map<String, DateTime> maxTimestamps = {};
+
+  //   // Process the data to get min and max timestamps for each date
+  //   for (var row in data) {
+  //     DateTime received = row['received'];
+  //     String dateKey = DateFormat('yyyy-MM-dd').format(received);
+
+  //     // Update min and max timestamps for each date
+  //     if (!minTimestamps.containsKey(dateKey) ||
+  //         received.isBefore(minTimestamps[dateKey]!)) {
+  //       minTimestamps[dateKey] = received;
+  //     }
+
+  //     if (!maxTimestamps.containsKey(dateKey) ||
+  //         received.isAfter(maxTimestamps[dateKey]!)) {
+  //       maxTimestamps[dateKey] = received;
+  //     }
+  //   }
+
+  //   // Prepare processed data for display
+  //   List<Map<String, String>> processedData = [];
+  //   for (var date in minTimestamps.keys) {
+  //     String formattedDate =
+  //         DateFormat('dd MMM yyyy').format(minTimestamps[date]!);
+  //     String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+  //     String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+  //     // Calculate duration
+  //     Duration duration = maxTimestamps[date]!.difference(minTimestamps[date]!);
+  //     String formattedDuration =
+  //         '${duration.inHours} jam ${duration.inMinutes.remainder(60)} menit';
+
+  //     processedData.add({
+  //       'formattedDate': formattedDate,
+  //       'jamAwal': jamAwal,
+  //       'jamAkhir': jamAkhir,
+  //       'duration': formattedDuration,
+  //     });
+  //   }
+
+  //   return processedData;
+  // }
+
+  // List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+  //   Map<String, DateTime> minTimestamps = {};
+  //   Map<String, DateTime> maxTimestamps = {};
+  //   Map<String, double> totalDistances = {}; // For speed if needed
+  //   Map<String, double> totalSpeeds = {}; // Total speed per date
+  //   Map<String, int> entryCounts = {}; // Count of entries per date
+
+  //   // Process the data to get min and max timestamps and total speeds for each date
+  //   for (var row in data) {
+  //     DateTime received = row['received'];
+  //     String dateKey = DateFormat('yyyy-MM-dd').format(received);
+
+  //     // Update min and max timestamps for each date
+  //     if (!minTimestamps.containsKey(dateKey) ||
+  //         received.isBefore(minTimestamps[dateKey]!)) {
+  //       minTimestamps[dateKey] = received;
+  //     }
+
+  //     if (!maxTimestamps.containsKey(dateKey) ||
+  //         received.isAfter(maxTimestamps[dateKey]!)) {
+  //       maxTimestamps[dateKey] = received;
+  //     }
+
+  //     // Sum speeds and count entries for average speed calculation
+  //     double speed = row['speed_kn']?.toDouble() ??
+  //         0.0; // Assuming speed_kn is the key for speed
+  //     totalSpeeds[dateKey] = (totalSpeeds[dateKey] ?? 0.0) + speed;
+  //     entryCounts[dateKey] = (entryCounts[dateKey] ?? 0) + 1;
+  //   }
+
+  //   // Prepare processed data for display
+  //   List<Map<String, String>> processedData = [];
+  //   for (var date in minTimestamps.keys) {
+  //     String formattedDate =
+  //         DateFormat('dd MMM yyyy').format(minTimestamps[date]!);
+  //     String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+  //     String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+  //     // Calculate duration
+  //     Duration duration = maxTimestamps[date]!.difference(minTimestamps[date]!);
+  //     String formattedDuration =
+  //         '${duration.inHours} jam ${duration.inMinutes.remainder(60)} menit';
+
+  //     // Calculate average speed
+  //     double totalSpeed = totalSpeeds[date] ?? 0.0;
+  //     int count = entryCounts[date] ?? 1; // Avoid division by zero
+  //     double averageSpeed = totalSpeed / count;
+  //     String formattedAverageSpeed =
+  //         '${averageSpeed.toStringAsFixed(2)} knots'; // Adjust units as necessary
+
+  //     processedData.add({
+  //       'formattedDate': formattedDate,
+  //       'jamAwal': jamAwal,
+  //       'jamAkhir': jamAkhir,
+  //       'duration': formattedDuration,
+  //       'averageSpeed': formattedAverageSpeed,
+  //     });
+  //   }
+
+  //   return processedData;
+  // }
+
+  // List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+  //   Map<String, DateTime> minTimestamps = {};
+  //   Map<String, DateTime> maxTimestamps = {};
+  //   Map<String, double> totalSpeeds = {}; // Total speed per date
+  //   Map<String, int> entryCounts = {}; // Count of entries per date
+  //   Map<String, double> minSpeeds = {}; // Minimum speed per date
+  //   Map<String, double> maxSpeeds = {}; // Maximum speed per date
+
+  //   // Process the data to get min and max timestamps and total speeds for each date
+  //   for (var row in data) {
+  //     DateTime received = row['received'];
+  //     String dateKey = DateFormat('yyyy-MM-dd').format(received);
+
+  //     // Update min and max timestamps for each date
+  //     if (!minTimestamps.containsKey(dateKey) ||
+  //         received.isBefore(minTimestamps[dateKey]!)) {
+  //       minTimestamps[dateKey] = received;
+  //     }
+
+  //     if (!maxTimestamps.containsKey(dateKey) ||
+  //         received.isAfter(maxTimestamps[dateKey]!)) {
+  //       maxTimestamps[dateKey] = received;
+  //     }
+
+  //     // Sum speeds and count entries for average speed calculation
+  //     double speed = row['speed_kn']?.toDouble() ??
+  //         0.0; // Assuming speed_kn is the key for speed
+  //     totalSpeeds[dateKey] = (totalSpeeds[dateKey] ?? 0.0) + speed;
+  //     entryCounts[dateKey] = (entryCounts[dateKey] ?? 0) + 1;
+
+  //     // Update min and max speeds
+  //     if (!minSpeeds.containsKey(dateKey) || speed < minSpeeds[dateKey]!) {
+  //       minSpeeds[dateKey] = speed;
+  //     }
+
+  //     if (!maxSpeeds.containsKey(dateKey) || speed > maxSpeeds[dateKey]!) {
+  //       maxSpeeds[dateKey] = speed;
+  //     }
+  //   }
+
+  //   // Prepare processed data for display
+  //   List<Map<String, String>> processedData = [];
+  //   for (var date in minTimestamps.keys) {
+  //     String formattedDate =
+  //         DateFormat('dd MMM yyyy').format(minTimestamps[date]!);
+  //     String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+  //     String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+  //     // Calculate duration
+  //     Duration duration = maxTimestamps[date]!.difference(minTimestamps[date]!);
+  //     String formattedDuration =
+  //         '${duration.inHours} jam ${duration.inMinutes.remainder(60)} menit';
+
+  //     // Calculate average speed
+  //     double totalSpeed = totalSpeeds[date] ?? 0.0;
+  //     int count = entryCounts[date] ?? 1; // Avoid division by zero
+  //     double averageSpeed = totalSpeed / count;
+  //     String formattedAverageSpeed =
+  //         'avg speed  ${averageSpeed.toStringAsFixed(2)} knots'; // Adjust units as necessary
+
+  //     // Get min and max speeds
+  //     double minSpeed = minSpeeds[date] ?? 0.0;
+  //     double maxSpeed = maxSpeeds[date] ?? 0.0;
+
+  //     processedData.add({
+  //       'formattedDate': formattedDate,
+  //       'jamAwal': jamAwal,
+  //       'jamAkhir': jamAkhir,
+  //       'duration': formattedDuration,
+  //       'averageSpeed': formattedAverageSpeed,
+  //       'minSpeed': '${minSpeed.toStringAsFixed(2)} knots', // Format as needed
+  //       'maxSpeed': '${maxSpeed.toStringAsFixed(2)} knots', // Format as needed
+  //     });
+  //   }
+
+  //   return processedData;
+  // }
+
+  // List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+  //   Map<String, DateTime> minTimestamps = {};
+  //   Map<String, DateTime> maxTimestamps = {};
+  //   Map<String, double> totalSpeeds = {}; // Total speed per date
+  //   Map<String, int> entryCounts = {}; // Count of entries per date
+  //   Map<String, double> minSpeeds = {}; // Minimum speed per date
+  //   Map<String, double> maxSpeeds = {}; // Maximum speed per date
+  //   Map<String, List<Map<String, dynamic>>> dailyLocations =
+  //       {}; // Store lat/lon per day
+
+  //   // Process the data to get min and max timestamps, speeds, and locations for each date
+  //   for (var row in data) {
+  //     DateTime received = row['received'];
+  //     String dateKey = DateFormat('yyyy-MM-dd').format(received);
+
+  //     // Update min and max timestamps for each date
+  //     if (!minTimestamps.containsKey(dateKey) ||
+  //         received.isBefore(minTimestamps[dateKey]!)) {
+  //       minTimestamps[dateKey] = received;
+  //     }
+
+  //     if (!maxTimestamps.containsKey(dateKey) ||
+  //         received.isAfter(maxTimestamps[dateKey]!)) {
+  //       maxTimestamps[dateKey] = received;
+  //     }
+
+  //     // Store locations for calculating distance
+  //     if (!dailyLocations.containsKey(dateKey)) {
+  //       dailyLocations[dateKey] = [];
+  //     }
+  //     dailyLocations[dateKey]!.add({
+  //       'latitude': (row['latitude'] is String)
+  //           ? double.tryParse(row['latitude'])
+  //           : row['latitude'],
+  //       'longitude': (row['longitude'] is String)
+  //           ? double.tryParse(row['longitude'])
+  //           : row['longitude'],
+  //       'received': received,
+  //       'speed_kn': (row['speed_kn'] is String)
+  //           ? double.tryParse(row['speed_kn'])
+  //           : row['speed_kn'],
+  //     });
+
+  //     // Sum speeds and count entries for average speed calculation
+  //     double speed = (row['speed_kn'] is String)
+  //         ? double.tryParse(row['speed_kn']) ?? 0.0
+  //         : (row['speed_kn']?.toDouble() ?? 0.0);
+  //     totalSpeeds[dateKey] = (totalSpeeds[dateKey] ?? 0.0) + speed;
+  //     entryCounts[dateKey] = (entryCounts[dateKey] ?? 0) + 1;
+
+  //     // Update min and max speeds
+  //     if (!minSpeeds.containsKey(dateKey) || speed < minSpeeds[dateKey]!) {
+  //       minSpeeds[dateKey] = speed;
+  //     }
+
+  //     if (!maxSpeeds.containsKey(dateKey) || speed > maxSpeeds[dateKey]!) {
+  //       maxSpeeds[dateKey] = speed;
+  //     }
+  //   }
+
+  //   // Prepare processed data for display
+  //   List<Map<String, String>> processedData = [];
+  //   for (var date in minTimestamps.keys) {
+  //     String formattedDate =
+  //         DateFormat('dd MMM yyyy').format(minTimestamps[date]!);
+  //     String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+  //     String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+  //     // Calculate duration
+  //     Duration duration = maxTimestamps[date]!.difference(minTimestamps[date]!);
+  //     String formattedDuration =
+  //         '${duration.inHours} jam ${duration.inMinutes.remainder(60)} menit';
+
+  //     // Calculate average speed
+  //     double totalSpeed = totalSpeeds[date] ?? 0.0;
+  //     int count = entryCounts[date] ?? 1; // Avoid division by zero
+  //     double averageSpeed = totalSpeed / count;
+  //     String formattedAverageSpeed =
+  //         'avg speed ${averageSpeed.toStringAsFixed(2)} knots';
+
+  //     // Get min and max speeds
+  //     double minSpeed = minSpeeds[date] ?? 0.0;
+  //     double maxSpeed = maxSpeeds[date] ?? 0.0;
+
+  //     // Calculate distance from the first point of today to the first point of the next day if average speed > 0.1
+  //     double totalDistance = 0.0;
+  //     if (averageSpeed > 0.1 && dailyLocations.containsKey(date)) {
+  //       var firstPointToday = dailyLocations[date]!.firstWhere(
+  //           (location) => location['received'] == minTimestamps[date]);
+  //       var nextDateKey = DateFormat('yyyy-MM-dd')
+  //           .format(minTimestamps[date]!.add(Duration(days: 1)));
+  //       if (dailyLocations.containsKey(nextDateKey)) {
+  //         var firstPointNextDay = dailyLocations[nextDateKey]!.firstWhere(
+  //             (location) => location['received'] == minTimestamps[nextDateKey]);
+
+  //         // Calculate the distance
+  //         totalDistance = calculateDistanceNmi(
+  //           firstPointToday['latitude'],
+  //           firstPointToday['longitude'],
+  //           firstPointNextDay['latitude'],
+  //           firstPointNextDay['longitude'],
+  //         );
+  //       }
+  //     }
+
+  //     processedData.add({
+  //       'formattedDate': formattedDate,
+  //       'jamAwal': jamAwal,
+  //       'jamAkhir': jamAkhir,
+  //       'duration': formattedDuration,
+  //       'averageSpeed': formattedAverageSpeed,
+  //       'minSpeed': '${minSpeed.toStringAsFixed(2)} knots', // Format as needed
+  //       'maxSpeed': '${maxSpeed.toStringAsFixed(2)} knots', // Format as needed
+  //       'totalDistance': (averageSpeed > 0.1)
+  //           ? '${totalDistance.toStringAsFixed(2)} nmi'
+  //           : 'N/A',
+  //     });
+  //   }
+
+  //   return processedData;
+  // }
+
+  // List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+  //   // Maps to hold timestamps, speeds, and locations for processing
+  //   Map<String, DateTime> minTimestamps = {};
+  //   Map<String, DateTime> maxTimestamps = {};
+  //   Map<String, double> totalSpeeds = {};
+  //   Map<String, int> entryCounts = {};
+  //   Map<String, double> minSpeeds = {};
+  //   Map<String, double> maxSpeeds = {};
+  //   Map<String, List<Map<String, dynamic>>> dailyLocations = {};
+
+  //   // Process the data to get min and max timestamps, speeds, and locations for each date
+  //   for (var row in data) {
+  //     DateTime received = row['received'];
+  //     String dateKey = DateFormat('yyyy-MM-dd').format(received);
+
+  //     // Update min and max timestamps for each date
+  //     if (!minTimestamps.containsKey(dateKey) ||
+  //         received.isBefore(minTimestamps[dateKey]!)) {
+  //       minTimestamps[dateKey] = received;
+  //     }
+  //     if (!maxTimestamps.containsKey(dateKey) ||
+  //         received.isAfter(maxTimestamps[dateKey]!)) {
+  //       maxTimestamps[dateKey] = received;
+  //     }
+
+  //     // Store locations for calculating distance
+  //     if (!dailyLocations.containsKey(dateKey)) {
+  //       dailyLocations[dateKey] = [];
+  //     }
+  //     dailyLocations[dateKey]!.add({
+  //       'latitude': (row['latitude'] is String)
+  //           ? double.tryParse(row['latitude'])
+  //           : row['latitude'],
+  //       'longitude': (row['longitude'] is String)
+  //           ? double.tryParse(row['longitude'])
+  //           : row['longitude'],
+  //       'received': received,
+  //       'speed_kn': (row['speed_kn'] is String)
+  //           ? double.tryParse(row['speed_kn'])
+  //           : row['speed_kn'],
+  //     });
+
+  //     // Sum speeds and count entries for average speed calculation
+  //     double speed = (row['speed_kn'] is String)
+  //         ? double.tryParse(row['speed_kn']) ?? 0.0
+  //         : (row['speed_kn']?.toDouble() ?? 0.0);
+  //     totalSpeeds[dateKey] = (totalSpeeds[dateKey] ?? 0.0) + speed;
+  //     entryCounts[dateKey] = (entryCounts[dateKey] ?? 0) + 1;
+
+  //     // Update min and max speeds
+  //     if (!minSpeeds.containsKey(dateKey) || speed < minSpeeds[dateKey]!) {
+  //       minSpeeds[dateKey] = speed;
+  //     }
+  //     if (!maxSpeeds.containsKey(dateKey) || speed > maxSpeeds[dateKey]!) {
+  //       maxSpeeds[dateKey] = speed;
+  //     }
+  //   }
+
+  //   // Prepare processed data for display
+  //   List<Map<String, String>> processedData = [];
+  //   for (var date in minTimestamps.keys) {
+  //     String formattedDate =
+  //         DateFormat('dd MMM yyyy').format(minTimestamps[date]!);
+  //     String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+  //     String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+  //     // Calculate duration
+  //     Duration duration = maxTimestamps[date]!.difference(minTimestamps[date]!);
+  //     String formattedDuration =
+  //         '${duration.inHours} jam ${duration.inMinutes.remainder(60)} menit';
+
+  //     // Calculate average speed
+  //     double totalSpeed = totalSpeeds[date] ?? 0.0;
+  //     int count = entryCounts[date] ?? 1; // Avoid division by zero
+  //     double averageSpeed = totalSpeed / count;
+  //     String formattedAverageSpeed =
+  //         'avg speed ${averageSpeed.toStringAsFixed(2)} knots';
+
+  //     // Get min and max speeds
+  //     double minSpeed = minSpeeds[date] ?? 0.0;
+  //     double maxSpeed = maxSpeeds[date] ?? 0.0;
+
+  //     // Calculate total distance for the day
+  //     double totalDistance = 0.0;
+
+  //     if (dailyLocations.containsKey(date)) {
+  //       var locations = dailyLocations[date]!;
+
+  //       // Hitung jarak dari titik awal ke semua titik pada hari ini
+  //       for (int i = 0; i < locations.length - 1; i++) {
+  //         var current = locations[i];
+  //         var next = locations[i + 1];
+
+  //         double startLat = current['latitude'];
+  //         double startLon = current['longitude'];
+  //         double endLat = next['latitude'];
+  //         double endLon = next['longitude'];
+
+  //         double distanceNmi =
+  //             calculateDistanceNmi(startLat, startLon, endLat, endLon);
+  //         totalDistance += distanceNmi;
+  //       }
+
+  //       // Hitung jarak dari titik terakhir hari ini ke titik awal hari berikutnya
+  //       String nextDateKey = DateFormat('yyyy-MM-dd')
+  //           .format(minTimestamps[date]!.add(Duration(days: 1)));
+  //       if (dailyLocations.containsKey(nextDateKey)) {
+  //         var firstPointNextDay = dailyLocations[nextDateKey]!.firstWhere(
+  //             (location) => location['received'] == minTimestamps[nextDateKey]);
+
+  //         var lastPointToday = locations.last;
+  //         double endLat = lastPointToday['latitude'];
+  //         double endLon = lastPointToday['longitude'];
+
+  //         // Hitung jarak ke titik awal hari berikutnya
+  //         double distanceToNextDay = calculateDistanceNmi(
+  //           endLat,
+  //           endLon,
+  //           firstPointNextDay['latitude'],
+  //           firstPointNextDay['longitude'],
+  //         );
+  //         totalDistance += distanceToNextDay;
+  //       }
+  //     }
+
+  //     processedData.add({
+  //       'formattedDate': formattedDate,
+  //       'jamAwal': jamAwal,
+  //       'jamAkhir': jamAkhir,
+  //       'duration': formattedDuration,
+  //       'averageSpeed': formattedAverageSpeed,
+  //       'minSpeed': '${minSpeed.toStringAsFixed(2)} knots',
+  //       'maxSpeed': '${maxSpeed.toStringAsFixed(2)} knots',
+  //       'totalDistance': (averageSpeed > 0.1)
+  //           ? '${totalDistance.toStringAsFixed(2)} nmi'
+  //           : 'N/A',
+  //     });
+
+  //     print('Total distance for $date: $totalDistance nmi');
+  //   }
+  //   return processedData;
+  // }
+
+  // List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+  //   // Maps to hold timestamps, speeds, and locations for processing
+  //   Map<String, DateTime> minTimestamps = {};
+  //   Map<String, DateTime> maxTimestamps = {};
+  //   Map<String, double> totalSpeeds = {};
+  //   Map<String, int> entryCounts = {};
+  //   Map<String, double> minSpeeds = {};
+  //   Map<String, double> maxSpeeds = {};
+  //   Map<String, List<Map<String, dynamic>>> dailyLocations = {};
+
+  //   // Process the data to get min and max timestamps, speeds, and locations for each date
+  //   for (var row in data) {
+  //     DateTime received = row['received'];
+  //     String dateKey = DateFormat('yyyy-MM-dd').format(received);
+
+  //     // Update min and max timestamps for each date
+  //     if (!minTimestamps.containsKey(dateKey) ||
+  //         received.isBefore(minTimestamps[dateKey]!)) {
+  //       minTimestamps[dateKey] = received;
+  //     }
+  //     if (!maxTimestamps.containsKey(dateKey) ||
+  //         received.isAfter(maxTimestamps[dateKey]!)) {
+  //       maxTimestamps[dateKey] = received;
+  //     }
+
+  //     // Store locations for calculating distance
+  //     if (!dailyLocations.containsKey(dateKey)) {
+  //       dailyLocations[dateKey] = [];
+  //     }
+  //     dailyLocations[dateKey]!.add({
+  //       'latitude': (row['latitude'] is String)
+  //           ? double.tryParse(row['latitude'])
+  //           : row['latitude'],
+  //       'longitude': (row['longitude'] is String)
+  //           ? double.tryParse(row['longitude'])
+  //           : row['longitude'],
+  //       'received': received,
+  //       'speed_kn': (row['speed_kn'] is String)
+  //           ? double.tryParse(row['speed_kn'])
+  //           : row['speed_kn'],
+  //     });
+
+  //     // Sum speeds and count entries for average speed calculation
+  //     double speed = (row['speed_kn'] is String)
+  //         ? double.tryParse(row['speed_kn']) ?? 0.0
+  //         : (row['speed_kn']?.toDouble() ?? 0.0);
+  //     totalSpeeds[dateKey] = (totalSpeeds[dateKey] ?? 0.0) + speed;
+  //     entryCounts[dateKey] = (entryCounts[dateKey] ?? 0) + 1;
+
+  //     // Update min and max speeds
+  //     if (!minSpeeds.containsKey(dateKey) || speed < minSpeeds[dateKey]!) {
+  //       minSpeeds[dateKey] = speed;
+  //     }
+  //     if (!maxSpeeds.containsKey(dateKey) || speed > maxSpeeds[dateKey]!) {
+  //       maxSpeeds[dateKey] = speed;
+  //     }
+  //   }
+
+  //   // Prepare processed data for display
+  //   List<Map<String, String>> processedData = [];
+  //   for (var date in minTimestamps.keys) {
+  //     String formattedDate =
+  //         DateFormat('dd MMM yyyy').format(minTimestamps[date]!);
+  //     String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+  //     String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+  //     // Calculate duration
+  //     Duration duration = maxTimestamps[date]!.difference(minTimestamps[date]!);
+  //     String formattedDuration =
+  //         '${duration.inHours} jam ${duration.inMinutes.remainder(60)} menit';
+
+  //     // Calculate average speed
+  //     double totalSpeed = totalSpeeds[date] ?? 0.0;
+  //     int count = entryCounts[date] ?? 1; // Avoid division by zero
+  //     double averageSpeed = totalSpeed / count;
+  //     String formattedAverageSpeed =
+  //         'avg speed ${averageSpeed.toStringAsFixed(2)} knots';
+
+  //     // Get min and max speeds
+  //     double minSpeed = minSpeeds[date] ?? 0.0;
+  //     double maxSpeed = maxSpeeds[date] ?? 0.0;
+
+  //     // Calculate total distance for the day
+  //     double totalDistance = 0.0;
+
+  //     if (dailyLocations.containsKey(date)) {
+  //       var locations = dailyLocations[date]!;
+
+  //       // Hitung jarak dari titik awal ke semua titik pada hari ini
+  //       for (int i = 0; i < locations.length - 1; i++) {
+  //         var current = locations[i];
+  //         var next = locations[i + 1];
+
+  //         double startLat = current['latitude'];
+  //         double startLon = current['longitude'];
+  //         double endLat = next['latitude'];
+  //         double endLon = next['longitude'];
+
+  //         double speedCurrent = current['speed_kn'] ?? 0.0;
+  //         double speedNext = next['speed_kn'] ?? 0.0;
+
+  //         // Calculate distance only if both speeds are greater than 0.1 knots
+  //         if (speedCurrent > 0.1 && speedNext > 0.1) {
+  //           double distanceNmi =
+  //               calculateDistanceNmi(startLat, startLon, endLat, endLon);
+  //           totalDistance += distanceNmi;
+  //         }
+  //       }
+
+  //       // Hitung jarak dari titik terakhir hari ini ke titik awal hari berikutnya
+  //       String nextDateKey = DateFormat('yyyy-MM-dd')
+  //           .format(minTimestamps[date]!.add(Duration(days: 1)));
+  //       if (dailyLocations.containsKey(nextDateKey)) {
+  //         var firstPointNextDay = dailyLocations[nextDateKey]!.firstWhere(
+  //             (location) => location['received'] == minTimestamps[nextDateKey]);
+
+  //         var lastPointToday = locations.last;
+  //         double endLat = lastPointToday['latitude'];
+  //         double endLon = lastPointToday['longitude'];
+
+  //         // Hitung jarak ke titik awal hari berikutnya jika speed terakhir lebih dari 0.1 knots
+  //         if (lastPointToday['speed_kn'] > 0.1) {
+  //           // Hitung jarak ke titik awal hari berikutnya
+  //           double distanceToNextDay = calculateDistanceNmi(
+  //             endLat,
+  //             endLon,
+  //             firstPointNextDay['latitude'],
+  //             firstPointNextDay['longitude'],
+  //           );
+  //           totalDistance += distanceToNextDay;
+  //         }
+  //       }
+  //     }
+
+  //     processedData.add({
+  //       'formattedDate': formattedDate,
+  //       'jamAwal': jamAwal,
+  //       'jamAkhir': jamAkhir,
+  //       'duration': formattedDuration,
+  //       'averageSpeed': formattedAverageSpeed,
+  //       'minSpeed': '${minSpeed.toStringAsFixed(2)} knots',
+  //       'maxSpeed': '${maxSpeed.toStringAsFixed(2)} knots',
+  //       'totalDistance': (totalDistance > 0.0)
+  //           ? '${totalDistance.toStringAsFixed(2)} nmi'
+  //           : 'N/A',
+  //     });
+  //   }
+  //   return processedData;
+  // }
+
+  List<Map<String, String>> processVesselData(List<Map<String, dynamic>> data) {
+    // Maps to hold timestamps, speeds, and locations for processing
+    Map<String, DateTime> minTimestamps = {};
+    Map<String, DateTime> maxTimestamps = {};
+    Map<String, double> totalSpeeds = {};
+    Map<String, int> entryCounts = {};
+    Map<String, double> minSpeeds = {};
+    Map<String, double> maxSpeeds = {};
+    Map<String, List<Map<String, dynamic>>> dailyLocations = {};
+
+    // Process the data to get min and max timestamps, speeds, and locations for each date
+    for (var row in data) {
+      DateTime received = row['received'];
+      String dateKey = DateFormat('yyyy-MM-dd').format(received);
+
+      // Update min and max timestamps for each date
+      if (!minTimestamps.containsKey(dateKey) ||
+          received.isBefore(minTimestamps[dateKey]!)) {
+        minTimestamps[dateKey] = received;
+      }
+      if (!maxTimestamps.containsKey(dateKey) ||
+          received.isAfter(maxTimestamps[dateKey]!)) {
+        maxTimestamps[dateKey] = received;
       }
 
-      // Update waktu akhir jika item['received'] lebih besar dari yang sudah ada
-      if (item['received'].isAfter(groupedData[dateKey]!['end_time'])) {
-        groupedData[dateKey]!['end_time'] = item['received'];
+      // Store locations for calculating distance
+      if (!dailyLocations.containsKey(dateKey)) {
+        dailyLocations[dateKey] = [];
       }
+      dailyLocations[dateKey]!.add({
+        'latitude': (row['latitude'] is String)
+            ? double.tryParse(row['latitude'])
+            : row['latitude'],
+        'longitude': (row['longitude'] is String)
+            ? double.tryParse(row['longitude'])
+            : row['longitude'],
+        'received': received,
+        'speed_kn': (row['speed_kn'] is String)
+            ? double.tryParse(row['speed_kn'])
+            : row['speed_kn'],
+      });
 
-      // Hitung total jarak jika speed_kn lebih dari 0.1
-      double speedKn = double.parse(item['speed_kn'].toString());
-      if (speedKn > 0.1) {
-        // Anda perlu menyimpan lokasi sebelumnya untuk menghitung jarak
-        // Misalnya dengan cara menyimpan latitude/longitude terakhir
-        double distanceNmi = calculateDistanceNmi(
-          double.parse(item['latitude'].toString()),
-          double.parse(item['longitude'].toString()),
-          // Latitude dan Longitude terakhir yang telah disimpan sebelumnya
-          // Anda perlu menyimpan data ini dalam logika Anda
-          // Misalnya:
-          0.0, // Latitude terakhir
-          0.0, // Longitude terakhir
-        );
-        groupedData[dateKey]!['total_distance'] += distanceNmi;
+      // Sum speeds and count entries for average speed calculation
+      double speed = (row['speed_kn'] is String)
+          ? double.tryParse(row['speed_kn']) ?? 0.0
+          : (row['speed_kn']?.toDouble() ?? 0.0);
+      totalSpeeds[dateKey] = (totalSpeeds[dateKey] ?? 0.0) + speed;
+      entryCounts[dateKey] = (entryCounts[dateKey] ?? 0) + 1;
+
+      // Update min and max speeds
+      if (!minSpeeds.containsKey(dateKey) || speed < minSpeeds[dateKey]!) {
+        minSpeeds[dateKey] = speed;
+      }
+      if (!maxSpeeds.containsKey(dateKey) || speed > maxSpeeds[dateKey]!) {
+        maxSpeeds[dateKey] = speed;
       }
     }
 
-    // Convert groupedData to a list
-    return groupedData.entries.map((entry) {
-      return {
-        'date': entry.key,
-        'start_time': entry.value['start_time'],
-        'end_time': entry.value['end_time'],
-        'total_distance': entry.value['total_distance'],
-      };
-    }).toList();
+    // Prepare processed data for display
+    List<Map<String, String>> processedData = [];
+    for (var date in minTimestamps.keys) {
+      String formattedDate =
+          DateFormat('dd MMM yyyy').format(minTimestamps[date]!);
+      String jamAwal = DateFormat('hh:mm a').format(minTimestamps[date]!);
+      String jamAkhir = DateFormat('hh:mm a').format(maxTimestamps[date]!);
+
+      // Calculate duration
+      Duration duration = maxTimestamps[date]!.difference(minTimestamps[date]!);
+      String formattedDuration =
+          '${duration.inHours} jam ${duration.inMinutes.remainder(60)} menit';
+
+      // Calculate average speed
+      double totalSpeed = totalSpeeds[date] ?? 0.0;
+      int count = entryCounts[date] ?? 1; // Avoid division by zero
+      double averageSpeed = totalSpeed / count;
+      String formattedAverageSpeed =
+          'avg speed ${averageSpeed.toStringAsFixed(2)} knots';
+
+      // Get min and max speeds
+      double minSpeed = minSpeeds[date] ?? 0.0;
+      double maxSpeed = maxSpeeds[date] ?? 0.0;
+
+      // Calculate total distance for the day
+      double totalDistance = calculateTotalDistance(dailyLocations[date]!);
+
+      processedData.add({
+        'formattedDate': formattedDate,
+        'jamAwal': jamAwal,
+        'jamAkhir': jamAkhir,
+        'duration': formattedDuration,
+        'averageSpeed': formattedAverageSpeed,
+        'minSpeed': '${minSpeed.toStringAsFixed(2)} knots',
+        'maxSpeed': '${maxSpeed.toStringAsFixed(2)} knots',
+        'totalDistance': (totalDistance > 0.0)
+            ? '${totalDistance.toStringAsFixed(2)} nmi'
+            : 'N/A',
+      });
+    }
+    return processedData;
+  }
+
+  double calculateTotalDistancePerDay(List<Map<String, String>> processedData) {
+    double totalDistance = 0.0;
+
+    // Iterate through each processed data entry and sum the distances
+    for (var entry in processedData) {
+      String distanceString = entry['totalDistance'] ?? '0.0 nmi';
+      double distance = double.tryParse(distanceString.split(' ')[0]) ??
+          0.0; // Extract the numeric part
+      totalDistance += distance;
+    }
+
+    return totalDistance;
+  }
+
+  // String calculateTotalDurationPerDay(List<Map<String, String>> processedData) {
+  //   int totalMinutes = 0;
+
+  //   // Iterate through each processed data entry and sum the durations
+  //   for (var entry in processedData) {
+  //     // Parse the duration string into total minutes
+  //     String durationString = entry['duration'] ?? '0 jam 0 menit';
+  //     RegExp regex = RegExp(r'(\d+)\s+jam\s+(\d+)\s+menit');
+  //     var match = regex.firstMatch(durationString);
+
+  //     if (match != null) {
+  //       int hours = int.parse(match.group(1)!);
+  //       int minutes = int.parse(match.group(2)!);
+  //       totalMinutes +=
+  //           (hours * 60) + minutes; // Convert hours to minutes and add
+  //     }
+  //   }
+
+  //   // Convert total minutes back to hours and minutes
+  //   int totalHours = totalMinutes ~/ 60;
+  //   int remainingMinutes = totalMinutes % 60;
+
+  //   return '$totalHours jam ${remainingMinutes} menit';
+  // }
+
+  String calculateTotalDurationPerDay(List<Map<String, String>> processedData) {
+    int totalMinutes = 0;
+
+    // Iterate through each processed data entry and sum the durations
+    for (var entry in processedData) {
+      // Parse the duration string into total minutes
+      String durationString = entry['duration'] ?? '0 jam 0 menit';
+      RegExp regex = RegExp(r'(\d+)\s+jam\s+(\d+)\s+menit');
+      var match = regex.firstMatch(durationString);
+
+      if (match != null) {
+        int hours = int.parse(match.group(1)!);
+        int minutes = int.parse(match.group(2)!);
+        totalMinutes +=
+            (hours * 60) + minutes; // Convert hours to minutes and add
+      }
+    }
+
+    // Convert total minutes back to days, hours, and minutes
+    int totalDays = totalMinutes ~/ (24 * 60); // 1 day = 1440 minutes
+    int remainingHours = (totalMinutes % (24 * 60)) ~/ 60; // Remaining hours
+    int remainingMinutes = totalMinutes % 60; // Remaining minutes
+
+    return '$totalDays hari $remainingHours jam $remainingMinutes menit';
+  }
+
+  double calculateAverageSpeedPerDay(List<Map<String, String>> processedData) {
+    double totalSpeed = 0.0;
+    int totalEntries = 0;
+
+    // Iterate through each processed data entry and sum the average speeds
+    for (var entry in processedData) {
+      // Extract the average speed from the entry
+      String averageSpeedString = entry['averageSpeed'] ?? '0.0 knots';
+      double averageSpeed = double.tryParse(averageSpeedString.split(' ')[2]) ??
+          0.0; // Extract the numeric part
+      totalSpeed += averageSpeed;
+
+      // Count the number of entries to calculate the overall average
+      totalEntries += 1;
+    }
+
+    // Calculate overall average speed
+    double overallAverageSpeed =
+        (totalEntries > 0) ? (totalSpeed / totalEntries) : 0.0;
+
+    return overallAverageSpeed;
   }
 
   // tanggal
@@ -1763,12 +2818,13 @@ class MileageDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double totalDistance = calculateTotalDistance(data!);
-    // Map<String, int> totalTime = _calculateTotalTime();
     double averageSpeed = _calculateAverageSpeed();
-    // Map<String, Map<String, DateTime>> timeByDate =
-    //     _getEarliestAndLatestTimesByDate(data!);
+    List<Map<String, String>> processedData = processVesselData(data!);
+    String totalDuration = calculateTotalDurationPerDay(processedData);
 
-    List<Map<String, dynamic>> displayData = groupAndCalculateMileage(data!);
+    double averageDailySpeed = calculateAverageSpeedPerDay(processedData);
+
+    double totalDailyDistance = calculateTotalDistancePerDay(processedData);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -1910,7 +2966,7 @@ class MileageDetailPage extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      ': ${totalDistance.toStringAsFixed(2)} nmi',
+                                      ': ${totalDailyDistance.toStringAsFixed(2)} nmi',
                                       style: TextStyle(color: Colors.white70),
                                     ),
                                   ),
@@ -1941,12 +2997,13 @@ class MileageDetailPage extends StatelessWidget {
                                       style: TextStyle(color: Colors.white70),
                                     ),
                                   ),
-                                  // Expanded(
-                                  //   child: Text(
-                                  //     ': ${totalTime['days']} hari ${totalTime['hours']} jam ${totalTime['minutes']} menit',
-                                  //     style: TextStyle(color: Colors.white70),
-                                  //   ),
-                                  // ),
+                                  Expanded(
+                                    child: Text(
+                                      ': $totalDuration',
+                                      // ': ${totalTime['days']} hari ${totalTime['hours']} jam ${totalTime['minutes']} menit',
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                  ),
                                 ],
                               ),
                               Row(
@@ -1959,7 +3016,8 @@ class MileageDetailPage extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      ': ${averageSpeed.toStringAsFixed(2)} knots',
+                                      // ': ${averageSpeed.toStringAsFixed(2)} knots',
+                                      ': ${averageDailySpeed.toStringAsFixed(2)} knots',
                                       style: TextStyle(color: Colors.white70),
                                     ),
                                   ),
@@ -1971,207 +3029,20 @@ class MileageDetailPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Expanded(
-                  //   child: ListView.builder(
-                  //     itemCount: data!.length,
-                  //     itemBuilder: (context, index) {
-                  //       final item = data![index];
-                  //       double distanceNmi = calculateDistanceNmi(
-                  //         double.parse(item['start_latitude']),
-                  //         double.parse(item['start_longitude']),
-                  //         double.parse(item['end_latitude']),
-                  //         double.parse(item['end_longitude']),
-                  //       );
-
-                  //       double rerataSpeed = item['average_speed_knots'] ?? '-';
-                  //       String distanceText = (rerataSpeed < 0.1)
-                  //           ? '- nmi'
-                  //           : '${distanceNmi.toStringAsFixed(2)} nmi';
-
-                  //       DateTime startTime = item['waktu_awal'];
-                  //       DateTime endTime = item['waktu_akhir'];
-
-                  //       return TabCard(
-                  //         tanggalBerlayar:
-                  //             '${DateFormat('dd MMM yyyy').format((item['tgl_aktifasi']))} ${DateFormat('hh:mm a').format((startTime))} - ${DateFormat('hh:mm a').format((endTime))}',
-                  //         jarak: distanceText,
-                  //         lamaBerlayar: '${item['duration']}',
-                  //         rerataSpeed:
-                  //             'avg speed ${item['average_speed_knots']} knots',
-                  //         highSpeed: '${item['high_speed_knots']} knots',
-                  //         lowSpeed: '${item['low_speed_knots']} knots',
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
-                  // Expanded(
-                  //   child: ListView.builder(
-                  //     itemCount: data!.length,
-                  //     itemBuilder: (context, index) {
-                  //       final item = data![index];
-
-                  //       // Hitung jarak dari titik awal ke titik akhir untuk item saat ini
-                  //       double distanceNmi = calculateDistanceNmi(
-                  //         double.parse(item['start_latitude']),
-                  //         double.parse(item['start_longitude']),
-                  //         double.parse(item['end_latitude']),
-                  //         double.parse(item['end_longitude']),
-                  //       );
-
-                  //       // Menyiapkan nilai untuk rerata speed
-                  //       double rerataSpeed = item['average_speed_knots'] ?? -1;
-                  //       String distanceText = (rerataSpeed < 0.1)
-                  //           ? '- nmi'
-                  //           : '${distanceNmi.toStringAsFixed(2)} nmi';
-
-                  //       DateTime startTime = item['waktu_awal'];
-                  //       DateTime endTime = item['waktu_akhir'];
-
-                  //       // Cek jika ada item berikutnya untuk menghitung jarak
-                  //       double distanceToNextStart = 0.0;
-                  //       if (index < data!.length - 1) {
-                  //         final nextItem = data![index + 1];
-                  //         distanceToNextStart = calculateDistanceNmi(
-                  //           double.parse(item['end_latitude']),
-                  //           double.parse(item['end_longitude']),
-                  //           double.parse(nextItem['start_latitude']),
-                  //           double.parse(nextItem['start_longitude']),
-                  //         );
-                  //       }
-
-                  //       String combinedDistanceText = distanceToNextStart > 0
-                  //           ? '$distanceText (to next: ${distanceToNextStart.toStringAsFixed(2)} nmi)'
-                  //           : distanceText;
-
-                  //       return TabCard(
-                  //         tanggalBerlayar:
-                  //             '${DateFormat('dd MMM yyyy').format((item['tgl_aktifasi']))} ${DateFormat('hh:mm a').format((startTime))} - ${DateFormat('hh:mm a').format((endTime))}',
-                  //         // jarak: '$distanceText',
-                  //         jarak: '$combinedDistanceText',
-                  //         lamaBerlayar: '${item['duration']}',
-                  //         rerataSpeed:
-                  //             'avg speed ${item['average_speed_knots']} knots',
-                  //         highSpeed: '${item['high_speed_knots']} knots',
-                  //         lowSpeed: '${item['low_speed_knots']} knots',
-                  //         // lowSpeed: '(to next: ${distanceToNextStart.toStringAsFixed(2)} nmi)',
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: data!.length,
+                      itemCount: processedData.length,
                       itemBuilder: (context, index) {
-                        final item = data![index];
-
-                        Map<String, Map<String, dynamic>> groupedData = {};
-
-                        // Mengelompokkan data berdasarkan tanggal
-                        for (var item in data!) {
-                          // Format tanggal dari 'received' menjadi string yang lebih sederhana
-                          String dateKey =
-                              DateFormat('yyyy-MM-dd').format(item['received']);
-
-                          // Jika kunci tanggal belum ada, inisialisasi
-                          if (!groupedData.containsKey(dateKey)) {
-                            groupedData[dateKey] = {
-                              'start_time': item[
-                                  'received'], // Menggunakan received sebagai waktu awal
-                              'end_time': item[
-                                  'received'], // Awalnya sama dengan received
-                              'total_distance': 0.0, // Total jarak, jika perlu
-                            };
-                          }
-
-                          // Update waktu akhir jika item['received'] lebih besar dari yang sudah ada
-                          if (item['received']
-                              .isAfter(groupedData[dateKey]!['end_time'])) {
-                            groupedData[dateKey]!['end_time'] =
-                                item['received'];
-                          }
-
-                          // Hitung total jarak jika speed_kn lebih dari 0.1
-                          double speedKn =
-                              double.parse(item['speed_kn'].toString());
-                          if (speedKn > 0.1) {
-                            double distanceNmi = calculateDistanceNmi(
-                              double.parse(item['latitude'].toString()),
-                              double.parse(item['longitude'].toString()),
-                              // Anda perlu menyimpan lokasi sebelumnya untuk menghitung jarak
-                              // Misalnya dengan cara menyimpan latitude/longitude terakhir
-                              double.parse(item['latitude']
-                                  .toString()), // Latitude sebelumnya
-                              double.parse(item['longitude']
-                                  .toString()), // Longitude sebelumnya
-                            );
-                            groupedData[dateKey]!['total_distance'] +=
-                                distanceNmi;
-                          }
-                        }
-
-// Convert groupedData to a list
-                        List<Map<String, dynamic>> displayData =
-                            groupedData.entries.map((entry) {
-                          return {
-                            'date': entry.key,
-                            'start_time': entry.value['start_time'],
-                            'end_time': entry.value['end_time'],
-                            'total_distance': entry.value['total_distance'],
-                          };
-                        }).toList();
-
-                        // double distanceNmi = calculateDistanceNmi(
-                        //   double.parse(item['latitude']),
-                        //   double.parse(item['longitude']),
-                        //   double.parse(item['latitude']),
-                        //   double.parse(item['longitude']),
-                        // );
-
-                        // double speedKn = item['speed_kn'];
-                        // double distanceTextValue =
-                        //     (speedKn < 0.1) ? 0.0 : distanceNmi;
-
-                        // double speedKn =
-                        //     double.parse(item['speed_kn'].toString());
-                        // double distanceNmi = 0.0;
-
-                        // if (index > 0 && speedKn > 0.1) {
-                        //   // Koordinat sebelumnya untuk menghitung jarak
-                        //   final prevItem = data![index - 1];
-                        //   distanceNmi = calculateDistanceNmi(
-                        //     double.parse(prevItem['latitude'].toString()),
-                        //     double.parse(prevItem['longitude'].toString()),
-                        //     double.parse(item['latitude'].toString()),
-                        //     double.parse(item['longitude'].toString()),
-                        //   );
-                        // }
-
-                        // double totalDistance =
-                        //     (speedKn < 0.1) ? 0.0 : distanceNmi;
-                        // double totalDistance = distanceTextValue;
-
-                        String formattedDate = DateFormat('dd MMM yyyy')
-                            .format(item['start_time']);
-                        String startTime =
-                            DateFormat('HH:mm').format(item['start_time']);
-                        String endTime =
-                            DateFormat('HH:mm').format(item['end_time']);
+                        final item = processedData[index];
 
                         return TabCard(
-                          tanggalBerlayar: 
-                          '${DateFormat('dd MMM yyyy hh:mm a').format((item['received']))}',
-                          // jarak: '${totalDistance.toStringAsFixed(2)} nmi',
-                          // lamaBerlayar: '${item['duration']}',
-                          // rerataSpeed:
-                          //     'avg speed ${item['average_speed_knots']} knots',
-                          // highSpeed: '${item['high_speed_knots']} knots',
-                          // lowSpeed: '${item['low_speed_knots']} knots',
-                          // tanggalBerlayar: 'test',
-                          jarak: 'tes',
-                          lamaBerlayar: 'test',
-                          rerataSpeed: 'test',
-                          highSpeed: 'test',
-                          lowSpeed: 'test',
+                          tanggalBerlayar:
+                              '${item['formattedDate']} ${item['jamAwal']} - ${item['jamAkhir']}',
+                          jarak: '${item['totalDistance']}',
+                          lamaBerlayar: '${item['duration']}',
+                          rerataSpeed: '${item['averageSpeed']}',
+                          highSpeed: '${item['maxSpeed']}',
+                          lowSpeed: '${item['minSpeed']}',
                         );
                       },
                     ),
