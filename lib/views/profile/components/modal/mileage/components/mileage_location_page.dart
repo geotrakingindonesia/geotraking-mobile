@@ -6,6 +6,7 @@ import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/formated_latlong.dart';
 import 'package:geotraking/core/components/map_config.dart';
 import 'package:geotraking/core/components/map_tool.dart';
+// import 'package:info_popup/info_popup.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -130,7 +131,7 @@ class _MileageLocationPageState extends State<MileageLocationPage> {
           FlutterMap(
             options: MapOptions(
               initialCenter: initialCenter,
-              initialZoom: 20,
+              initialZoom: 10,
               interactionOptions: const InteractionOptions(
                 flags: InteractiveFlag.pinchZoom |
                     InteractiveFlag.drag |

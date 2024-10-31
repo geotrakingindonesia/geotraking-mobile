@@ -35,7 +35,8 @@ class _MileageDataModalState extends State<MileageDataModal> {
 
       try {
         _historyData = await vesselService
-            .getJarakTempuhHistoryTraking(
+            // .getJarakTempuhHistoryTraking(
+            .calcMileageTrakingVessel(
           widget.mobileId!,
           _startDate,
           _endDate,

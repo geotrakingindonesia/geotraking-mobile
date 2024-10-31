@@ -167,23 +167,23 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
     }
   }
 
-  String _formatLatitude(double? lat) {
-    if (lat == null) return '';
-    int degrees = lat.toInt();
-    double minutes = (lat - degrees) * 60;
-    int minutesInt = minutes.toInt();
-    double seconds = (minutes - minutesInt) * 60;
-    return '${degrees.abs()} ${degrees < 0 ? 'S' : 'N'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
-  }
+  // String _formatLatitude(double? lat) {
+  //   if (lat == null) return '';
+  //   int degrees = lat.toInt();
+  //   double minutes = (lat - degrees) * 60;
+  //   int minutesInt = minutes.toInt();
+  //   double seconds = (minutes - minutesInt) * 60;
+  //   return '${degrees.abs()} ${degrees < 0 ? 'S' : 'N'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
+  // }
 
-  String _formatLongitude(double? lon) {
-    if (lon == null) return '';
-    int degrees = lon.toInt();
-    double minutes = (lon - degrees) * 60;
-    int minutesInt = minutes.toInt();
-    double seconds = (minutes - minutesInt) * 60;
-    return '${degrees.abs()} ${degrees < 0 ? 'W' : 'E'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
-  }
+  // String _formatLongitude(double? lon) {
+  //   if (lon == null) return '';
+  //   int degrees = lon.toInt();
+  //   double minutes = (lon - degrees) * 60;
+  //   int minutesInt = minutes.toInt();
+  //   double seconds = (minutes - minutesInt) * 60;
+  //   return '${degrees.abs()} ${degrees < 0 ? 'W' : 'E'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
+  // }
 
   Future<void> _fetchData() async {
     try {
@@ -209,7 +209,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                 points: points,
                 color: colors[index % colors.length].withOpacity(0.3),
                 isFilled: true,
-                // isDotted: true,
                 borderColor: Colors.black45,
                 borderStrokeWidth: 2,
                 label: labelText,
@@ -372,23 +371,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
             ),
           ),
         ),
-        // appBar: AppBar(
-        //   title: Text(Localization.getTrackKapalKu(_selectedLanguage)),
-        //   titleTextStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-        //         color: Colors.black,
-        //       ),
-        //   leading: const AppBackButton(),
-        //   actions: [
-        //     IconButton(
-        //       icon: Icon(
-        //         _isSidebarVisible ? Icons.cancel : Icons.search,
-        //         color: Colors.black,
-        //       ),
-        //       onPressed: _toggleSidebar,
-        //     ),
-        //   ],
-        //   backgroundColor: Colors.white,
-        // ),
         body: Stack(
           children: [
             FlutterMap(
@@ -400,9 +382,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                       InteractiveFlag.drag |
                       InteractiveFlag.doubleTapZoom,
                 ),
-                // interactiveFlags: InteractiveFlag.pinchZoom |
-                //     InteractiveFlag.drag |
-                //     InteractiveFlag.doubleTapZoom,
               ),
               mapController: mapController,
               children: [
@@ -420,13 +399,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                 PolygonLayer<Object>(
                   polygons: _isShowWpp ? _polygons : [],
                 ),
-
-                // PolylineLayer(
-                //     polylines: _isShowBasarnas ? _polylinesBasarnas : []),
-                // PolylineLayer(
-                //     polylines:
-                //         _isShowPortPelabuhan ? _polylinesPortPelabuhan : []),
-                // PolygonLayer(polygons: _isShowWpp ? _polygons : []),
                 MarkerLayer(
                   markers: _isShowBasarnas
                       ? _basarnasList.map((basarnas) {
@@ -534,8 +506,8 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                               child: Text(
                                 kapalMember['nama_kapal'],
                                 overflow: TextOverflow.ellipsis,
-                                style:
-                                    TextStyle(color: Colors.black, fontSize: 10),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 10),
                               ),
                             ),
                           ),
@@ -956,83 +928,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
               ),
           ],
         ),
-        // bottomNavigationBar: Visibility(
-        //   visible: _selectedKapalMember != null,
-        //   child: BottomNavigationBar(
-        //     type: BottomNavigationBarType.fixed,
-        //     items: const <BottomNavigationBarItem>[
-        //       BottomNavigationBarItem(
-        //         icon: Icon(Icons.directions_boat),
-        //         label: 'Vessel',
-        //       ),
-        //       BottomNavigationBarItem(
-        //         icon: Icon(Icons.location_searching),
-        //         label: 'Traking',
-        //       ),
-        //       BottomNavigationBarItem(
-        //         icon: Icon(Icons.timer),
-        //         label: 'Airtime',
-        //       ),
-        //       BottomNavigationBarItem(
-        //         icon: Icon(Icons.close),
-        //         label: 'Close',
-        //       ),
-        //     ],
-        //     selectedItemColor: Colors.black,
-        //     unselectedItemColor: Colors.black,
-        //     onTap: (index) async {
-        //       if (index == 3) {
-        //         // Close button
-        //         setState(() {
-        //           _selectedKapalMember = null;
-        //         });
-        //       } else if (index == 1) {
-        //         await showModalBottomSheet(
-        //           context: context,
-        //           isScrollControlled: true,
-        //           builder: (context) {
-        //             double keyboardHeight =
-        //                 MediaQuery.of(context).viewInsets.bottom;
-        //             double paddingBottom =
-        //                 keyboardHeight > 0 ? keyboardHeight + 10 : 10;
-
-        //             return Padding(
-        //               padding: EdgeInsets.only(bottom: paddingBottom),
-        //               child: TrakingDataModal(
-        //                 mobileId: _selectedKapalMember!['mobile_id'],
-        //                 onTrackVessel: _onTrackVessel,
-        //                 onClearHistory: () {
-        //                   setState(() {
-        //                     _polylinePointsTraking.clear();
-        //                     _markersTraking.clear();
-        //                   });
-        //                 },
-        //               ),
-        //             );
-        //           },
-        //           constraints: BoxConstraints(
-        //               maxWidth: MediaQuery.of(context).size.width,
-        //               maxHeight: MediaQuery.of(context).size.height / 2),
-        //         );
-        //       } else {
-        //         showModalBottomSheet(
-        //           context: context,
-        //           isScrollControlled: true,
-        //           builder: (context) {
-        //             return index == 0
-        //                 ? VesselDataModal(vesselData: _selectedKapalMember!)
-        //                 : AirtimeDataModal(
-        //                     future: vesselService.getAirtimeKapal(
-        //                         _selectedKapalMember!['idfull'] ?? ''));
-        //           },
-        //           constraints: BoxConstraints(
-        //               maxWidth: MediaQuery.of(context).size.width,
-        //               maxHeight: MediaQuery.of(context).size.height / 3),
-        //         );
-        //       }
-        //     },
-        //   ),
-        // ),
       ),
     );
     // return Scaffold(

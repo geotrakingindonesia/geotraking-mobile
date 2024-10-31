@@ -480,7 +480,7 @@ class VesselService {
     return dataKapal;
   }
 
-  // fungsi hitung jarak tempuh histori traking kapal 
+  // fungsi hitung jarak tempuh histori traking kapal
   Future<List<Map<String, dynamic>>?> getJarakTempuhHistoryTraking(
       String mobileId, DateTime? startDate, DateTime? endDate) async {
     var settings = Connection.getSettings();
@@ -574,84 +574,84 @@ class VesselService {
         bd.tgl_aktifasi ASC;
   ''';
 
-  //   String query = '''
-  //   WITH DailyData AS (
-  //       SELECT 
-  //           DATE(varTimestamp) AS tgl_aktifasi,
-  //           Latitude AS latitude,
-  //           Longitude AS longitude,
-  //           Speed AS speed,
-  //           varTimestamp,
-  //           ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp ASC) AS row_num_first,
-  //           ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp DESC) AS row_num_last
-  //       FROM 
-  //           psg_modata
-  //       WHERE 
-  //           serviceID = ?
-  //           AND varTimestamp BETWEEN ? AND ?
-  //           AND Speed IS NOT NULL
-  //   ),
-  //   FirstData AS (
-  //       SELECT 
-  //           tgl_aktifasi,
-  //           latitude,
-  //           longitude,
-  //           varTimestamp AS waktu_awal,
-  //           row_num_first
-  //       FROM 
-  //           DailyData
-  //       WHERE 
-  //           row_num_first = 1
-  //   ),
-  //   LastData AS (
-  //       SELECT 
-  //           tgl_aktifasi,
-  //           latitude,
-  //           longitude,
-  //           varTimestamp AS waktu_akhir, 
-  //           row_num_last
-  //       FROM 
-  //           DailyData
-  //       WHERE 
-  //           row_num_last = 1
-  //   ),
-  //   DailyAverageSpeed AS (
-  //       SELECT 
-  //           tgl_aktifasi,
-  //           AVG(Speed) AS average_speed,
-  //           MAX(Speed) AS high_speed,
-  //           MIN(Speed) AS low_speed
-  //       FROM 
-  //           DailyData
-  //       WHERE 
-  //           Speed IS NOT NULL
-  //       GROUP BY 
-  //           tgl_aktifasi
-  //   )
-  //   SELECT 
-  //       fd.tgl_aktifasi,
-  //       fd.waktu_awal,
-  //       ld.waktu_akhir,
-  //       CONCAT(
-  //           TIMESTAMPDIFF(HOUR, fd.waktu_awal, ld.waktu_akhir), ' jam ',
-  //           MOD(TIMESTAMPDIFF(MINUTE, fd.waktu_awal, ld.waktu_akhir), 60), ' menit'
-  //       ) AS duration,
-  //       fd.latitude AS start_latitude,
-  //       fd.longitude AS start_longitude,
-  //       ld.latitude AS end_latitude,
-  //       ld.longitude AS end_longitude,
-  //       ROUND(das.average_speed * 1.9438, 1) AS average_speed_knots,
-  //       ROUND(das.high_speed * 1.9438, 1) AS high_speed_knots,
-  //       ROUND(das.low_speed * 1.9438, 1) AS low_speed_knots
-  //   FROM 
-  //       FirstData fd
-  //   JOIN 
-  //       LastData ld ON fd.tgl_aktifasi = ld.tgl_aktifasi
-  //   JOIN 
-  //       DailyAverageSpeed das ON fd.tgl_aktifasi = das.tgl_aktifasi
-  //   ORDER BY 
-  //       fd.tgl_aktifasi ASC;
-  // ''';
+    //   String query = '''
+    //   WITH DailyData AS (
+    //       SELECT
+    //           DATE(varTimestamp) AS tgl_aktifasi,
+    //           Latitude AS latitude,
+    //           Longitude AS longitude,
+    //           Speed AS speed,
+    //           varTimestamp,
+    //           ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp ASC) AS row_num_first,
+    //           ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp DESC) AS row_num_last
+    //       FROM
+    //           psg_modata
+    //       WHERE
+    //           serviceID = ?
+    //           AND varTimestamp BETWEEN ? AND ?
+    //           AND Speed IS NOT NULL
+    //   ),
+    //   FirstData AS (
+    //       SELECT
+    //           tgl_aktifasi,
+    //           latitude,
+    //           longitude,
+    //           varTimestamp AS waktu_awal,
+    //           row_num_first
+    //       FROM
+    //           DailyData
+    //       WHERE
+    //           row_num_first = 1
+    //   ),
+    //   LastData AS (
+    //       SELECT
+    //           tgl_aktifasi,
+    //           latitude,
+    //           longitude,
+    //           varTimestamp AS waktu_akhir,
+    //           row_num_last
+    //       FROM
+    //           DailyData
+    //       WHERE
+    //           row_num_last = 1
+    //   ),
+    //   DailyAverageSpeed AS (
+    //       SELECT
+    //           tgl_aktifasi,
+    //           AVG(Speed) AS average_speed,
+    //           MAX(Speed) AS high_speed,
+    //           MIN(Speed) AS low_speed
+    //       FROM
+    //           DailyData
+    //       WHERE
+    //           Speed IS NOT NULL
+    //       GROUP BY
+    //           tgl_aktifasi
+    //   )
+    //   SELECT
+    //       fd.tgl_aktifasi,
+    //       fd.waktu_awal,
+    //       ld.waktu_akhir,
+    //       CONCAT(
+    //           TIMESTAMPDIFF(HOUR, fd.waktu_awal, ld.waktu_akhir), ' jam ',
+    //           MOD(TIMESTAMPDIFF(MINUTE, fd.waktu_awal, ld.waktu_akhir), 60), ' menit'
+    //       ) AS duration,
+    //       fd.latitude AS start_latitude,
+    //       fd.longitude AS start_longitude,
+    //       ld.latitude AS end_latitude,
+    //       ld.longitude AS end_longitude,
+    //       ROUND(das.average_speed * 1.9438, 1) AS average_speed_knots,
+    //       ROUND(das.high_speed * 1.9438, 1) AS high_speed_knots,
+    //       ROUND(das.low_speed * 1.9438, 1) AS low_speed_knots
+    //   FROM
+    //       FirstData fd
+    //   JOIN
+    //       LastData ld ON fd.tgl_aktifasi = ld.tgl_aktifasi
+    //   JOIN
+    //       DailyAverageSpeed das ON fd.tgl_aktifasi = das.tgl_aktifasi
+    //   ORDER BY
+    //       fd.tgl_aktifasi ASC;
+    // ''';
 
     List<dynamic> params = [
       mobileId,
@@ -684,5 +684,82 @@ class VesselService {
     await conn.close();
 
     return jarakTempuhHistoryTraking;
+  }
+
+  // fungsi hitung jarak tempuh untuk setiap jarak traking kapal
+  Future<List<Map<String, dynamic>>?> calcMileageTrakingVessel(
+      String mobileId, DateTime? startDate, DateTime? endDate) async {
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+
+    DateTime startDateTime = DateTime(
+      startDate!.year,
+      startDate.month,
+      startDate.day,
+      0,
+      0,
+      0,
+    );
+
+    DateTime endDateTime = DateTime(
+      endDate!.year,
+      endDate.month,
+      endDate.day,
+      23,
+      59,
+      59,
+    );
+
+    String formattedStartDate =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(startDateTime);
+    String formattedEndDate =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(endDateTime);
+
+    String query = '''
+      SELECT
+        varTimestamp AS received,
+        msgTimestamp_GMT AS broadcast,
+        Latitude AS latitude,
+        Longitude AS longitude,
+        (Speed * 1.9438) AS speed_kn,
+        Direction AS heading
+      FROM
+        psg_modata
+      WHERE
+        serviceID = ?
+        AND varTimestamp IS NOT NULL
+        AND Speed IS NOT NULL
+        AND Direction IS NOT NULL
+        AND varTimestamp BETWEEN ? AND ?
+      ORDER BY
+        VAR_MOID DESC;
+  ''';
+
+    List<dynamic> params = [
+      mobileId,
+      formattedStartDate,
+      formattedEndDate,
+    ];
+
+    var results = await conn.query(query, params);
+
+    List<Map<String, dynamic>> calcMileageTraking = [];
+
+    if (results.isNotEmpty) {
+      for (var row in results) {
+        calcMileageTraking.add({
+          'received': row['received'] ?? '',
+          'broadcast': row['broadcast'] ?? '',
+          'latitude': row['latitude'] ?? '',
+          'longitude': row['longitude'] ?? '',
+          'speed_kn': row['speed_kn'] ?? '',
+          'heading': row['heading'] ?? '',
+        });
+      }
+    }
+
+    await conn.close();
+
+    return calcMileageTraking;
   }
 }

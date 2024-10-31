@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/profile/components/modal/traking/components/tab_download_history_tracking.dart';
+import 'package:info_popup/info_popup.dart';
 // import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,32 +44,6 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
   bool _loading = false;
   bool _showHistoryData = false;
   List<dynamic> _historyData = [];
-
-  String _formatLatitude(double? lat) {
-    if (lat == null) return '';
-    try {
-      int degrees = lat.toInt();
-      double minutes = (lat - degrees) * 60;
-      int minutesInt = minutes.toInt();
-      double seconds = (minutes - minutesInt) * 60;
-      return '${degrees.abs()} ${degrees < 0 ? 'S' : 'N'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
-    } catch (e) {
-      return '';
-    }
-  }
-
-  String _formatLongitude(double? lon) {
-    if (lon == null) return '';
-    try {
-      int degrees = lon.toInt();
-      double minutes = (lon - degrees) * 60;
-      int minutesInt = minutes.toInt();
-      double seconds = (minutes - minutesInt) * 60;
-      return '${degrees.abs()} ${degrees < 0 ? 'W' : 'E'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
-    } catch (e) {
-      return '';
-    }
-  }
 
   @override
   void initState() {
@@ -333,26 +308,81 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                           print(
                               'Loading: $_loading, Show Buttons: $_showButtons');
 
+                          // for (var data in _historyData) {
+                          //   _polylinePointsTraking.add(
+                          //     LatLng(double.parse(data['latitude']),
+                          //         double.parse(data['longitude'])),
+                          //   );
+                          //   _headingsTraking.add(double.parse(data['heading']));
+                          //   _markersTraking.add(
+                          //     Marker(
+                          //       point: LatLng(
+                          //         double.parse(data['latitude']),
+                          //         double.parse(data['longitude']),
+                          //       ),
+                          //       width: 13,
+                          //       height: 13,
+                          //       child: Transform.rotate(
+                          //         angle:
+                          //             double.parse(data['heading']) * pi / 180,
+                          //         child: Image.asset(
+                          //           'assets/images/arrow_traking.png',
+                          //           fit: BoxFit.contain,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   );
+                          // }
                           for (var data in _historyData) {
-                            _polylinePointsTraking.add(
-                              LatLng(double.parse(data['latitude']),
-                                  double.parse(data['longitude'])),
-                            );
+                            var latitude = double.parse(data['latitude']);
+                            var longitude = double.parse(data['longitude']);
+
+                            _polylinePointsTraking
+                                .add(LatLng(latitude, longitude));
                             _headingsTraking.add(double.parse(data['heading']));
+
+                            // Create a Marker with an InfoPopup
                             _markersTraking.add(
                               Marker(
-                                point: LatLng(
-                                  double.parse(data['latitude']),
-                                  double.parse(data['longitude']),
-                                ),
+                                point: LatLng(latitude, longitude),
                                 width: 13,
                                 height: 13,
                                 child: Transform.rotate(
                                   angle:
                                       double.parse(data['heading']) * pi / 180,
-                                  child: Image.asset(
-                                    'assets/images/arrow_traking.png',
-                                    fit: BoxFit.contain,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // Show the info popup when the marker is tapped
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return InfoPopupWidget(
+                                            contentTitle: "Tracking Info",
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    'Timestamp: ${data['timestamp']}'),
+                                                Text(
+                                                    'Latitude: ${data['latitude']}'),
+                                                Text(
+                                                    'Longitude: ${data['longitude']}'),
+                                                Text(
+                                                    'Heading: ${data['heading']}°'),
+                                              ],
+                                            ),
+                                            // onDismiss: () {
+                                            //   Navigator.of(context).pop(); // Close the dialog
+                                            // },
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Image.asset(
+                                      'assets/images/arrow_traking.png',
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -412,9 +442,6 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                       ),
                                     ),
                                   );
-                                  // setState(() {
-                                  //   _showHistoryData = true;
-                                  // });
                                 },
                                 child: Icon(
                                   Icons.remove_red_eye_rounded,
@@ -422,155 +449,12 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                 ),
                               ),
                             ),
-                            // SizedBox(width: 5),
-                            // Expanded(
-                            //   child: ElevatedButton(
-                            //     style: ElevatedButton.styleFrom(
-                            //         backgroundColor: Colors.black54),
-                            //     onPressed: () async {
-                            //       setState(() {
-                            //         _textController.clear();
-                            //         _historyData.clear();
-                            //         _showButtons = false;
-                            //         _showHistoryData = false;
-                            //         _radioValue = null;
-                            //       });
-                            //       widget.onClearHistory();
-                            //       final prefs =
-                            //           await SharedPreferences.getInstance();
-                            //       prefs.remove('radioValue');
-                            //       prefs.remove('textFieldValue');
-                            //       prefs.remove('mobileId');
-                            //     },
-                            //     child: Icon(Icons.refresh_rounded,
-                            //         color: Colors.white),
-                            //   ),
-                            // ),
-                            // SizedBox(width: 5),
-                            // Expanded(
-                            //   child: ElevatedButton(
-                            //     style: ElevatedButton.styleFrom(
-                            //         backgroundColor: Colors.orangeAccent),
-                            //     onPressed: () async {
-                            //       Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //           builder: (context) =>
-                            //               TabDownloadHistoryTraking(
-                            //             mobileId: widget.mobileId!,
-                            //             historyData: _historyData,
-                            //           ),
-                            //         ),
-                            //       );
-                            //     },
-                            //     child: Icon(Icons.sim_card_download_rounded),
-                            //   ),
-                            // ),
                           ],
                         )
                       ],
                     )
                   : Container(),
               SizedBox(height: 15),
-              // _showHistoryData
-              //     ? Column(
-              //         children: [
-              //           Row(
-              //             children: [
-              //               Expanded(
-              //                 child: Text(
-              //                   'Timestamp',
-              //                   style: const TextStyle(
-              //                       color: Colors.black,
-              //                       fontWeight: FontWeight.bold),
-              //                 ),
-              //               ),
-              //               Expanded(
-              //                 child: Text(
-              //                   'Latitude',
-              //                   style: const TextStyle(
-              //                       color: Colors.black,
-              //                       fontWeight: FontWeight.bold),
-              //                 ),
-              //               ),
-              //               Expanded(
-              //                 child: Text(
-              //                   'Longitude',
-              //                   style: const TextStyle(
-              //                       color: Colors.black,
-              //                       fontWeight: FontWeight.bold),
-              //                 ),
-              //               ),
-              //               Expanded(
-              //                 child: Text(
-              //                   'Heading',
-              //                   style: const TextStyle(
-              //                       color: Colors.black,
-              //                       fontWeight: FontWeight.bold),
-              //                 ),
-              //               ),
-              //               Expanded(
-              //                 child: Text(
-              //                   'Speed',
-              //                   style: const TextStyle(
-              //                       color: Colors.black,
-              //                       fontWeight: FontWeight.bold),
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //           Divider(),
-              //           Column(
-              //             children: _historyData.map((data) {
-              //               return Column(
-              //                 children: [
-              //                   Row(
-              //                     children: [
-              //                       Expanded(
-              //                         child: Text(
-              //                           '${DateFormat('dd MMMM yyyy (HH:mm:ss)').format(DateTime.parse('${data['timestamp']}'))}',
-              //                           style: const TextStyle(
-              //                               color: Colors.black),
-              //                         ),
-              //                       ),
-              //                       Expanded(
-              //                         child: Text(
-              //                           '${_formatLatitude(double.parse(data['latitude']))}',
-              //                           style: const TextStyle(
-              //                               color: Colors.black),
-              //                         ),
-              //                       ),
-              //                       Expanded(
-              //                         child: Text(
-              //                           '${_formatLongitude(double.parse(data['longitude']))}',
-              //                           style: const TextStyle(
-              //                               color: Colors.black),
-              //                         ),
-              //                       ),
-              //                       Expanded(
-              //                         child: Text(
-              //                           '${data['heading']}°',
-              //                           style: const TextStyle(
-              //                               color: Colors.black),
-              //                         ),
-              //                       ),
-              //                       Expanded(
-              //                         child: Text(
-              //                           '${data['speed_kn']} Knot/${data['speed_kmh']} Kmh',
-              //                           style: const TextStyle(
-              //                               color: Colors.black),
-              //                         ),
-              //                       ),
-              //                     ],
-              //                   ),
-              //                   Divider(),
-              //                 ],
-              //               );
-              //             }).toList(),
-              //           ),
-              //         ],
-              //       )
-              //     : Container(),
             ],
           ),
         ),
