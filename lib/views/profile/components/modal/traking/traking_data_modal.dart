@@ -367,6 +367,28 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                       },
                     ),
                   ),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black54),
+                      onPressed: () async {
+                        setState(() {
+                          _textController.clear();
+                          _historyData.clear();
+                          _showButtons = false;
+                          _showHistoryData = false;
+                          _radioValue = null;
+                        });
+                        widget.onClearHistory();
+                        final prefs = await SharedPreferences.getInstance();
+                        prefs.remove('radioValue');
+                        prefs.remove('textFieldValue');
+                        prefs.remove('mobileId');
+                      },
+                      child: Icon(Icons.refresh_rounded, color: Colors.white),
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 5),
@@ -400,31 +422,31 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.black54),
-                                onPressed: () async {
-                                  setState(() {
-                                    _textController.clear();
-                                    _historyData.clear();
-                                    _showButtons = false;
-                                    _showHistoryData = false;
-                                    _radioValue = null;
-                                  });
-                                  widget.onClearHistory();
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.remove('radioValue');
-                                  prefs.remove('textFieldValue');
-                                  prefs.remove('mobileId');
-                                },
-                                child: Icon(Icons.refresh_rounded,
-                                    color: Colors.white),
-                              ),
-                            ),
-                            SizedBox(width: 5),
+                            // SizedBox(width: 5),
+                            // Expanded(
+                            //   child: ElevatedButton(
+                            //     style: ElevatedButton.styleFrom(
+                            //         backgroundColor: Colors.black54),
+                            //     onPressed: () async {
+                            //       setState(() {
+                            //         _textController.clear();
+                            //         _historyData.clear();
+                            //         _showButtons = false;
+                            //         _showHistoryData = false;
+                            //         _radioValue = null;
+                            //       });
+                            //       widget.onClearHistory();
+                            //       final prefs =
+                            //           await SharedPreferences.getInstance();
+                            //       prefs.remove('radioValue');
+                            //       prefs.remove('textFieldValue');
+                            //       prefs.remove('mobileId');
+                            //     },
+                            //     child: Icon(Icons.refresh_rounded,
+                            //         color: Colors.white),
+                            //   ),
+                            // ),
+                            // SizedBox(width: 5),
                             // Expanded(
                             //   child: ElevatedButton(
                             //     style: ElevatedButton.styleFrom(

@@ -964,7 +964,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage> {
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.redAccent,
                                 ),
                                 onPressed: () {
@@ -1000,7 +1000,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage> {
                               SizedBox(width: 5),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.orangeAccent,
                                 ),
                                 onPressed: () {
@@ -1035,7 +1035,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage> {
                               SizedBox(width: 5),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.blueAccent,
                                 ),
                                 onPressed: () {
@@ -1070,7 +1070,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage> {
                               SizedBox(width: 5),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.green,
                                 ),
                                 onPressed: () {
@@ -1105,7 +1105,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage> {
                               SizedBox(width: 5),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.pink,
                                 ),
                                 onPressed: () {

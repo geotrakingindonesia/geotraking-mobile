@@ -1493,7 +1493,7 @@ class MileageDetailPage extends StatelessWidget {
                 ),
                 pw.Row(
                   children: [
-                    pw.Text('Waktu Bergerak: ',
+                    pw.Text('Periode Traking: ',
                         style: pw.TextStyle(fontSize: 14)),
                     pw.Text(
                       '${totalTime['days']} hari ${totalTime['hours']} jam ${totalTime['minutes']} menit',
@@ -1521,7 +1521,7 @@ class MileageDetailPage extends StatelessWidget {
                 'Tanggal',
                 'Jarak (nmi)',
                 'Durasi',
-                'Kecepatan (knots)'
+                'Kecepatan Rata-rata(knots)'
               ],
               headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
               cellAlignment: pw.Alignment.center,
@@ -1545,7 +1545,6 @@ class MileageDetailPage extends StatelessWidget {
                   // DateTime startTime = item['waktu_awal'];
                   // DateTime endTime = item['waktu_akhir'];
 
-                  // Hitung jarak dari titik awal ke titik akhir untuk item saat ini
                   double distanceNmi = calculateDistanceNmi(
                     double.parse(item['start_latitude']),
                     double.parse(item['start_longitude']),
@@ -1553,15 +1552,13 @@ class MileageDetailPage extends StatelessWidget {
                     double.parse(item['end_longitude']),
                   );
 
-                  // Menyiapkan nilai untuk rerata speed
                   double rerataSpeed = item['average_speed_knots'] ?? -1;
                   double distanceTextValue =
                       (rerataSpeed < 0.1) ? 0.0 : distanceNmi;
 
-                  DateTime startTime = item['waktu_awal'];
-                  DateTime endTime = item['waktu_akhir'];
+                  // DateTime startTime = item['waktu_awal'];
+                  // DateTime endTime = item['waktu_akhir'];
 
-                  // Cek jika ada item berikutnya untuk menghitung jarak
                   double distanceToNextStart = 0.0;
                   if (index < data!.length - 1) {
                     final nextItem = data![index + 1];
@@ -1578,7 +1575,7 @@ class MileageDetailPage extends StatelessWidget {
                       distanceTextValue + distanceToNextStart;
 
                   return [
-                    '${DateFormat('dd MMM yyyy').format(item['tgl_aktifasi'])} ${DateFormat('hh:mm a').format(startTime)} - ${DateFormat('hh:mm a').format(endTime)}',
+                    '${DateFormat('dd MMM yyyy').format(item['tgl_aktifasi'])}',
                     // distanceNmi.toStringAsFixed(2),
                     totalDistance.toStringAsFixed(2),
                     item['duration'],
@@ -1594,7 +1591,7 @@ class MileageDetailPage extends StatelessWidget {
 
     final directory = await getExternalStorageDirectory();
     final file = File(
-        '${directory!.path}/laporan_histori_jarak_tempuh_${vesselName}.pdf');
+        '${directory!.path}/laporan_jarak_tempuh_${vesselName}.pdf');
 
     await file.writeAsBytes(await pdf.save());
 
@@ -1773,7 +1770,7 @@ class MileageDetailPage extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      'Waktu Bergerak',
+                                      'Periode Traking',
                                       style: TextStyle(color: Colors.white70),
                                     ),
                                   ),
@@ -1900,7 +1897,6 @@ class MileageDetailPage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final item = data![index];
 
-                        // Hitung jarak dari titik awal ke titik akhir untuk item saat ini
                         double distanceNmi = calculateDistanceNmi(
                           double.parse(item['start_latitude']),
                           double.parse(item['start_longitude']),
@@ -1908,7 +1904,6 @@ class MileageDetailPage extends StatelessWidget {
                           double.parse(item['end_longitude']),
                         );
 
-                        // Menyiapkan nilai untuk rerata speed
                         double rerataSpeed = item['average_speed_knots'] ?? -1;
                         double distanceTextValue =
                             (rerataSpeed < 0.1) ? 0.0 : distanceNmi;
@@ -1916,7 +1911,6 @@ class MileageDetailPage extends StatelessWidget {
                         DateTime startTime = item['waktu_awal'];
                         DateTime endTime = item['waktu_akhir'];
 
-                        // Cek jika ada item berikutnya untuk menghitung jarak
                         double distanceToNextStart = 0.0;
                         if (index < data!.length - 1) {
                           final nextItem = data![index + 1];
@@ -1928,7 +1922,6 @@ class MileageDetailPage extends StatelessWidget {
                           );
                         }
 
-                        // Jumlahkan distanceText dengan distanceToNextStart
                         double totalDistance =
                             distanceTextValue + distanceToNextStart;
 

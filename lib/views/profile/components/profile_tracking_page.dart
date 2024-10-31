@@ -26,6 +26,7 @@ import 'package:geotraking/core/services/wpp_service.dart';
 import 'package:geotraking/views/profile/components/modal/airtime/airtime_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/traking/traking_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/vessel/vessel_data_modal.dart';
+import 'package:info_popup/info_popup.dart';
 // import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -359,15 +360,15 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
               automaticallyImplyLeading: false,
               elevation: 0,
               actions: [
-          IconButton(
-            icon: Icon(
-              _isSidebarVisible ? Icons.cancel : Icons.search,
-              color: Colors.black,
-            ),
-            onPressed: _toggleSidebar,
-          ),
-        ],
-        backgroundColor: Colors.white,
+                IconButton(
+                  icon: Icon(
+                    _isSidebarVisible ? Icons.cancel : Icons.search,
+                    color: Colors.black,
+                  ),
+                  onPressed: _toggleSidebar,
+                ),
+              ],
+              backgroundColor: Colors.white,
             ),
           ),
         ),
@@ -516,20 +517,26 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                       bool isSelected = _selectedKapalMember == kapalMember;
                       return Marker(
                         width: 120,
-                        height: 30,
-                        point: LatLng(double.parse(kapalMember['lat']),
-                            double.parse(kapalMember['lon'])),
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              kapalMember['nama_kapal'],
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.black),
+                        height: 23,
+                        point: LatLng(
+                          double.parse(kapalMember['lat']),
+                          double.parse(kapalMember['lon']),
+                        ),
+                        child: Transform.translate(
+                          offset: Offset(0, -25),
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                kapalMember['nama_kapal'],
+                                overflow: TextOverflow.ellipsis,
+                                style:
+                                    TextStyle(color: Colors.black, fontSize: 10),
+                              ),
                             ),
                           ),
                         ),
@@ -579,7 +586,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                             : Colors.white,
                       ),
                       onPressed: () {
-                        // show && hidden basarnas
                         setState(() {
                           _isShowBasarnas = !_isShowBasarnas;
                         });
@@ -601,7 +607,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                             : Colors.white,
                       ),
                       onPressed: () {
-                        // show && hidden port ri
                         setState(() {
                           _isShowPortPelabuhan = !_isShowPortPelabuhan;
                         });
@@ -621,7 +626,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                         color: _isShowWpp ? Colors.blue.shade300 : Colors.white,
                       ),
                       onPressed: () {
-                        // show && hidden zona wpp
                         setState(() {
                           _isShowWpp = !_isShowWpp;
                         });
@@ -636,14 +640,13 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                     ),
                     child: IconButton(
                       icon: Icon(
-                        FontAwesomeIcons.ship,
+                        Icons.directions_boat_filled_rounded,
                         size: 20,
                         color: _isShowNamaKapal
                             ? Colors.blue.shade300
                             : Colors.white,
                       ),
                       onPressed: () {
-                        // show && hidden zona wpp
                         setState(() {
                           _isShowNamaKapal = !_isShowNamaKapal;
                         });
@@ -653,6 +656,135 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                 ],
               ),
             ),
+            if (_selectedKapalMember != null)
+              Positioned(
+                top: 216,
+                left: 16,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.location_history_rounded,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return VesselDataModal(
+                                  vesselData: _selectedKapalMember!);
+                            },
+                            constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width,
+                                maxHeight:
+                                    MediaQuery.of(context).size.height / 3),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.location_searching,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              double keyboardHeight =
+                                  MediaQuery.of(context).viewInsets.bottom;
+                              double paddingBottom =
+                                  keyboardHeight > 0 ? keyboardHeight + 10 : 10;
+
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: paddingBottom),
+                                child: TrakingDataModal(
+                                  mobileId: _selectedKapalMember!['mobile_id'],
+                                  onTrackVessel: _onTrackVessel,
+                                  onClearHistory: () {
+                                    setState(() {
+                                      _polylinePointsTraking.clear();
+                                      _markersTraking.clear();
+                                    });
+                                  },
+                                ),
+                              );
+                            },
+                            constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width,
+                                maxHeight:
+                                    MediaQuery.of(context).size.height / 2),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.timer,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return AirtimeDataModal(
+                                  future: vesselService.getAirtimeKapal(
+                                      _selectedKapalMember!['idfull'] ?? ''));
+                            },
+                            constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width,
+                                maxHeight:
+                                    MediaQuery.of(context).size.height / 3),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.close,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _selectedKapalMember = null;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             SelectedBasarnasInfo(
               selectedBasarnas: _selectedBasarnas,
               onClose: () {
@@ -824,83 +956,83 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
               ),
           ],
         ),
-        bottomNavigationBar: Visibility(
-          visible: _selectedKapalMember != null,
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.directions_boat),
-                label: 'Vessel',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.location_searching),
-                label: 'Traking',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.timer),
-                label: 'Airtime',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.close),
-                label: 'Close',
-              ),
-            ],
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.black,
-            onTap: (index) async {
-              if (index == 3) {
-                // Close button
-                setState(() {
-                  _selectedKapalMember = null;
-                });
-              } else if (index == 1) {
-                await showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) {
-                    double keyboardHeight =
-                        MediaQuery.of(context).viewInsets.bottom;
-                    double paddingBottom =
-                        keyboardHeight > 0 ? keyboardHeight + 10 : 10;
+        // bottomNavigationBar: Visibility(
+        //   visible: _selectedKapalMember != null,
+        //   child: BottomNavigationBar(
+        //     type: BottomNavigationBarType.fixed,
+        //     items: const <BottomNavigationBarItem>[
+        //       BottomNavigationBarItem(
+        //         icon: Icon(Icons.directions_boat),
+        //         label: 'Vessel',
+        //       ),
+        //       BottomNavigationBarItem(
+        //         icon: Icon(Icons.location_searching),
+        //         label: 'Traking',
+        //       ),
+        //       BottomNavigationBarItem(
+        //         icon: Icon(Icons.timer),
+        //         label: 'Airtime',
+        //       ),
+        //       BottomNavigationBarItem(
+        //         icon: Icon(Icons.close),
+        //         label: 'Close',
+        //       ),
+        //     ],
+        //     selectedItemColor: Colors.black,
+        //     unselectedItemColor: Colors.black,
+        //     onTap: (index) async {
+        //       if (index == 3) {
+        //         // Close button
+        //         setState(() {
+        //           _selectedKapalMember = null;
+        //         });
+        //       } else if (index == 1) {
+        //         await showModalBottomSheet(
+        //           context: context,
+        //           isScrollControlled: true,
+        //           builder: (context) {
+        //             double keyboardHeight =
+        //                 MediaQuery.of(context).viewInsets.bottom;
+        //             double paddingBottom =
+        //                 keyboardHeight > 0 ? keyboardHeight + 10 : 10;
 
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: paddingBottom),
-                      child: TrakingDataModal(
-                        mobileId: _selectedKapalMember!['mobile_id'],
-                        onTrackVessel: _onTrackVessel,
-                        onClearHistory: () {
-                          setState(() {
-                            _polylinePointsTraking.clear();
-                            _markersTraking.clear();
-                          });
-                        },
-                      ),
-                    );
-                  },
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width,
-                      maxHeight: MediaQuery.of(context).size.height / 2),
-                );
-              } else {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) {
-                    return index == 0
-                        ? VesselDataModal(vesselData: _selectedKapalMember!)
-                        : AirtimeDataModal(
-                            future: vesselService.getAirtimeKapal(
-                                _selectedKapalMember!['idfull'] ?? ''));
-                  },
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width,
-                      maxHeight: MediaQuery.of(context).size.height / 3),
-                );
-              }
-            },
-          ),
-        ),
+        //             return Padding(
+        //               padding: EdgeInsets.only(bottom: paddingBottom),
+        //               child: TrakingDataModal(
+        //                 mobileId: _selectedKapalMember!['mobile_id'],
+        //                 onTrackVessel: _onTrackVessel,
+        //                 onClearHistory: () {
+        //                   setState(() {
+        //                     _polylinePointsTraking.clear();
+        //                     _markersTraking.clear();
+        //                   });
+        //                 },
+        //               ),
+        //             );
+        //           },
+        //           constraints: BoxConstraints(
+        //               maxWidth: MediaQuery.of(context).size.width,
+        //               maxHeight: MediaQuery.of(context).size.height / 2),
+        //         );
+        //       } else {
+        //         showModalBottomSheet(
+        //           context: context,
+        //           isScrollControlled: true,
+        //           builder: (context) {
+        //             return index == 0
+        //                 ? VesselDataModal(vesselData: _selectedKapalMember!)
+        //                 : AirtimeDataModal(
+        //                     future: vesselService.getAirtimeKapal(
+        //                         _selectedKapalMember!['idfull'] ?? ''));
+        //           },
+        //           constraints: BoxConstraints(
+        //               maxWidth: MediaQuery.of(context).size.width,
+        //               maxHeight: MediaQuery.of(context).size.height / 3),
+        //         );
+        //       }
+        //     },
+        //   ),
+        // ),
       ),
     );
     // return Scaffold(

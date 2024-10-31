@@ -45,6 +45,8 @@ dependencies:
   flutter_form_builder: ^9.5.0
   flutter_plugin_android_lifecycle: ^2.0.23
 
+  info_popup: ^4.3.1 #package utk popup tampil di kapal 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
