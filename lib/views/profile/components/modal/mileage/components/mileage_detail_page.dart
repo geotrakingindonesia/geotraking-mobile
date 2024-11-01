@@ -2645,175 +2645,189 @@ class MileageDetailPage extends StatelessWidget {
   //   return {'days': totalDays, 'hours': totalHours, 'minutes': totalMinutes};
   // }
 
-  // Future<void> _savePdf() async {
-  //   final pdf = pw.Document();
+  Future<void> _savePdf() async {
+    final pdf = pw.Document();
 
-  //   final ByteData bytes =
-  //       await rootBundle.load('assets/images/logo-geosat.png');
-  //   final Uint8List imageData = bytes.buffer.asUint8List();
+    final ByteData bytes =
+        await rootBundle.load('assets/images/logo-geosat.png');
+    final Uint8List imageData = bytes.buffer.asUint8List();
 
-  //   double totalDistance = _calculateTotalDistance();
-  //   Map<String, int> totalTime = _calculateTotalTime();
-  //   double averageSpeed = _calculateAverageSpeed();
+    // double totalDistance = _calculateTotalDistance();
+    // Map<String, int> totalTime = _calculateTotalTime();
+    // double averageSpeed = _calculateAverageSpeed();
 
-  //   pdf.addPage(
-  //     pw.MultiPage(
-  //       build: (pw.Context context) {
-  //         return [
-  //           pw.Column(
-  //             crossAxisAlignment: pw.CrossAxisAlignment.start,
-  //             children: [
-  //               pw.Row(
-  //                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   pw.Text('Laporan Jarak Tempuh Kapal',
-  //                       style: pw.TextStyle(
-  //                           fontSize: 22, fontWeight: pw.FontWeight.bold)),
-  //                   pw.Image(
-  //                     pw.MemoryImage(imageData),
-  //                     width: 100,
-  //                     height: 50,
-  //                   ),
-  //                 ],
-  //               ),
-  //               pw.SizedBox(height: 20),
-  //               pw.Row(
-  //                 children: [
-  //                   pw.Text(
-  //                     '${startDate != null && endDate != null ? "${DateFormat('dd MMM yyyy').format(startDate!)} - ${DateFormat('dd MMM yyyy').format(endDate!)}" : "No date selected"}',
-  //                     style: pw.TextStyle(fontSize: 18),
-  //                   ),
-  //                 ],
-  //               ),
-  //               pw.Divider(),
-  //               pw.Row(
-  //                 children: [
-  //                   pw.Text('Nama Kapal: ', style: pw.TextStyle(fontSize: 14)),
-  //                   pw.Text(vesselName ?? '',
-  //                       style: pw.TextStyle(fontSize: 14)),
-  //                 ],
-  //               ),
-  //               pw.Row(
-  //                 children: [
-  //                   pw.Text('Jarak Tempuh: ',
-  //                       style: pw.TextStyle(fontSize: 14)),
-  //                   pw.Text('${totalDistance.toStringAsFixed(2)} nmi',
-  //                       style: pw.TextStyle(fontSize: 14)),
-  //                 ],
-  //               ),
-  //               pw.Row(
-  //                 children: [
-  //                   pw.Text('Perjalanan: ', style: pw.TextStyle(fontSize: 14)),
-  //                   pw.Text('${data!.length} hari',
-  //                       style: pw.TextStyle(fontSize: 14)),
-  //                 ],
-  //               ),
-  //               pw.Row(
-  //                 children: [
-  //                   pw.Text('Periode Traking: ',
-  //                       style: pw.TextStyle(fontSize: 14)),
-  //                   pw.Text(
-  //                     '${totalTime['days']} hari ${totalTime['hours']} jam ${totalTime['minutes']} menit',
-  //                     style: pw.TextStyle(fontSize: 14),
-  //                   ),
-  //                 ],
-  //               ),
-  //               pw.Row(
-  //                 children: [
-  //                   pw.Text('Average Speed: ',
-  //                       style: pw.TextStyle(fontSize: 14)),
-  //                   pw.Text(
-  //                     '${averageSpeed.toStringAsFixed(2)} knots',
-  //                     style: pw.TextStyle(fontSize: 14),
-  //                   ),
-  //                 ],
-  //               ),
-  //               pw.SizedBox(height: 20),
-  //               pw.Text('Detail Perjalanan', style: pw.TextStyle(fontSize: 18)),
-  //               pw.SizedBox(height: 5),
-  //             ],
-  //           ),
-  //           pw.TableHelper.fromTextArray(
-  //             headers: [
-  //               'Tanggal',
-  //               'Jarak (nmi)',
-  //               'Durasi',
-  //               'Kecepatan Rata-rata(knots)'
-  //             ],
-  //             headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-  //             cellAlignment: pw.Alignment.center,
-  //             cellStyle: pw.TextStyle(fontSize: 10),
-  //             columnWidths: {
-  //               0: pw.FixedColumnWidth(100),
-  //               1: pw.FixedColumnWidth(60),
-  //               2: pw.FixedColumnWidth(60),
-  //               3: pw.FixedColumnWidth(60),
-  //             },
-  //             data: List<List<String>>.generate(
-  //               data!.length,
-  //               (index) {
-  //                 final item = data![index];
-  //                 // double distanceNmi = calculateDistanceNmi(
-  //                 //   double.parse(item['start_latitude']),
-  //                 //   double.parse(item['start_longitude']),
-  //                 //   double.parse(item['end_latitude']),
-  //                 //   double.parse(item['end_longitude']),
-  //                 // );
-  //                 // DateTime startTime = item['waktu_awal'];
-  //                 // DateTime endTime = item['waktu_akhir'];
+    List<Map<String, String>> processedData = processVesselData(data!);
+    String totalDuration = calculateTotalDurationPerDay(processedData);
 
-  //                 double distanceNmi = calculateDistanceNmi(
-  //                   double.parse(item['start_latitude']),
-  //                   double.parse(item['start_longitude']),
-  //                   double.parse(item['end_latitude']),
-  //                   double.parse(item['end_longitude']),
-  //                 );
+    double averageDailySpeed = calculateAverageSpeedPerDay(processedData);
 
-  //                 double rerataSpeed = item['average_speed_knots'] ?? -1;
-  //                 double distanceTextValue =
-  //                     (rerataSpeed < 0.1) ? 0.0 : distanceNmi;
+    double totalDailyDistance = calculateTotalDistancePerDay(processedData);
 
-  //                 // DateTime startTime = item['waktu_awal'];
-  //                 // DateTime endTime = item['waktu_akhir'];
+    pdf.addPage(
+      pw.MultiPage(
+        build: (pw.Context context) {
+          return [
+            pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Laporan Jarak Tempuh Kapal',
+                        style: pw.TextStyle(
+                            fontSize: 22, fontWeight: pw.FontWeight.bold)),
+                    pw.Image(
+                      pw.MemoryImage(imageData),
+                      width: 100,
+                      height: 50,
+                    ),
+                  ],
+                ),
+                pw.SizedBox(height: 20),
+                pw.Row(
+                  children: [
+                    pw.Text(
+                      '${startDate != null && endDate != null ? "${DateFormat('dd MMM yyyy').format(startDate!)} - ${DateFormat('dd MMM yyyy').format(endDate!)}" : "No date selected"}',
+                      style: pw.TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+                pw.Divider(),
+                pw.Row(
+                  children: [
+                    pw.Text('Nama Kapal: ', style: pw.TextStyle(fontSize: 14)),
+                    pw.Text(vesselName ?? '',
+                        style: pw.TextStyle(fontSize: 14)),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Jarak Tempuh: ',
+                        style: pw.TextStyle(fontSize: 14)),
+                    // pw.Text('${totalDistance.toStringAsFixed(2)} nmi',
+                    pw.Text('${totalDailyDistance.toStringAsFixed(2)} nmi',
+                        style: pw.TextStyle(fontSize: 14)),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Perjalanan: ', style: pw.TextStyle(fontSize: 14)),
+                    pw.Text('${calculateUniqueDays(data!)} hari',
+                        style: pw.TextStyle(fontSize: 14)),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Periode Traking: ',
+                        style: pw.TextStyle(fontSize: 14)),
+                    pw.Text(
+                      ': $totalDuration',
+                      // '${totalTime['days']} hari ${totalTime['hours']} jam ${totalTime['minutes']} menit',
+                      style: pw.TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Average Speed: ',
+                        style: pw.TextStyle(fontSize: 14)),
+                    pw.Text(
+                      // '${averageSpeed.toStringAsFixed(2)} knots',
+                      '${averageDailySpeed.toStringAsFixed(2)} knots',
+                      style: pw.TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+                pw.SizedBox(height: 20),
+                pw.Text('Detail Perjalanan', style: pw.TextStyle(fontSize: 18)),
+                pw.SizedBox(height: 5),
+              ],
+            ),
+            pw.TableHelper.fromTextArray(
+              headers: [
+                'Tanggal',
+                'Jarak (nmi)',
+                'Durasi',
+                'Kecepatan Rata-rata(knots)'
+              ],
+              headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              cellAlignment: pw.Alignment.center,
+              cellStyle: pw.TextStyle(fontSize: 10),
+              columnWidths: {
+                0: pw.FixedColumnWidth(100),
+                1: pw.FixedColumnWidth(60),
+                2: pw.FixedColumnWidth(60),
+                3: pw.FixedColumnWidth(60),
+              },
+              data: List<List<String>>.generate(
+                processedData.length,
+                (index) {
+                  final item = processedData[index];
+                  // double distanceNmi = calculateDistanceNmi(
+                  //   double.parse(item['start_latitude']),
+                  //   double.parse(item['start_longitude']),
+                  //   double.parse(item['end_latitude']),
+                  //   double.parse(item['end_longitude']),
+                  // );
+                  // DateTime startTime = item['waktu_awal'];
+                  // DateTime endTime = item['waktu_akhir'];
 
-  //                 double distanceToNextStart = 0.0;
-  //                 if (index < data!.length - 1) {
-  //                   final nextItem = data![index + 1];
-  //                   distanceToNextStart = calculateDistanceNmi(
-  //                     double.parse(item['end_latitude']),
-  //                     double.parse(item['end_longitude']),
-  //                     double.parse(nextItem['start_latitude']),
-  //                     double.parse(nextItem['start_longitude']),
-  //                   );
-  //                 }
+                  // double distanceNmi = calculateDistanceNmi(
+                  //   double.parse(item['start_latitude']),
+                  //   double.parse(item['start_longitude']),
+                  //   double.parse(item['end_latitude']),
+                  //   double.parse(item['end_longitude']),
+                  // );
 
-  //                 // Jumlahkan distanceText dengan distanceToNextStart
-  //                 double totalDistance =
-  //                     distanceTextValue + distanceToNextStart;
+                  // double rerataSpeed = item['average_speed_knots'] ?? -1;
+                  // double distanceTextValue =
+                  //     (rerataSpeed < 0.1) ? 0.0 : distanceNmi;
 
-  //                 return [
-  //                   '${DateFormat('dd MMM yyyy').format(item['tgl_aktifasi'])}',
-  //                   // distanceNmi.toStringAsFixed(2),
-  //                   totalDistance.toStringAsFixed(2),
-  //                   item['duration'],
-  //                   item['average_speed_knots'].toString(),
-  //                 ];
-  //               },
-  //             ),
-  //           ),
-  //         ];
-  //       },
-  //     ),
-  //   );
+                  // // DateTime startTime = item['waktu_awal'];
+                  // // DateTime endTime = item['waktu_akhir'];
 
-  //   final directory = await getExternalStorageDirectory();
-  //   final file =
-  //       File('${directory!.path}/laporan_jarak_tempuh_${vesselName}.pdf');
+                  // double distanceToNextStart = 0.0;
+                  // if (index < data!.length - 1) {
+                  //   final nextItem = data![index + 1];
+                  //   distanceToNextStart = calculateDistanceNmi(
+                  //     double.parse(item['end_latitude']),
+                  //     double.parse(item['end_longitude']),
+                  //     double.parse(nextItem['start_latitude']),
+                  //     double.parse(nextItem['start_longitude']),
+                  //   );
+                  // }
 
-  //   await file.writeAsBytes(await pdf.save());
+                  // // Jumlahkan distanceText dengan distanceToNextStart
+                  // double totalDistance =
+                  //     distanceTextValue + distanceToNextStart;
 
-  //   OpenFile.open(file.path);
-  // }
+                  return [
+                    '${item['formattedDate']}',
+                    // '${DateFormat('dd MMM yyyy').format(item['tgl_aktifasi'])}',
+                    // distanceNmi.toStringAsFixed(2),
+                    '${item['totalDistance']}',
+                    '${item['duration']}',
+                    '${item['averageSpeed']}',
+                    // totalDistance.toStringAsFixed(2),
+                    // item['duration'],
+                    // item['average_speed_knots'].toString(),
+                  ];
+                },
+              ),
+            ),
+          ];
+        },
+      ),
+    );
+
+    final directory = await getExternalStorageDirectory();
+    final file =
+        File('${directory!.path}/laporan_jarak_tempuh_${vesselName}.pdf');
+
+    await file.writeAsBytes(await pdf.save());
+
+    OpenFile.open(file.path);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -2841,24 +2855,24 @@ class MileageDetailPage extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // ElevatedButton.icon(
-                //   onPressed: _savePdf,
-                //   icon: Icon(
-                //     Icons.save,
-                //     size: 24,
-                //     color: Colors.white60,
-                //   ),
-                //   label: Text(
-                //     'Pdf',
-                //     style: TextStyle(
-                //       fontSize: 16,
-                //       color: Colors.white60,
-                //     ),
-                //   ),
-                //   style: ElevatedButton.styleFrom(
-                //     backgroundColor: Colors.black54,
-                //   ),
-                // ),
+                ElevatedButton.icon(
+                  onPressed: _savePdf,
+                  icon: Icon(
+                    Icons.save,
+                    size: 24,
+                    color: Colors.white60,
+                  ),
+                  label: Text(
+                    'Pdf',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white60,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black54,
+                  ),
+                ),
               ],
             ),
           ),
@@ -2918,14 +2932,14 @@ class MileageDetailPage extends StatelessWidget {
                                     size: 24,
                                   ),
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              MileageLocationPage(
-                                                data: data,
-                                              )),
-                                    );
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //       builder: (context) =>
+                                    //           MileageLocationPage(
+                                    //             data: data,
+                                    //           )),
+                                    // );
                                   },
                                   tooltip: 'Go to Location',
                                 ),
