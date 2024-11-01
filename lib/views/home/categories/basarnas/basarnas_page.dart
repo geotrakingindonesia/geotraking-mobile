@@ -72,9 +72,6 @@ class _BasarnasPageState extends State<BasarnasPage> {
                     InteractiveFlag.drag |
                     InteractiveFlag.doubleTapZoom,
               ),
-              // interactiveFlags: InteractiveFlag.pinchZoom |
-              //     InteractiveFlag.drag |
-              //     InteractiveFlag.doubleTapZoom,
             ),
             mapController: mapController,
             children: [

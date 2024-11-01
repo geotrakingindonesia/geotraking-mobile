@@ -84,5 +84,53 @@ class SelectedBasarnasInfo extends StatelessWidget {
         ],
       ),
     );
+
+    // return Container(
+    //   width: 300,
+    //   height: 140,
+    //   decoration: BoxDecoration(
+    //     color: Colors.white,
+    //     borderRadius: BorderRadius.circular(10),
+    //   ),
+    //   padding: const EdgeInsets.all(20),
+    //   child: SingleChildScrollView(
+    //     child: Column(
+    //       mainAxisSize: MainAxisSize.min,
+    //       children: [
+    //         Align(
+    //           alignment: Alignment.topLeft,
+    //           child: Text(
+    //             'Nama Basarnas: ${selectedBasarnas?.namaBasarnas}',
+    //             style: const TextStyle(color: Colors.black),
+    //           ),
+    //         ),
+    //         Divider(thickness: 0.5),
+    //         Align(
+    //           alignment: Alignment.topLeft,
+    //           child: Text(
+    //             'Tipe Basarnas: ${selectedBasarnas?.tipe}',
+    //             style: const TextStyle(color: Colors.black),
+    //           ),
+    //         ),
+    //         Divider(thickness: 0.5),
+    //         Align(
+    //           alignment: Alignment.topLeft,
+    //           child: Text(
+    //             'Latitude: ${selectedBasarnas?.lat}',
+    //             style: const TextStyle(color: Colors.black),
+    //           ),
+    //         ),
+    //         Divider(thickness: 0.5),
+    //         Align(
+    //           alignment: Alignment.topLeft,
+    //           child: Text(
+    //             'Longitude: ${selectedBasarnas?.lon}',
+    //             style: const TextStyle(color: Colors.black),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

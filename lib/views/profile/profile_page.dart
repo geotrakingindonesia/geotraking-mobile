@@ -415,6 +415,92 @@ class _ProfilePageState extends State<ProfilePage> {
                   // SizedBox(
                   //   height: 20,
                   // ),
+                  // Container(
+                  //   margin: const EdgeInsets.all(15),
+                  //   padding: const EdgeInsets.symmetric(
+                  //       vertical: 10, horizontal: 15),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.green,
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                  //   child: Row(
+                  //     children: [
+                  //       // Circle Avatar on the left
+                  //       Padding(
+                  //         padding: const EdgeInsets.all(5),
+                  //         child: SizedBox(
+                  //           width: 68,
+                  //           height: 68,
+                  //           child: ClipOval(
+                  //             child: AspectRatio(
+                  //               aspectRatio: 1 / 1,
+                  //               child: _user!.avatar != null &&
+                  //                       _user!.avatar!.isNotEmpty
+                  //                   ? CircleAvatar(
+                  //                       radius: 25,
+                  //                       backgroundImage: FileImage(
+                  //                         File(
+                  //                             '${_directory?.path}/avatar_${_user!.id}.jpg'),
+                  //                       ),
+                  //                     )
+                  //                   : CircleAvatar(
+                  //                       radius: 25,
+                  //                       backgroundImage: AssetImage(
+                  //                           'assets/images/user.png'),
+                  //                     ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+
+                  //       const SizedBox(width: 12),
+
+                  //       // Name and phone number column
+                  //       Expanded(
+                  //         child: Column(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             Text(
+                  //               _user!.name.length > 20
+                  //                   ? _user!.name.substring(0, 20) + '...'
+                  //                   : _user!.name,
+                  //               style: const TextStyle(
+                  //                 fontSize: 16,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 color: Colors.white,
+                  //               ),
+                  //             ),
+                  //             const SizedBox(height: 3),
+                  //             Text(
+                  //               // 'phoneNumber',
+                  //               _user!.noHp,
+                  //               style: const TextStyle(
+                  //                 fontSize: 14,
+                  //                 color: Colors.white70,
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+
+                  //       // Arrow icon on the right
+                  //       IconButton(
+                  //         icon: Icon(Icons.arrow_forward_ios,
+                  //             color: Colors.white),
+                  //         onPressed: () {
+                  //           Navigator.pushNamed(
+                  //               context, AppRoutes.editMyProfile);
+                  //         },
+                  //         tooltip: 'Edit Profile',
+                  //       ),
+                  //       // Icon(
+                  //       //   Icons.arrow_forward_ios,
+                  //       //   color: Colors.white,
+                  //       //   size: 20,
+                  //       // ),
+                  //     ],
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.all(AppDefaults.padding),
                     child: Center(
@@ -545,7 +631,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   //       crossAxisAlignment: CrossAxisAlignment.start,
                   //       children: [
                   //         Text(
-                  //           'Console',                            
+                  //           'Console',
                   //           style: Theme.of(context)
                   //               .textTheme
                   //               .titleMedium
@@ -587,7 +673,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            Localization.report(widget.selectedLanguage),                            
+                            Localization.report(widget.selectedLanguage),
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium

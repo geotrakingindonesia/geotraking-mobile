@@ -26,7 +26,7 @@ import 'package:geotraking/core/services/wpp_service.dart';
 import 'package:geotraking/views/profile/components/modal/airtime/airtime_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/traking/traking_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/vessel/vessel_data_modal.dart';
-import 'package:info_popup/info_popup.dart';
+// import 'package:info_popup/info_popup.dart';
 // import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -2738,26 +2738,55 @@ class MileageDetailPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                pw.SizedBox(height: 20),
-                pw.Text('Detail Perjalanan', style: pw.TextStyle(fontSize: 18)),
-                pw.SizedBox(height: 5),
               ],
             ),
+            // pw.SizedBox(height: 20),
+            // pw.Text('Data Running Hours', style: pw.TextStyle(fontSize: 18)),
+            // pw.SizedBox(height: 5),
+            // pw.TableHelper.fromTextArray(
+            //   headers: [
+            //     'Tanggal',
+            //     'Speed Gerak',
+            //     'Speed Tidak Gerak',
+            //   ],
+            //   headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            //   cellAlignment: pw.Alignment.center,
+            //   cellStyle: pw.TextStyle(fontSize: 10),
+            //   columnWidths: {
+            //     0: pw.FixedColumnWidth(50),
+            //     1: pw.FixedColumnWidth(50),
+            //     2: pw.FixedColumnWidth(50),
+            //   },
+            //   data: List<List<String>>.generate(
+            //     processedData.length,
+            //     (index) {
+            //       final item = processedData[index];
+            //       return [
+            //         '${item['formattedDate']}',
+            //         '${item['totalDistance']}',
+            //         '${item['totalDistance']}',
+            //       ];
+            //     },
+            //   ),
+            // ),
+            // pw.SizedBox(height: 20),
+            pw.Text('Detail Perjalanan', style: pw.TextStyle(fontSize: 18)),
+            pw.SizedBox(height: 5),
             pw.TableHelper.fromTextArray(
               headers: [
                 'Tanggal',
                 'Jarak (nmi)',
                 'Durasi',
-                'Kecepatan Rata-rata(knots)'
+                'Kecepatan Rata-rata (knots)'
               ],
               headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
               cellAlignment: pw.Alignment.center,
               cellStyle: pw.TextStyle(fontSize: 10),
               columnWidths: {
-                0: pw.FixedColumnWidth(100),
+                0: pw.FixedColumnWidth(50),
                 1: pw.FixedColumnWidth(60),
                 2: pw.FixedColumnWidth(60),
-                3: pw.FixedColumnWidth(60),
+                3: pw.FixedColumnWidth(100),
               },
               data: List<List<String>>.generate(
                 processedData.length,
