@@ -350,41 +350,41 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                 child: Transform.rotate(
                                   angle:
                                       double.parse(data['heading']) * pi / 180,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // Show the info popup when the marker is tapped
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return InfoPopupWidget(
-                                            contentTitle: "Tracking Info",
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                    'Timestamp: ${data['timestamp']}'),
-                                                Text(
-                                                    'Latitude: ${data['latitude']}'),
-                                                Text(
-                                                    'Longitude: ${data['longitude']}'),
-                                                Text(
-                                                    'Heading: ${data['heading']}°'),
-                                              ],
-                                            ),
-                                            // onDismiss: () {
-                                            //   Navigator.of(context).pop(); // Close the dialog
-                                            // },
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Image.asset(
-                                      'assets/images/arrow_traking.png',
-                                      fit: BoxFit.contain,
-                                    ),
+                                  // child: GestureDetector(
+                                  //   onTap: () {
+                                  //     // Show the info popup when the marker is tapped
+                                  //     showDialog(
+                                  //       context: context,
+                                  //       builder: (context) {
+                                  //         return InfoPopupWidget(
+                                  //           contentTitle: "Tracking Info",
+                                  //           child: Column(
+                                  //             crossAxisAlignment:
+                                  //                 CrossAxisAlignment.start,
+                                  //             children: [
+                                  //               Text(
+                                  //                   'Timestamp: ${data['timestamp']}'),
+                                  //               Text(
+                                  //                   'Latitude: ${data['latitude']}'),
+                                  //               Text(
+                                  //                   'Longitude: ${data['longitude']}'),
+                                  //               Text(
+                                  //                   'Heading: ${data['heading']}°'),
+                                  //             ],
+                                  //           ),
+                                  //           // onDismiss: () {
+                                  //           //   Navigator.of(context).pop(); // Close the dialog
+                                  //           // },
+                                  //         );
+                                  //       },
+                                  //     );
+                                  //   },
+                                  child: Image.asset(
+                                    'assets/images/arrow_traking.png',
+                                    fit: BoxFit.contain,
                                   ),
                                 ),
+                                // ),
                               ),
                             );
                           }

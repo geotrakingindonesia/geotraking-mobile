@@ -2932,14 +2932,15 @@ class MileageDetailPage extends StatelessWidget {
                                     size: 24,
                                   ),
                                   onPressed: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //       builder: (context) =>
-                                    //           MileageLocationPage(
-                                    //             data: data,
-                                    //           )),
-                                    // );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            MileageLocationPage(
+                                          data: data,
+                                        ),
+                                      ),
+                                    );
                                   },
                                   tooltip: 'Go to Location',
                                 ),
