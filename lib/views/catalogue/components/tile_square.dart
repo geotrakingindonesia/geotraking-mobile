@@ -94,9 +94,26 @@ class TileSquareProduct extends StatelessWidget {
                         end: Alignment.bottomCenter,
                       ),
                     ),
-                    child: Image.asset(
+                    // child: Image.asset(
+                    //   data.cover,
+                    //   fit: BoxFit.cover,
+                    // ),
+                    child: Image.network(
                       data.cover,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Center(child: Icon(Icons.error)),
+                      loadingBuilder: (context, child, progress) {
+                        if (progress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: progress.expectedTotalBytes != null
+                                ? progress.cumulativeBytesLoaded /
+                                    progress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),

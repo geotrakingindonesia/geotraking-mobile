@@ -61,9 +61,26 @@ class ProductDetailPage extends StatelessWidget {
                           //   product.image,
                           //   fit: BoxFit.cover,
                           // ),
-                          child: Image.asset(
+                          // child: Image.asset(
+                          //   product.image,
+                          //   fit: BoxFit.cover,
+                          // ),
+                          child: Image.network(
                             product.image,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Center(child: Icon(Icons.error)),
+                            loadingBuilder: (context, child, progress) {
+                              if (progress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: progress.expectedTotalBytes != null
+                                      ? progress.cumulativeBytesLoaded /
+                                          progress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),

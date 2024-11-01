@@ -86,11 +86,6 @@ class NewsPackCard extends StatelessWidget {
   }
 
   String get shortTitle {
-    // if (title.length > 20) {
-    //   return title.substring(0, 20) + "...";
-    // } else {
-    //   return title;
-    // }
     return title.length > 20 ? '${title.substring(0, 20)}...' : title;
   }
 

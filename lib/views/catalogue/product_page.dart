@@ -26,13 +26,31 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  // Future<List<Product>> _loadProducts() async {
+  //   final jsonString =
+  //       await rootBundle.loadString('assets/jsons/catalogue.json');
+  //   final jsonData = jsonDecode(jsonString) as List<dynamic>;
+  //   final products =
+  //       jsonData.map((jsonProduct) => Product.fromJson(jsonProduct)).toList();
+  //   return products;
+  // }
+
   Future<List<Product>> _loadProducts() async {
     final jsonString =
         await rootBundle.loadString('assets/jsons/catalogue.json');
     final jsonData = jsonDecode(jsonString) as List<dynamic>;
-    final products =
-        jsonData.map((jsonProduct) => Product.fromJson(jsonProduct)).toList();
+    final products = jsonData.map((jsonProduct) {
+      final product = Product.fromJson(jsonProduct);
+      // Convert Google Drive link to a direct viewable URL
+      product.image = _convertDriveLink(product.image);
+      return product;
+    }).toList();
     return products;
+  }
+
+  String _convertDriveLink(String driveUrl) {
+    final fileId = driveUrl.split('/d/')[1].split('/')[0];
+    return 'https://drive.google.com/uc?export=view&id=$fileId';
   }
 
   final PageController _pageController = PageController();

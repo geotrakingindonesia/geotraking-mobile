@@ -4,7 +4,7 @@
         "nama_product": "BlueTraker VMS",
         "deskripsi": "BlueTraker VMS is a communication terminal specifically developed to monitor fishing vessels globally. It uses hybrid satellite and GSM/GPRS communication channels to transmit position, speed and heading in real-time to the fisheries management authority. BlueTraker VMS transponder can also send catch reports as well as fishing effort data from our BlueSenz range of sensors. Moreover, BlueTraker VMS transponder offers bidirectional communication between vessel and Fisheries Monitoring Center via Bluetooth using our smartphone application (BTApp) or through ConBox 2018 LCD device.",
         "categori": "Iridium",
-        "image": "assets/images/bluetrakervms.png",
+        "image": "https://drive.google.com/file/d/1Ar9QOYAs44_AWaY39F0TJnocbjPfV1hG/view?usp=sharing",
         "link": "https://geosat.co.id/bluetraker-vms/"
     },
     {
@@ -12,7 +12,7 @@
         "nama_product": "BlueTraker SSAS (Ship Security Alert System)",
         "deskripsi": "The BlueTraker SSAS terminal is a self-contained unit with pre-programmed tracking and security alerting functionalities. The unique double-shell housing with a ventilated layer between the two shells gives it an added protection against low temperatures and winds.\r\nAll integrated design ensures the main terminal unit is away from harms reach in order to perform its function without interventions. It can be installed on the highest point of the vessel.",
         "categori": "Iridium",
-        "image": "assets/images/bluetrakerssas.png",
+        "image": "https://drive.google.com/file/d/16G_-KvOrB2WDqy9jseGLG-2BuQjge7sP/view?usp=sharing",
         "link": "https://geosat.co.id/bluetraker-ssas-ship-security-alert-system/"
     },
     {
@@ -20,7 +20,7 @@
         "nama_product": "BlueTraker LRIT (Long Range and Identification Tracking)\n",
         "deskripsi": "Truly global communication coverage, including sea area A4, utilizing Iridium satellite network!\r\nBlueTraker LRIT fully complies with IMO regulations on Long Range Identification and Tracking and is the most robust terminal on the market. It offers reliable, safe & secure, truly global LRIT operation for all types of vessels. It is a cost-effective solution for a long life operation.\r\n\r\nFor vessels that operate in the Polar Regions, BlueTraker LRIT Arctic is the world’s only LRIT terminal capable of withstanding the extreme cold of this environment including Sea area A4. The terminal with its unique double shell housing resists accelerated cooling in extreme environments from the wind chill factor. Its smart engineering allows operation and even cold start at temperatures as low as -50° Celsius!",
         "categori": "Iridium",
-        "image": "assets/images/bluetrakerlrit.png",
+        "image": "https://drive.google.com/file/d/1TVjbqSUe5OKF1ROH925nFIlrLEX7me34/view?usp=sharing",
         "link": "https://geosat.co.id/bluetraker-lrit-long-range-and-identification-tracking/"
     },
     {
@@ -28,7 +28,7 @@
         "nama_product": "SmartOne Solar",
         "deskripsi": "Powered by the sun, this Commercial IoT device allows managers to efficiently monitor and manage their remote assets. \r\n\r\nImprove your company’s bottom line by maximizing resource and asset efficiency with cloud based mapping services for Globalstar and SPOT devices.\r\n\r\nSmartOne Solar’s integrated solar panel and battery capabilities deliver up to 10 years of life with little to no maintenance required.  The device easily mounts to any fixed or mobile asset for intelligent tracking, monitoring, and integration with a multitude of wireless sensors through the configurable BLE Sensors interface. SmartOne Solar has unparalleled safety/device certifications such as ATEX, IECEx and North America, IP68/69K, HERO certifications, and others to meet the needs of every application.",
         "categori": "GlobalStar",
-        "image": "assets/images/smartonesolar.png",
+        "image": "https://drive.google.com/file/d/1_Rs88jHiu0csNbDisKJlrc_dNDKQgB3o/view?usp=sharing",
         "link": "https://geosat.co.id/smartone-solar/"
     },
     {
@@ -36,7 +36,7 @@
         "nama_product": "SmartOne C",
         "deskripsi": "This cost-effective device allows for intelligent management of both fixed and mobile assets and serves as a practical solution for your goals regarding operating efficiency and security. \r\n\r\nImprove your company’s bottom line by maximizing resource and asset efficiency with cloud based mapping services for Globalstar and SPOT devices.\r\n\r\nSmartOne C is a small, low-power Commercial IoT device ideal for asset tracking, lightweight input and event monitoring.  The SmartOne C can be line-powered, or in the absence or interruption of external power, will automatically switch to battery back-up using 4 AAA batteries. SmartOne C utilizes motion sensors, comparative GPS positions and custom configured sensors to gather and transmit asset status information.",
         "categori": "GlobalStar",
-        "image": "assets/images/smartonec.png",
+        "image": "https://drive.google.com/file/d/1VWWTG2yaKHSTtdp1z3YcxFMS3-KzNSrK/view?usp=sharing",
         "link": "https://geosat.co.id/smartone-c/"
     },
     {
@@ -44,7 +44,7 @@
         "nama_product": "ST6100 Series",
         "deskripsi": "ST 6100 series satellite terminals deliver complete visibility and control of industrial assets operating in remote areas, with global satellite connectivity over the network.\r\n\r\nThe versatile, environmentally-sealed ST 6100 satellite terminals can be installed on mobile assets such as light-and heavy-duty commercial vehicles, railcars, fishing vessels, heavy equipment and more. And with two-way satellite connectivity, the ST 6100 series is ideal for remotely monitoring and controlling fixed and portable assets used in SCADA applications such as those in the energy sector, including pipelines, flow meters, pumps, generators and tanks.\r\n\r\nA newly designed built-in antenna makes it suitable for both land and maritime deployments, which means you can now use a single device on land and sea. The ST 6100 series also features a built-in accelerometer, expanded memory capacity, and support for additional navigation systems.",
         "categori": "",
-        "image": "assets/images/ST6100.png",
+        "image": "https://drive.google.com/file/d/1wTc4Q-AVw2OhZs-tzLARpr_j74_f4GvB/view?usp=sharing",
         "link": "https://geosat.co.id/st6100-series/"
     },
     {
@@ -52,7 +52,7 @@
         "nama_product": "Iridium Extreme 9575",
         "deskripsi": "The Smarter, Tougher Satellite Phone\r\nIridium Extreme® combines market-leading toughness with an unmatched feature set including location awareness and a fully integrated SOS button with emergency response service — all in one compact handset.\r\n\r\nBuilt to Take a Beating\r\nTough and rugged, Iridium Extreme® is engineered to support high-usage customers in harsh conditions — everywhere.",
         "categori": "Iridium",
-        "image": "assets/images/iridium_extream.png",
+        "image": "https://drive.google.com/file/d/1rDaxHu6o0_3RphfeTj0Gkd4JegFKXGR3/view?usp=sharing",
         "link": "https://geosat.co.id/iridium-extreme-9575/"
     },
     {
@@ -60,7 +60,7 @@
         "nama_product": "Iridium Extreme PTT 9575P",
         "deskripsi": "The only truly global Push-To-Talk system.\r\nIridium Extreme PTT brings reliable group communications to the next level with truly global Push-To-Talk (PTT), voice, data, SMS, SOS, GPS, and Location-Based Services. This durable, dual-mode handset features a reinforced push-to-talk button and high audio loudspeaker, delivering fast and simple communications.\r\n\r\nCoordinate and Control\r\nThe Iridium Extreme® PTT is the device for global dependability, adaptability and durability. Only Iridium can deliver the power of fast, simple and secure group communication with the toughest, most feature-rich PTT-enabled satellite phone on the market.",
         "categori": "Iridium",
-        "image": "assets/images/iridium_extream_ptt.png",
+        "image": "https://drive.google.com/file/d/1xZXK0ZRrVEgcV08zgQpOwjz73ZPhzMzm/view?usp=sharing",
         "link": "https://geosat.co.id/iridium-extreme-ptt-9575p/"
     },
     {
@@ -68,7 +68,7 @@
         "nama_product": "Inmarsat SatPhone 2",
         "deskripsi": "Our powerful, rugged and dependable handheld satellite phone offers a critical communications link when out of reach of terrestrial networks, no matter how remote or harsh the environment.\r\n\r\nFOR ENTERPRISES\r\nNo matter what conditions you may be facing – from searing heat to icy blasts, desert sandstorms or monsoon rain – our robust handset has got you covered\r\n\r\nStay Connected With IsatPhone 2\r\nInmarsat’s IsatPhone 2 is a tough phone for a tough world. No matter what conditions you may be facing – from searing heat to icy blasts, desert sandstorms or monsoon rain – our robust handset has got you covered.\r\n\r\nOperating on the most reliable satellite communications network in the world, IsatPhone 2 offers you unrivalled battery life as well as email, SMS and GPS capabilities to make sure you stay connected.\r\n\r\nService Plans\r\nWhether you are looking for a pre-paid plan or a pay monthly plan, or a single sim plan or a shared corporate allowance plan we can help. Regardless of whether you need a minimum commitment of one month or twelve we have a plan to suit your needs.\r\n\r\nFOR GOVERNMENT\r\nIsatPhone 2 can be depended on to deliver communication certainty when it matters most.\r\n\r\nDependable, clear voice service – no matter how remote\r\nIsatPhone 2 utilises the world’s most advanced satellite communication network so you can rely on your calls getting through. And because calls are made via our single global network with 99.9% availability, there are no roaming charges and users can be assured of clear voice quality and minimal call drop out.\r\n\r\nA link to the outside world\r\nSatellite phones play an essential role when core terrestrial networks experience outages due to natural or manmade disasters. IsatPhone 2 can be depended on to deliver communication certainty when it matters most. The robust handset has been engineered to operate within extreme and harsh conditions and is dust, splash and shock resistant (IP65, IK04).",
         "categori": "Inmarsat",
-        "image": "assets/images/isatphone-2.png",
+        "image": "https://drive.google.com/file/d/12FLd7OsI98MpJfKixzYydVXVCRAbLVVs/view?usp=sharing",
         "link": "https://geosat.co.id/inmarsat-isatphone-2/"
     },
     {
@@ -76,7 +76,7 @@
         "nama_product": "Thuraya XT Lite 1",
         "deskripsi": "Thuraya’s XT-LITE is the world’s best-value satellite phone. Designed for cost-conscious users, this reliable satellite handset offers a clear and uninterrupted connection at an unbeatable price.\r\n\r\nAn easy-to-use satellite phone, users can make phone calls and send SMS messages in satellite mode. If you’re about to embark on a journey of mountain-climbing or desert crossings, Thuraya’s XT-LITE is the best choice on the market for keeping you in touch with friends and family – at an affordable price.",
         "categori": "Thuraya",
-        "image": "assets/images/thuraya-xt-lite.png",
+        "image": "https://drive.google.com/file/d/1x3kZzMhWDJL_vGUL3Dy5GVrTzEUde5HQ/view?usp=sharing",
         "link": "https://geosat.co.id/thuraya-xt-lite-1/"
     },
     {
@@ -84,7 +84,7 @@
         "nama_product": "Thuraya MarineStar",
         "deskripsi": "Is the latest Satellite Phone replacement for Thuraya Seastar which is\r\nspecifically for use or installation on ships. With special Marine specifications, this Satellite Phone is able to meet your communication needs in all water areas of Asia, Africa, Europe, and Australia. The network is more stable and strong.\r\nVery artistic design with LCD screen, and equipped with a dedicated SOS button.",
         "categori": "Thuraya",
-        "image": "assets/images/thuraya-marine.png",
+        "image": "https://drive.google.com/file/d/1_lM6RtFV7vXB-oehb4y-rs2FUMti6Jdt/view?usp=sharing",
         "link": "https://geosat.co.id/thuraya-marinestart-8/"
     },
     {
@@ -92,7 +92,7 @@
         "nama_product": "FleetOne",
         "deskripsi": "SAILOR Fleet One ensures reliable, global voice calling and Internet connectivity even on smaller boats that don’t have the room, or the budget, for larger satcom antennas.",
         "categori": "Inmarsat",
-        "image": "assets/images/FleetOne.png",
+        "image": "https://drive.google.com/file/d/1cy_tGK6aVv832PrShCmhZMnFUGwrXRvG/view?usp=sharing",
         "link": "https://geosat.co.id/fleetone/"
     },
     {
@@ -100,7 +100,7 @@
         "nama_product": "Thales VesseLINK™\r\n",
         "deskripsi": "Dependable Maritime Satcoms from Pole-to-Pole\r\nVesseLINKTM 700 provides truly global satellite coverage for maritime communications. With uninterrupted coverage from pole to pole, it is the solution to depend on for essential communications. Suitable for ships or fleets of any size, VesseLINK 700 easily integrates with existing equipment to fully digitize your vessel. VesseLINK 700 operates using Iridium Certus® 700 broadband services over the truly global Iridium® network, which provides highly reliable, mobile and essential voice, text, and web communications for captain and crew. VesseLINK comes with an intuitive, user-friendly interface and can be quickly integrated into existing vessels or new fleets and includes built-in upgradeability to future-proof your investment and ensures peak speed and performance.",
         "categori": "Iridium",
-        "image": "assets/images/Thales-geosat.png",
+        "image": "https://drive.google.com/file/d/17AqGCVPoBWbSgwvzXcrWWdLv1Fg-21HL/view?usp=sharing",
         "link": "https://geosat.co.id/thales-vessellinktm-700/"
     },
     {
@@ -108,7 +108,7 @@
         "nama_product": "Iridium Sailor 4300\r\n",
         "deskripsi": "Dependable Maritime Satcoms from Pole-to-Pole\r\nDelivering Iridium Certus to the Maritime Industry\r\nCompact and incredibly easy to install, Cobham’s SAILOR 4300 Iridium Connected® terminal delivers reliable, high-performance L-band satcom solutions to mariners all over the world. With service over the Iridium® network, you can operate safer, smarter and more efficiently through the power of reliable, truly global communications and digitally connected applications.\r\n\r\n",
         "categori": "Iridium",
-        "image": "assets/images/sailor-4300.png",
+        "image": "https://drive.google.com/file/d/1qicFIWBvDKPGU-y8zTQu-p2lfqqtyhD2/view?usp=sharing",
         "link": "https://geosat.co.id/iridium-sailor-4300/"
     },
     {
@@ -116,7 +116,7 @@
         "nama_product": "Spot Gen 3\r\n",
         "deskripsi": "Critical, life-saving communication using 100% satellite technology.\r\nAlways plan for the unexpected. The SPOT Gen3 gives you a critical, life-saving line of communication when you travel beyond the boundaries of mobile coverage. Let family and friends know you’re OK or, if the worst should happen, send emergency responders your GPS location, all with the push of a button.\r\n\r\nWherever you go, track and share your adventure. SPOT Gen3 Satellite GPS Messenger works where mobile phones don’t.\r\n\r\nCompact and easy to carry Battery powered, no external power supply required Supports “I’m OK” sked reports as well as SOS duress, help and custom messages Increased frequency of reporting while in SOS or help mode<\r\n\r\nMotion Activated Tracking\r\n\r\nA vibration sensor tells your SPOT to send tracks only when you’re moving, this is a battery saving feature.\r\n\r\nEnhanced Tracking\r\n\r\nUpgrades available to Unlimited or Extreme Tracking. Choose your rate of tracking of 60, 30, 10, or 5 minutes with Unlimited Tracking, or down to 2.5 minutes with Extreme Tracking.\r\n\r\nMore Battery Options\r\n\r\n4 AAA ‘off the shelf’ Lithium Batteries 4 AAA ‘off the shelf’ NiMH rechargeable Batteries Line power with a 5v USB connection. (SPOT Gen 3 is not waterproof when line powered)\r\n\r\nAlready have an active SPOT Gen3 and thinking about upgrading to the new SPOT X? Great news, you can upgrade your SPOT Gen3 service to a SPOT X service free of charge. SPOT will transfer your existing connected SPOT Gen3 service to a SPOT X Unlimited Plan for the remainder of your SPOT Gen3 service term, and waive the activation fee.<\r\n\r\nSimply purchase a SPOT X device online, or from an approved retailer. Then log into your SPOT account in MyAccount, click on ‘My Devices,’ select your SPOT Gen3 device and then click on ‘Upgrade Your SPOT Device.’ You will need the ESN & Auth Code of both your SPOT Gen3 and SPOT X device to complete the upgrade.",
         "categori": "GlobalStar",
-        "image": "assets/images/Spot-gen-3a.png",
+        "image": "https://drive.google.com/file/d/1hYGugaxHkDjBesdQ7DlyV5-SrJq0DIMD/view?usp=sharing",
         "link": "https://geosat.co.id/spot-gen3/"
     },
     {
@@ -124,7 +124,7 @@
         "nama_product": "Spot Gen 4\r\n",
         "deskripsi": "Add this rugged, pocket-sized safety device to your personal protective equipment (PPE) to stay connected to your remote or lone workers, no matter how far off the grid they go.\r\n\r\nImprove your company’s bottom line by maximizing resource and asset efficiency with cloud based mapping services for Globalstar and SPOT devices.\r\n\r\n",
         "categori": "GlobalStar",
-        "image": "assets/images/spotgen4.png",
+        "image": "https://drive.google.com/file/d/1N00rHgu3eyQ-icm5Zr266yZ4alSi9IYR/view?usp=sharing",
         "link": "https://geosat.co.id/spot-gen-4/"
     },
     {
@@ -132,7 +132,7 @@
         "nama_product": "Spot Gen X\r\n",
         "deskripsi": "SPOT X provides reliable, 2-way satellite communications so you can stay connected to remote and lone workers outside of terrestrial coverage.\r\n\r\nImprove your company’s bottom line by maximizing resource and asset efficiency with cloud based mapping services for Globalstar and SPOT devices.",
         "categori": "GlobalStar",
-        "image": "assets/images/spotgenx.png",
+        "image": "https://drive.google.com/file/d/1i8k93vBq9OoeG9Ntm1h6KJ-IT90VdtzV/view?usp=sharing",
         "link": "https://geosat.co.id/spot-gen-x/"
     },
     {
@@ -140,7 +140,7 @@
         "nama_product": "Spot Gen Trace\r\n",
         "deskripsi": "SPOT Trace simplifies managing mobile inventory from a distance and promotes loss prevention to minimize costs.\r\n\r\nImprove your company’s bottom line by maximizing resource and asset efficiency with cloud based mapping services for Globalstar and SPOT devices.\r\n\r\n",
         "categori": "GlobalStar",
-        "image": "assets/images/spotgentrace.png",
+        "image": "https://drive.google.com/file/d/1eoo0R42iXVpVODIfomqk16huRoOJmeEm/view?usp=sharing",
         "link": "https://geosat.co.id/spot-gen-trace/"
     },
     {
@@ -148,7 +148,7 @@
         "nama_product": "inReach Mini\r\n",
         "deskripsi": "inReach Mini is your go-to connection for maintaining off-the-grid contact. It’s our palm-sized satellite communicator for adventures where size and weight matter.\r\n\r\nNeed assistance? Send interactive SOS alerts anytime, globally. No matter where you are, two-way messaging lets you connect to the ones who matter. Let loved ones know precisely where you’re roaming with location tracking and sharing. Get connectivity and peace of mind on your other Garmin devices. Open up inReach and your phone to new capabilities by using the Earthmate® app. Get weather updates delivered to the palm of your hand.\r\n\r\n",
         "categori": "Iridium",
-        "image": "assets/images/inreachmini.png",
+        "image": "https://drive.google.com/file/d/1H4jojOczCwUwIjhWT6glJIZKL9kbVit6/view?usp=sharing",
         "link": "https://geosat.co.id/inreach-mini/"
     },
     {
@@ -156,7 +156,7 @@
         "nama_product": "inReach Explorer\r\n",
         "deskripsi": "You may venture off the grid, but you can still stay in touch — as long as you’re carrying an inReach SE+ or inReach Explorer+. These handheld satellite communicators are designed for the outdoor enthusiast who wants to roam farther and experience more — without compromising their loved ones‘ peace of mind. From backcountry experiences to international adventures, inReach provides communication, location sharing, navigation and critical SOS functions for anyone who loves getting away from it all, on land, water or in the skies.\r\n\r\n",
         "categori": "Iridium",
-        "image": "assets/images/inreach.png",
+        "image": "https://drive.google.com/file/d/1MoMqqcNkTajAZTJK9i6Z-9_oyiBp0nY0/view?usp=sharing",
         "link": "https://geosat.co.id/inreach-explorer/"
     },
     {
@@ -164,7 +164,7 @@
         "nama_product": "Vision Trak",
         "deskripsi": "CCTV Vision Track with automatic image capture for bycatch control on board of fishing vessels.\r\n\r\n",
         "categori": "",
-        "image": "assets/images/cam_vision.png",
+        "image": "https://drive.google.com/file/d/1wUpapVX-7lKD8gzwydfuv-PpWoMoMABh/view?usp=sharing",
         "link": "https://geosat.co.id/vision-trak/"
     },
     {
@@ -172,7 +172,7 @@
         "nama_product": "Electronic Eye (REM) for Marine\r\n",
         "deskripsi": "Remote Electronic Monitoring System with automatic image capture for bycatch control on board of fishing vessels.\r\n \r\nFor this REM, Marine Instruments has developed Beluga software, a program for the analysis and visualization of the images obtained by the observer. The program allows a quick visualization of long hours of fishing and the reviewing of the number of fishing operations, if they were with FAD or free school and the amount of catch and bycatch.\r\n\r\n",
         "categori": "",
-        "image": "assets/images/camera-marine.png",
+        "image": "https://drive.google.com/file/d/1Wx9qkFFR_Zuv7Nw9A4gWlriQ_WL-128k/view?usp=sharing",
         "link": "https://geosat.co.id/electronic-eye-rem-for-marine/"
     },
     {
@@ -180,7 +180,7 @@
         "nama_product": "ConBox Bluetraker\r\n",
         "deskripsi": "ConBox Sardine is basic connection cabinet with only power indicator and alert button (for alerting FMC in case of distress).\r\n\r\n",
         "categori": "Iridium",
-        "image": "assets/images/ConBox-Bluetraker.png",
+        "image": "https://drive.google.com/file/d/1polAGLJ71yDkZ3GvdB12TqkZ7X_nxv1J/view?usp=sharing",
         "link": "https://geosat.co.id/conbox-bluetraker/"
     },
     {
@@ -188,7 +188,7 @@
         "nama_product": "ConBox SmartOne Solar\r\n",
         "deskripsi": "ConBox SmartOne Solar is basic connection cabinet with only power indicator and alert button.\r\n\r\n",
         "categori": "GlobalStar",
-        "image": "assets/images/ConBoxSmartOneSolar.png",
+        "image": "https://drive.google.com/file/d/1h_2cJBKK-l24gyM6Brv84uO4GkXsUKsX/view?usp=sharing",
         "link": "https://geosat.co.id/conbox-smartone-solar/"
     },
     {
@@ -196,7 +196,7 @@
         "nama_product": "ConBox ST6100\r\n",
         "deskripsi": "ConBox ST6100 is basic connection cabinet with only power indicator and alert button.\r\n\r\n",
         "categori": "Inmarsat",
-        "image": "assets/images/conbox-st6100.png",
+        "image": "https://drive.google.com/file/d/1EIdTk-wCF3I3ByusKX1qDskCt5lTRRez/view?usp=sharing",
         "link": "https://geosat.co.id/conbox-st6100/"
     },
     {
@@ -204,7 +204,7 @@
         "nama_product": "Battery Iridium 9555\r\n",
         "deskripsi": "The Iridium 9555 Lithium Ion Battery (Iridium Part Number BAT21601) works with the new Iridium 9555 satellite phone.\r\n\r\n",
         "categori": "Iridium",
-        "image": "assets/images/battery9555.png",
+        "image": "https://drive.google.com/file/d/1dLZZ3fnr-2BHsQT_-z2m9T-KMkvhRnFS/view?usp=sharing",
         "link": "https://geosat.co.id/battery-iridium-9555/"
     },
     {
@@ -212,7 +212,7 @@
         "nama_product": "Battery Thuraya XT Lite\r\n",
         "deskripsi": "The Iridium 9555 Lithium Ion Battery (Iridium Part Number BAT21601) works with the new Iridium 9555 satellite phone.\r\n\r\n",
         "categori": "Thuraya",
-        "image": "assets/images/battery-thurayaxtlite.png",
+        "image": "https://drive.google.com/file/d/1IZd848xFtcuPBZRsPEubfr7Z7yliFiEi/view?usp=sharing",
         "link": "https://geosat.co.id/battery-thuraya-xt-lite/"
     },
     {
@@ -220,7 +220,7 @@
         "nama_product": "Adapter Iridium 9555\r\n",
         "deskripsi": "The Iridium 9555 Antenna Adapter provides the external connection to the 9555 satellite phone to use an external antenna. The adapter snaps around the phone and uses TNC connector to attach to the external antenna cable. This adapter does not include the external antenna.\r\n\r\n",
         "categori": "Iridium",
-        "image": "assets/images/adapter9555.png",
+        "image": "https://drive.google.com/file/d/170A7rzOYERvI96CoN06Tm1aSuZ3JhndP/view?usp=sharing",
         "link": "https://geosat.co.id/adapter-iridium-9555/"
     },
     {
@@ -228,7 +228,7 @@
         "nama_product": "Adapter Iridium 9575\r\n",
         "deskripsi": "The Iridium Extreme 9575 Power and USB Adapter allows your iridium Extreme 9575 satellite phone to connect to the charger and USB cable. This model does not include the antenna adapter. If you are traveling to remote areas you might want to carry a spare USB and Power Adapter because the 9575 satellite phone model requires this adapter to plug the satellite phone in the power chargers or USB cable.\r\n\r\n",
         "categori": "Iridium",
-        "image": "assets/images/adapter9575.png",
+        "image": "https://drive.google.com/file/d/146gK1Sk-LycmcngASrW7gSzrAn2nnITn/view?usp=sharing",
         "link": "https://geosat.co.id/adapter-iridium-9575/"
     },
     {
@@ -236,7 +236,7 @@
         "nama_product": "Adapter Thuraya XT Lite\r\n",
         "deskripsi": "Thuraya XT-LITE power charger with international plug kit (4 adapter) for the old vesrion of XT-Lite, the new phone version is having an USB plug instead.\r\n\r\n",
         "categori": "Thuraya",
-        "image": "assets/images/adapterthurayaxtlite.png",
+        "image": "https://drive.google.com/file/d/1cKt09_6ZrcQvjZRVgtDGdSnAMZY3G7Uj/view?usp=sharing",
         "link": "https://geosat.co.id/adapter-thuraya-xt-lite/"
     },
     {
@@ -244,7 +244,7 @@
         "nama_product": "Cable BlueTraker VMS\r\n",
         "deskripsi": "Main Cable Set is used to connect BlueTraker® terminal to ConBox and consists of :\r\n\r\nConnection cable (oil and UV resistant, for outdoor use, standard length of 10 meters)\r\nConnector (IP68 grade connector, female)\r\nAdditional cable sets used for service connections and other required project connections are available upon request.",
         "categori": "Iridium",
-        "image": "assets/images/cable-bluetraker.png",
+        "image": "https://drive.google.com/file/d/1XVnkfx3rGJ78bo02TTmbFELyyAkZoGZY/view?usp=sharing",
         "link": "https://geosat.co.id/cable-bluetraker-vms/"
     },
     {
@@ -252,7 +252,7 @@
         "nama_product": "Cable Smartone Solar",
         "deskripsi": "The Universal Input Cable connects to the Globalstar SmartOne Solar Tracker to provide power and I/O capability.\r\n\r\n",
         "categori": "GlobalStar",
-        "image": "assets/images/cable-ss.png",
+        "image": "https://drive.google.com/file/d/16d7qihjch8D2HHS57MZVDLkt2gzAQOpO/view?usp=sharing",
         "link": "https://geosat.co.id/cable-smartone-solar/"
     },
     {
@@ -260,7 +260,7 @@
         "nama_product": "Cable ST6100\r\n",
         "deskripsi": "The Universal Input Cable connects to the Orbcomm ST6100 to provide power and I/O capability.\r\n\r\n",
         "categori": "Inmarsat",
-        "image": "assets/images/cable-st.png",
+        "image": "https://drive.google.com/file/d/1J-746gY5DwZ8sUxjQAWBt3zo-RzObNYb/view?usp=sharing",
         "link": "https://geosat.co.id/cable-st6100/"
     },
     {
@@ -268,7 +268,7 @@
         "nama_product": "Mounts BlueTraker\r\n",
         "deskripsi": "Various mounting accessories are available. Taking in account their planned use, the customer can choose between :\r\n\r\nRailMount (mounting to an on-board rail, various rail diameters can be used)\r\nUniMount (the most universal, various mounting surfaces possible)\r\nMastMount (mounting to a mast, most comonly used in leisure applications)\r\nTowerMount (mounting to a flat surface, most commonly used on top of a cabin)\r\nTransponder can also be mounted to a proper flat surface without bracket using only screws (if applicable). Ask us if you are not sure how to approach your installation.",
         "categori": "Iridium",
-        "image": "assets/images/mount_vms.png",
+        "image": "https://drive.google.com/file/d/1xGOyhmgBecpb9G_P4vBVe9RAjxLIte-d/view?usp=sharing",
         "link": "https://geosat.co.id/mounts-bluetraker/"
     },
     {
@@ -276,7 +276,7 @@
         "nama_product": "Iridium EDGE\r\n",
         "deskripsi": "Various mounting accessories are available. Taking in account their planned use, the customer can choose between :\r\n\r\nRailMount (mounting to an on-board rail, various rail diameters can be used)\r\nUniMount (the most universal, various mounting surfaces possible)\r\nMastMount (mounting to a mast, most comonly used in leisure applications)\r\nTowerMount (mounting to a flat surface, most commonly used on top of a cabin)\r\nTransponder can also be mounted to a proper flat surface without bracket using only screws (if applicable). Ask us if you are not sure how to approach your installation.",
         "categori": "Iridium",
-        "image": "assets/images/iridium-edge.png",
+        "image": "https://drive.google.com/file/d/1OcjfmC30p5AYkxgObjvWuqw0-Fsyngp9/view?usp=sharing",
         "link": "https://geosat.co.id/mounts-bluetraker/"
     },
     {
@@ -284,7 +284,7 @@
         "nama_product": "Iridium EDGE Solar\r\n",
         "deskripsi": "Various mounting accessories are available. Taking in account their planned use, the customer can choose between :\r\n\r\nRailMount (mounting to an on-board rail, various rail diameters can be used)\r\nUniMount (the most universal, various mounting surfaces possible)\r\nMastMount (mounting to a mast, most comonly used in leisure applications)\r\nTowerMount (mounting to a flat surface, most commonly used on top of a cabin)\r\nTransponder can also be mounted to a proper flat surface without bracket using only screws (if applicable). Ask us if you are not sure how to approach your installation.",
         "categori": "Iridium",
-        "image": "assets/images/iridium-edge-solar.png",
+        "image": "https://drive.google.com/file/d/1uDCz-CrF8lVvN8ahZcgU2aeUNyRKHI28/view?usp=sharing",
         "link": "https://geosat.co.id/mounts-bluetraker/"
     },
     {
@@ -292,7 +292,23 @@
         "nama_product": "Iridium Go!\r\n",
         "deskripsi": "Various mounting accessories are available. Taking in account their planned use, the customer can choose between :\r\n\r\nRailMount (mounting to an on-board rail, various rail diameters can be used)\r\nUniMount (the most universal, various mounting surfaces possible)\r\nMastMount (mounting to a mast, most comonly used in leisure applications)\r\nTowerMount (mounting to a flat surface, most commonly used on top of a cabin)\r\nTransponder can also be mounted to a proper flat surface without bracket using only screws (if applicable). Ask us if you are not sure how to approach your installation.",
         "categori": "Iridium",
-        "image": "assets/images/iridium-go!.png",
+        "image": "https://drive.google.com/file/d/1PUG5DV56CZmiM7aXcW-XQak2Wdp_5bZQ/view?usp=sharing",
         "link": "https://geosat.co.id/mounts-bluetraker/"
+    },
+    {
+        "id": 38,
+        "nama_product": "Iridum Go! exec\r\n",
+        "deskripsi": "Combining the features and functionality of a battery powered Wi-Fi access device with the reliability and truly global coverage of an Iridium® satellite phone, Iridium GO! exec® enables wireless Internet connectivity for smartphones and laptops, and provides simultaneous access for up to two high-quality voice lines. \r\nLight and compact, Iridium GO! exec meets personal and professional connectivity demands–when and where you need it. From humanitarian missions to backwoods camping to leisure boating–and everything in between–Iridium GO! exec keeps you on the grid via chat, e-mail, social media, and other popular apps.",
+        "categori": "Iridium",
+        "image": "https://drive.google.com/file/d/1VBDi9gUMhkvXIUuB_3uk6M5nHiT2G9AX/view?usp=sharing",
+        "link": "https://drive.google.com/file/d/1VBDi9gUMhkvXIUuB_3uk6M5nHiT2G9AX/view?usp=sharing"
+    },
+    {
+        "id": 39,
+        "nama_product": "Starlink\r\n",
+        "deskripsi": "Starlink is a satellite internet constellation operated by Starlink Services, LLC, an international telecommunications provider that is a wholly owned subsidiary of American aerospace company SpaceX, providing coverage to over 100 countries and territories. It also aims to provide global mobile broadband.",
+        "categori": "Starlink",
+        "image": "https://drive.google.com/file/d/1pZOZqzWb9EcKzp9D0kiGLkNQcMr7s9yr/view?usp=sharing",
+        "link": "https://drive.google.com/file/d/1pZOZqzWb9EcKzp9D0kiGLkNQcMr7s9yr/view?usp=sharing"
     }
 ]
