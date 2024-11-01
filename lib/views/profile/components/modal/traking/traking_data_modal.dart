@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geotraking/core/components/formated_latlong.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/profile/components/modal/traking/components/tab_download_history_tracking.dart';
 import 'package:info_popup/info_popup.dart';
@@ -33,6 +34,8 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
   final _textController = TextEditingController();
   final _textFieldKey = GlobalKey();
   String _textFieldValue = '';
+
+  final formatterLatlong = FormatedLatlong();
 
   bool _isRadioButtonSelected = false;
 
@@ -347,41 +350,122 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                 point: LatLng(latitude, longitude),
                                 width: 13,
                                 height: 13,
-                                child: Transform.rotate(
-                                  angle:
-                                      double.parse(data['heading']) * pi / 180,
-                                  // child: GestureDetector(
-                                  //   onTap: () {
-                                  //     // Show the info popup when the marker is tapped
-                                  //     showDialog(
-                                  //       context: context,
-                                  //       builder: (context) {
-                                  //         return InfoPopupWidget(
-                                  //           contentTitle: "Tracking Info",
-                                  //           child: Column(
-                                  //             crossAxisAlignment:
-                                  //                 CrossAxisAlignment.start,
-                                  //             children: [
-                                  //               Text(
-                                  //                   'Timestamp: ${data['timestamp']}'),
-                                  //               Text(
-                                  //                   'Latitude: ${data['latitude']}'),
-                                  //               Text(
-                                  //                   'Longitude: ${data['longitude']}'),
-                                  //               Text(
-                                  //                   'Heading: ${data['heading']}°'),
-                                  //             ],
-                                  //           ),
-                                  //           // onDismiss: () {
-                                  //           //   Navigator.of(context).pop(); // Close the dialog
-                                  //           // },
-                                  //         );
-                                  //       },
-                                  //     );
-                                  //   },
-                                  child: Image.asset(
-                                    'assets/images/arrow_traking.png',
-                                    fit: BoxFit.contain,
+                                // child: Transform.rotate(
+                                //   angle:
+                                //       double.parse(data['heading']) * pi / 180,
+                                //   // child: GestureDetector(
+                                //   //   onTap: () {
+                                //   //     // Show the info popup when the marker is tapped
+                                //   //     showDialog(
+                                //   //       context: context,
+                                //   //       builder: (context) {
+                                //   //         return InfoPopupWidget(
+                                //   //           contentTitle: "Tracking Info",
+                                //   //           child: Column(
+                                //   //             crossAxisAlignment:
+                                //   //                 CrossAxisAlignment.start,
+                                //   //             children: [
+                                //   //               Text(
+                                //   //                   'Timestamp: ${data['timestamp']}'),
+                                //   //               Text(
+                                //   //                   'Latitude: ${data['latitude']}'),
+                                //   //               Text(
+                                //   //                   'Longitude: ${data['longitude']}'),
+                                //   //               Text(
+                                //   //                   'Heading: ${data['heading']}°'),
+                                //   //             ],
+                                //   //           ),
+                                //   //           // onDismiss: () {
+                                //   //           //   Navigator.of(context).pop(); // Close the dialog
+                                //   //           // },
+                                //   //         );
+                                //   //       },
+                                //   //     );
+                                //   //   },
+                                //   child: Image.asset(
+                                //     'assets/images/arrow_traking.png',
+                                //     fit: BoxFit.contain,
+                                //   ),
+                                // ),
+                                child: InfoPopupWidget(
+                                  child: Transform.rotate(
+                                    angle: double.parse(data['heading']) *
+                                        pi /
+                                        180,
+                                    child: Image.asset(
+                                      'assets/images/arrow_traking.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  customContent: () => Container(
+                                    padding: EdgeInsets.all(8),
+                                    width: 290,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                'Latitude',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                ': ${formatterLatlong.formatLatitude(latitude)}',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                'Latitude',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                ': ${formatterLatlong.formatLongitude(longitude)}',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                'Heading',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                ': ${double.parse(data['heading']).toStringAsFixed(2)}°',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 // ),
