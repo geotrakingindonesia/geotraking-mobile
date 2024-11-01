@@ -10,7 +10,8 @@ import 'package:flutter/services.dart' show rootBundle;
 class NewsPacks extends StatefulWidget {
   final String selectedLanguage;
   NewsPacks({
-    Key? key, required this.selectedLanguage,
+    Key? key,
+    required this.selectedLanguage,
   }) : super(key: key);
 
   @override
@@ -85,11 +86,17 @@ class NewsPackCard extends StatelessWidget {
   }
 
   String get shortTitle {
-    if (title.length > 20) {
-      return title.substring(0, 20) + "...";
-    } else {
-      return title;
-    }
+    // if (title.length > 20) {
+    //   return title.substring(0, 20) + "...";
+    // } else {
+    //   return title;
+    // }
+    return title.length > 20 ? '${title.substring(0, 20)}...' : title;
+  }
+
+  String get directImageUrl {
+    final driveFileId = image.split('/d/')[1].split('/')[0];
+    return 'https://drive.google.com/uc?export=view&id=$driveFileId';
   }
 
   @override
@@ -112,11 +119,24 @@ class NewsPackCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                Image.asset(
-                  image,
+                Image.network(
+                  directImageUrl,
                   fit: BoxFit.cover,
                   width: 280,
                   height: 110,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.error)),
+                  loadingBuilder: (context, child, progress) {
+                    if (progress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: progress.expectedTotalBytes != null
+                            ? progress.cumulativeBytesLoaded /
+                                progress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
                 ),
                 Container(
                   decoration: BoxDecoration(

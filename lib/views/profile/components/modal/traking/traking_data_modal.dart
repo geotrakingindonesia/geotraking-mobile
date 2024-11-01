@@ -7,7 +7,6 @@ import 'package:geotraking/core/components/formated_latlong.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/profile/components/modal/traking/components/tab_download_history_tracking.dart';
 import 'package:info_popup/info_popup.dart';
-// import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -311,31 +310,6 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                           print(
                               'Loading: $_loading, Show Buttons: $_showButtons');
 
-                          // for (var data in _historyData) {
-                          //   _polylinePointsTraking.add(
-                          //     LatLng(double.parse(data['latitude']),
-                          //         double.parse(data['longitude'])),
-                          //   );
-                          //   _headingsTraking.add(double.parse(data['heading']));
-                          //   _markersTraking.add(
-                          //     Marker(
-                          //       point: LatLng(
-                          //         double.parse(data['latitude']),
-                          //         double.parse(data['longitude']),
-                          //       ),
-                          //       width: 13,
-                          //       height: 13,
-                          //       child: Transform.rotate(
-                          //         angle:
-                          //             double.parse(data['heading']) * pi / 180,
-                          //         child: Image.asset(
-                          //           'assets/images/arrow_traking.png',
-                          //           fit: BoxFit.contain,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   );
-                          // }
                           for (var data in _historyData) {
                             var latitude = double.parse(data['latitude']);
                             var longitude = double.parse(data['longitude']);
@@ -350,43 +324,6 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                 point: LatLng(latitude, longitude),
                                 width: 13,
                                 height: 13,
-                                // child: Transform.rotate(
-                                //   angle:
-                                //       double.parse(data['heading']) * pi / 180,
-                                //   // child: GestureDetector(
-                                //   //   onTap: () {
-                                //   //     // Show the info popup when the marker is tapped
-                                //   //     showDialog(
-                                //   //       context: context,
-                                //   //       builder: (context) {
-                                //   //         return InfoPopupWidget(
-                                //   //           contentTitle: "Tracking Info",
-                                //   //           child: Column(
-                                //   //             crossAxisAlignment:
-                                //   //                 CrossAxisAlignment.start,
-                                //   //             children: [
-                                //   //               Text(
-                                //   //                   'Timestamp: ${data['timestamp']}'),
-                                //   //               Text(
-                                //   //                   'Latitude: ${data['latitude']}'),
-                                //   //               Text(
-                                //   //                   'Longitude: ${data['longitude']}'),
-                                //   //               Text(
-                                //   //                   'Heading: ${data['heading']}°'),
-                                //   //             ],
-                                //   //           ),
-                                //   //           // onDismiss: () {
-                                //   //           //   Navigator.of(context).pop(); // Close the dialog
-                                //   //           // },
-                                //   //         );
-                                //   //       },
-                                //   //     );
-                                //   //   },
-                                //   child: Image.asset(
-                                //     'assets/images/arrow_traking.png',
-                                //     fit: BoxFit.contain,
-                                //   ),
-                                // ),
                                 child: InfoPopupWidget(
                                   child: Transform.rotate(
                                     angle: double.parse(data['heading']) *
@@ -433,7 +370,7 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                'Latitude',
+                                                'Longitude',
                                                 style: TextStyle(fontSize: 12),
                                               ),
                                             ),
@@ -468,7 +405,6 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                     ),
                                   ),
                                 ),
-                                // ),
                               ),
                             );
                           }

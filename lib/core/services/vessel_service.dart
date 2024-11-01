@@ -480,211 +480,211 @@ class VesselService {
     return dataKapal;
   }
 
-  // fungsi hitung jarak tempuh histori traking kapal
-  Future<List<Map<String, dynamic>>?> getJarakTempuhHistoryTraking(
-      String mobileId, DateTime? startDate, DateTime? endDate) async {
-    var settings = Connection.getSettings();
-    var conn = await MySqlConnection.connect(settings);
+  // // fungsi hitung jarak tempuh histori traking kapal
+  // Future<List<Map<String, dynamic>>?> getJarakTempuhHistoryTraking(
+  //     String mobileId, DateTime? startDate, DateTime? endDate) async {
+  //   var settings = Connection.getSettings();
+  //   var conn = await MySqlConnection.connect(settings);
 
-    DateTime startDateTime = DateTime(
-      startDate!.year,
-      startDate.month,
-      startDate.day,
-      0,
-      0,
-      0,
-    );
+  //   DateTime startDateTime = DateTime(
+  //     startDate!.year,
+  //     startDate.month,
+  //     startDate.day,
+  //     0,
+  //     0,
+  //     0,
+  //   );
 
-    DateTime endDateTime = DateTime(
-      endDate!.year,
-      endDate.month,
-      endDate.day,
-      23,
-      59,
-      59,
-    );
+  //   DateTime endDateTime = DateTime(
+  //     endDate!.year,
+  //     endDate.month,
+  //     endDate.day,
+  //     23,
+  //     59,
+  //     59,
+  //   );
 
-    String formattedStartDate =
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(startDateTime);
-    String formattedEndDate =
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(endDateTime);
+  //   String formattedStartDate =
+  //       DateFormat('yyyy-MM-dd HH:mm:ss').format(startDateTime);
+  //   String formattedEndDate =
+  //       DateFormat('yyyy-MM-dd HH:mm:ss').format(endDateTime);
 
-    String query = '''
-    WITH DailyData AS (
-      SELECT 
-          DATE(varTimestamp) AS tgl_aktifasi,
-          Latitude AS latitude,
-          Longitude AS longitude,
-          Speed AS speed,
-          varTimestamp,
-          ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp ASC) AS row_num_first,
-          ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp DESC) AS row_num_last
-      FROM 
-          psg_modata
-      WHERE 
-          serviceID = ?
-          AND varTimestamp BETWEEN ? AND ?
-          AND Speed IS NOT NULL
-    ),
-    BoundaryData AS (
-        SELECT 
-            tgl_aktifasi,
-            MAX(CASE WHEN row_num_first = 1 THEN varTimestamp END) AS waktu_awal,
-            MAX(CASE WHEN row_num_last = 1 THEN varTimestamp END) AS waktu_akhir,
-            MAX(CASE WHEN row_num_first = 1 THEN latitude END) AS start_latitude,
-            MAX(CASE WHEN row_num_first = 1 THEN longitude END) AS start_longitude,
-            MAX(CASE WHEN row_num_last = 1 THEN latitude END) AS end_latitude,
-            MAX(CASE WHEN row_num_last = 1 THEN longitude END) AS end_longitude
-        FROM 
-            DailyData
-        GROUP BY 
-            tgl_aktifasi
-    ),
-    DailyAverageSpeed AS (
-        SELECT 
-            tgl_aktifasi,
-            AVG(Speed) * 1.9438 AS average_speed_knots,
-            MAX(Speed) * 1.9438 AS high_speed_knots,
-            MIN(Speed) * 1.9438 AS low_speed_knots
-        FROM 
-            DailyData
-        GROUP BY 
-            tgl_aktifasi
-    )
-    SELECT 
-        bd.tgl_aktifasi,
-        bd.waktu_awal,
-        bd.waktu_akhir,
-        CONCAT(
-            TIMESTAMPDIFF(HOUR, bd.waktu_awal, bd.waktu_akhir), ' jam ',
-            MOD(TIMESTAMPDIFF(MINUTE, bd.waktu_awal, bd.waktu_akhir), 60), ' menit'
-        ) AS duration,
-        bd.start_latitude,
-        bd.start_longitude,
-        bd.end_latitude,
-        bd.end_longitude,
-        ROUND(das.average_speed_knots, 1) AS average_speed_knots,
-        ROUND(das.high_speed_knots, 1) AS high_speed_knots,
-        ROUND(das.low_speed_knots, 1) AS low_speed_knots
-    FROM 
-        BoundaryData bd
-    JOIN 
-        DailyAverageSpeed das ON bd.tgl_aktifasi = das.tgl_aktifasi
-    ORDER BY 
-        bd.tgl_aktifasi ASC;
-  ''';
+  //   String query = '''
+  //   WITH DailyData AS (
+  //     SELECT 
+  //         DATE(varTimestamp) AS tgl_aktifasi,
+  //         Latitude AS latitude,
+  //         Longitude AS longitude,
+  //         Speed AS speed,
+  //         varTimestamp,
+  //         ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp ASC) AS row_num_first,
+  //         ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp DESC) AS row_num_last
+  //     FROM 
+  //         psg_modata
+  //     WHERE 
+  //         serviceID = ?
+  //         AND varTimestamp BETWEEN ? AND ?
+  //         AND Speed IS NOT NULL
+  //   ),
+  //   BoundaryData AS (
+  //       SELECT 
+  //           tgl_aktifasi,
+  //           MAX(CASE WHEN row_num_first = 1 THEN varTimestamp END) AS waktu_awal,
+  //           MAX(CASE WHEN row_num_last = 1 THEN varTimestamp END) AS waktu_akhir,
+  //           MAX(CASE WHEN row_num_first = 1 THEN latitude END) AS start_latitude,
+  //           MAX(CASE WHEN row_num_first = 1 THEN longitude END) AS start_longitude,
+  //           MAX(CASE WHEN row_num_last = 1 THEN latitude END) AS end_latitude,
+  //           MAX(CASE WHEN row_num_last = 1 THEN longitude END) AS end_longitude
+  //       FROM 
+  //           DailyData
+  //       GROUP BY 
+  //           tgl_aktifasi
+  //   ),
+  //   DailyAverageSpeed AS (
+  //       SELECT 
+  //           tgl_aktifasi,
+  //           AVG(Speed) * 1.9438 AS average_speed_knots,
+  //           MAX(Speed) * 1.9438 AS high_speed_knots,
+  //           MIN(Speed) * 1.9438 AS low_speed_knots
+  //       FROM 
+  //           DailyData
+  //       GROUP BY 
+  //           tgl_aktifasi
+  //   )
+  //   SELECT 
+  //       bd.tgl_aktifasi,
+  //       bd.waktu_awal,
+  //       bd.waktu_akhir,
+  //       CONCAT(
+  //           TIMESTAMPDIFF(HOUR, bd.waktu_awal, bd.waktu_akhir), ' jam ',
+  //           MOD(TIMESTAMPDIFF(MINUTE, bd.waktu_awal, bd.waktu_akhir), 60), ' menit'
+  //       ) AS duration,
+  //       bd.start_latitude,
+  //       bd.start_longitude,
+  //       bd.end_latitude,
+  //       bd.end_longitude,
+  //       ROUND(das.average_speed_knots, 1) AS average_speed_knots,
+  //       ROUND(das.high_speed_knots, 1) AS high_speed_knots,
+  //       ROUND(das.low_speed_knots, 1) AS low_speed_knots
+  //   FROM 
+  //       BoundaryData bd
+  //   JOIN 
+  //       DailyAverageSpeed das ON bd.tgl_aktifasi = das.tgl_aktifasi
+  //   ORDER BY 
+  //       bd.tgl_aktifasi ASC;
+  // ''';
 
-    //   String query = '''
-    //   WITH DailyData AS (
-    //       SELECT
-    //           DATE(varTimestamp) AS tgl_aktifasi,
-    //           Latitude AS latitude,
-    //           Longitude AS longitude,
-    //           Speed AS speed,
-    //           varTimestamp,
-    //           ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp ASC) AS row_num_first,
-    //           ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp DESC) AS row_num_last
-    //       FROM
-    //           psg_modata
-    //       WHERE
-    //           serviceID = ?
-    //           AND varTimestamp BETWEEN ? AND ?
-    //           AND Speed IS NOT NULL
-    //   ),
-    //   FirstData AS (
-    //       SELECT
-    //           tgl_aktifasi,
-    //           latitude,
-    //           longitude,
-    //           varTimestamp AS waktu_awal,
-    //           row_num_first
-    //       FROM
-    //           DailyData
-    //       WHERE
-    //           row_num_first = 1
-    //   ),
-    //   LastData AS (
-    //       SELECT
-    //           tgl_aktifasi,
-    //           latitude,
-    //           longitude,
-    //           varTimestamp AS waktu_akhir,
-    //           row_num_last
-    //       FROM
-    //           DailyData
-    //       WHERE
-    //           row_num_last = 1
-    //   ),
-    //   DailyAverageSpeed AS (
-    //       SELECT
-    //           tgl_aktifasi,
-    //           AVG(Speed) AS average_speed,
-    //           MAX(Speed) AS high_speed,
-    //           MIN(Speed) AS low_speed
-    //       FROM
-    //           DailyData
-    //       WHERE
-    //           Speed IS NOT NULL
-    //       GROUP BY
-    //           tgl_aktifasi
-    //   )
-    //   SELECT
-    //       fd.tgl_aktifasi,
-    //       fd.waktu_awal,
-    //       ld.waktu_akhir,
-    //       CONCAT(
-    //           TIMESTAMPDIFF(HOUR, fd.waktu_awal, ld.waktu_akhir), ' jam ',
-    //           MOD(TIMESTAMPDIFF(MINUTE, fd.waktu_awal, ld.waktu_akhir), 60), ' menit'
-    //       ) AS duration,
-    //       fd.latitude AS start_latitude,
-    //       fd.longitude AS start_longitude,
-    //       ld.latitude AS end_latitude,
-    //       ld.longitude AS end_longitude,
-    //       ROUND(das.average_speed * 1.9438, 1) AS average_speed_knots,
-    //       ROUND(das.high_speed * 1.9438, 1) AS high_speed_knots,
-    //       ROUND(das.low_speed * 1.9438, 1) AS low_speed_knots
-    //   FROM
-    //       FirstData fd
-    //   JOIN
-    //       LastData ld ON fd.tgl_aktifasi = ld.tgl_aktifasi
-    //   JOIN
-    //       DailyAverageSpeed das ON fd.tgl_aktifasi = das.tgl_aktifasi
-    //   ORDER BY
-    //       fd.tgl_aktifasi ASC;
-    // ''';
+  //   //   String query = '''
+  //   //   WITH DailyData AS (
+  //   //       SELECT
+  //   //           DATE(varTimestamp) AS tgl_aktifasi,
+  //   //           Latitude AS latitude,
+  //   //           Longitude AS longitude,
+  //   //           Speed AS speed,
+  //   //           varTimestamp,
+  //   //           ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp ASC) AS row_num_first,
+  //   //           ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp DESC) AS row_num_last
+  //   //       FROM
+  //   //           psg_modata
+  //   //       WHERE
+  //   //           serviceID = ?
+  //   //           AND varTimestamp BETWEEN ? AND ?
+  //   //           AND Speed IS NOT NULL
+  //   //   ),
+  //   //   FirstData AS (
+  //   //       SELECT
+  //   //           tgl_aktifasi,
+  //   //           latitude,
+  //   //           longitude,
+  //   //           varTimestamp AS waktu_awal,
+  //   //           row_num_first
+  //   //       FROM
+  //   //           DailyData
+  //   //       WHERE
+  //   //           row_num_first = 1
+  //   //   ),
+  //   //   LastData AS (
+  //   //       SELECT
+  //   //           tgl_aktifasi,
+  //   //           latitude,
+  //   //           longitude,
+  //   //           varTimestamp AS waktu_akhir,
+  //   //           row_num_last
+  //   //       FROM
+  //   //           DailyData
+  //   //       WHERE
+  //   //           row_num_last = 1
+  //   //   ),
+  //   //   DailyAverageSpeed AS (
+  //   //       SELECT
+  //   //           tgl_aktifasi,
+  //   //           AVG(Speed) AS average_speed,
+  //   //           MAX(Speed) AS high_speed,
+  //   //           MIN(Speed) AS low_speed
+  //   //       FROM
+  //   //           DailyData
+  //   //       WHERE
+  //   //           Speed IS NOT NULL
+  //   //       GROUP BY
+  //   //           tgl_aktifasi
+  //   //   )
+  //   //   SELECT
+  //   //       fd.tgl_aktifasi,
+  //   //       fd.waktu_awal,
+  //   //       ld.waktu_akhir,
+  //   //       CONCAT(
+  //   //           TIMESTAMPDIFF(HOUR, fd.waktu_awal, ld.waktu_akhir), ' jam ',
+  //   //           MOD(TIMESTAMPDIFF(MINUTE, fd.waktu_awal, ld.waktu_akhir), 60), ' menit'
+  //   //       ) AS duration,
+  //   //       fd.latitude AS start_latitude,
+  //   //       fd.longitude AS start_longitude,
+  //   //       ld.latitude AS end_latitude,
+  //   //       ld.longitude AS end_longitude,
+  //   //       ROUND(das.average_speed * 1.9438, 1) AS average_speed_knots,
+  //   //       ROUND(das.high_speed * 1.9438, 1) AS high_speed_knots,
+  //   //       ROUND(das.low_speed * 1.9438, 1) AS low_speed_knots
+  //   //   FROM
+  //   //       FirstData fd
+  //   //   JOIN
+  //   //       LastData ld ON fd.tgl_aktifasi = ld.tgl_aktifasi
+  //   //   JOIN
+  //   //       DailyAverageSpeed das ON fd.tgl_aktifasi = das.tgl_aktifasi
+  //   //   ORDER BY
+  //   //       fd.tgl_aktifasi ASC;
+  //   // ''';
 
-    List<dynamic> params = [
-      mobileId,
-      formattedStartDate,
-      formattedEndDate,
-    ];
+  //   List<dynamic> params = [
+  //     mobileId,
+  //     formattedStartDate,
+  //     formattedEndDate,
+  //   ];
 
-    var results = await conn.query(query, params);
+  //   var results = await conn.query(query, params);
 
-    List<Map<String, dynamic>> jarakTempuhHistoryTraking = [];
+  //   List<Map<String, dynamic>> jarakTempuhHistoryTraking = [];
 
-    if (results.isNotEmpty) {
-      for (var row in results) {
-        jarakTempuhHistoryTraking.add({
-          'tgl_aktifasi': row['tgl_aktifasi'] ?? '',
-          'waktu_awal': row['waktu_awal'] ?? '',
-          'waktu_akhir': row['waktu_akhir'] ?? '',
-          'duration': row['duration'] ?? '',
-          'start_latitude': row['start_latitude'] ?? '',
-          'start_longitude': row['start_longitude'] ?? '',
-          'end_latitude': row['end_latitude'] ?? '',
-          'end_longitude': row['end_longitude'] ?? '',
-          'average_speed_knots': row['average_speed_knots'] ?? '',
-          'high_speed_knots': row['high_speed_knots'] ?? '',
-          'low_speed_knots': row['low_speed_knots'] ?? '',
-        });
-      }
-    }
+  //   if (results.isNotEmpty) {
+  //     for (var row in results) {
+  //       jarakTempuhHistoryTraking.add({
+  //         'tgl_aktifasi': row['tgl_aktifasi'] ?? '',
+  //         'waktu_awal': row['waktu_awal'] ?? '',
+  //         'waktu_akhir': row['waktu_akhir'] ?? '',
+  //         'duration': row['duration'] ?? '',
+  //         'start_latitude': row['start_latitude'] ?? '',
+  //         'start_longitude': row['start_longitude'] ?? '',
+  //         'end_latitude': row['end_latitude'] ?? '',
+  //         'end_longitude': row['end_longitude'] ?? '',
+  //         'average_speed_knots': row['average_speed_knots'] ?? '',
+  //         'high_speed_knots': row['high_speed_knots'] ?? '',
+  //         'low_speed_knots': row['low_speed_knots'] ?? '',
+  //       });
+  //     }
+  //   }
 
-    await conn.close();
+  //   await conn.close();
 
-    return jarakTempuhHistoryTraking;
-  }
+  //   return jarakTempuhHistoryTraking;
+  // }
 
   // fungsi hitung jarak tempuh untuk setiap jarak traking kapal
   Future<List<Map<String, dynamic>>?> calcMileageTrakingVessel(

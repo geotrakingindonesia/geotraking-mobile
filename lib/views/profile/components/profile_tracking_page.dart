@@ -457,6 +457,76 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                             _selectedKapalMember = kapalMember;
                           });
                         },
+                        // child: InfoPopupWidget(
+                        //   child: Stack(
+                        //     children: [
+                        //       MarkerImageWidget(
+                        //         timestamp: kapalMember['timestamp'],
+                        //         heading: kapalMember['heading'],
+                        //       ),
+                        //       if (isSelected)
+                        //         Positioned(
+                        //           left: 0,
+                        //           right: 0,
+                        //           top: 0,
+                        //           bottom: 0,
+                        //           child: Container(
+                        //             decoration: BoxDecoration(
+                        //               border: Border.all(
+                        //                   color: Colors.red, width: 2),
+                        //               borderRadius: BorderRadius.circular(15),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //     ],
+                        //   ),
+                        //   customContent: () => Container(
+                        //     padding: EdgeInsets.all(8),
+                        //     width: 290,
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.white,
+                        //       borderRadius: BorderRadius.circular(10),
+                        //     ),
+                        //     child: DefaultTabController(
+                        //       length: 4, // Number of tabs
+                        //       child: Column(
+                        //         children: [
+                        //           TabBar(
+                        //             tabs: [
+                        //               Tab(text: 'Vessel'),
+                        //               Tab(text: 'Tracking'),
+                        //               Tab(text: 'Airtime'),
+                        //               Tab(text: 'Close'),
+                        //             ],
+                        //           ),
+                        //           Expanded(
+                        //             child: TabBarView(
+                        //               children: [
+                        //                 // Content for Tracking tab
+                        //                 Center(
+                        //                   child: Text('Tracking Information'),
+                        //                 ),
+
+                        //                 // Content for Airtime tab
+                        //                 Center(
+                        //                   child: Text('Airtime Information'),
+                        //                 ),
+
+                        //                 // Content for Close tab
+                        //                 Center(
+                        //                   child: Text('Close the popup'),
+                        //                 ),
+                        //                 Center(
+                        //                   child: Text('Close the popup'),
+                        //                 ),
+                        //               ],
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         child: Stack(
                           children: [
                             MarkerImageWidget(
