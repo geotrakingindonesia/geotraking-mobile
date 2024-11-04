@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/components/localization_language.dart';
 // import 'package:geotraking/core/constants/app_colors.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
@@ -12,6 +13,8 @@ import 'package:geotraking/core/services/auth/authenticate_service.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/auth/login_page.dart';
 import 'package:geotraking/views/profile/apn/components/profile_apn_menu_options.dart';
+import 'package:geotraking/views/profile/components/card/contact_card.dart';
+import 'package:geotraking/views/profile/components/card/media_sosial_row.dart';
 import 'package:geotraking/views/profile/components/card/profile_info_card.dart';
 import 'package:geotraking/views/profile/components/profile_list_tile.dart';
 import 'package:geotraking/views/profile/components/profile_menu_options.dart';
@@ -115,40 +118,40 @@ class _ProfilePageState extends State<ProfilePage> {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
             elevation: 0,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 127, 183, 126),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.mode_edit_outlined, color: Colors.white),
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.editMyProfile);
-                    },
-                    tooltip: 'Edit Profile',
-                  ),
-                ),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.only(right: 15),
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       Navigator.pushNamed(context, AppRoutes.editMyProfile);
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: Colors.orangeAccent,
-              //       shape: CircleBorder(),
-              //     ),
-              //     child: const Icon(
-              //       Icons.mode_edit_outlined,
-              //       color: Colors.black87,
-              //     ),
-              //   ),
-              // ),
-            ],
+            // actions: [
+            //   Padding(
+            //     padding: const EdgeInsets.only(right: 15),
+            //     child: Container(
+            //       decoration: BoxDecoration(
+            //         color: Color.fromARGB(255, 127, 183, 126),
+            //         shape: BoxShape.circle,
+            //       ),
+            //       child: IconButton(
+            //         icon: Icon(Icons.mode_edit_outlined, color: Colors.white),
+            //         onPressed: () {
+            //           Navigator.pushNamed(context, AppRoutes.editMyProfile);
+            //         },
+            //         tooltip: 'Edit Profile',
+            //       ),
+            //     ),
+            //   ),
+            //   // Padding(
+            //   //   padding: const EdgeInsets.only(right: 15),
+            //   //   child: ElevatedButton(
+            //   //     onPressed: () {
+            //   //       Navigator.pushNamed(context, AppRoutes.editMyProfile);
+            //   //     },
+            //   //     style: ElevatedButton.styleFrom(
+            //   //       backgroundColor: Colors.orangeAccent,
+            //   //       shape: CircleBorder(),
+            //   //     ),
+            //   //     child: const Icon(
+            //   //       Icons.mode_edit_outlined,
+            //   //       color: Colors.black87,
+            //   //     ),
+            //   //   ),
+            //   // ),
+            // ],
           ),
         ),
       ),
@@ -550,7 +553,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         Spacer(),
-                        Icon(Icons.arrow_forward_ios, color: Colors.white),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.editMyProfile);
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -597,21 +609,23 @@ class _ProfilePageState extends State<ProfilePage> {
                             //   color: Colors.black,
                             // ),
                             ProfileListTile(
-                              title: Localization.privacyPolice(widget.selectedLanguage),
+                              title: Localization.privacyPolice(
+                                  widget.selectedLanguage),
                               icon: Icons.privacy_tip_outlined,
-                              onTap: () => Navigator.pushNamed(context,
-                                  AppRoutes.privacyPolice),
+                              onTap: () => Navigator.pushNamed(
+                                  context, AppRoutes.privacyPolice),
                             ),
                             const Divider(
                               thickness: 0.5,
                               color: Colors.black,
                             ),
-                            ProfileListTile(
-                              title: 'Media Sosial',
-                              icon: Icons.perm_media_outlined,
-                              onTap: () => Navigator.pushNamed(context,
-                                  AppRoutes.logBookHistoryHasilPenangkapan),
-                            ),
+                            MediaSosialRow(),
+                            // ProfileListTile(
+                            //   title: 'Media Sosial',
+                            //   icon: Icons.perm_media_outlined,
+                            //   onTap: () => Navigator.pushNamed(context,
+                            //       AppRoutes.logBookHistoryHasilPenangkapan),
+                            // ),
                             const Divider(
                               thickness: 0.5,
                               color: Colors.black,
@@ -621,6 +635,86 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    child: Container(
+                      height: 6,
+                      color: Colors.grey.shade200,
+                    ),
+                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.all(6),
+                  //   child: Column(
+                  //     children: [
+                  //       Padding(
+                  //         padding: const EdgeInsets.only(left: 16),
+                  //         child: Align(
+                  //           alignment: Alignment.topLeft,
+                  //           child: Text(
+                  //             'Hubungi Kami',
+                  //             style: TextStyle(
+                  //                 fontSize: 22,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 color: Colors.black,
+                  //                 fontStyle: FontStyle.italic),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       Padding(
+                  //         padding: const EdgeInsets.only(
+                  //             right: 16.0, left: 16, bottom: 16, top: 10),
+                  //         child: Container(
+                  //           padding: EdgeInsets.all(16),
+                  //           decoration: BoxDecoration(
+                  //             color: Colors.white,
+                  //             borderRadius: BorderRadius.circular(8),
+                  //             boxShadow: [
+                  //               BoxShadow(
+                  //                   color: Colors.grey.shade400,
+                  //                   blurRadius: 5,
+                  //                   spreadRadius: 1),
+                  //             ],
+                  //           ),
+                  //           child: Row(
+                  //             children: [
+                  //               Icon(FontAwesomeIcons.whatsapp,
+                  //                   size: 40, color: Colors.green),
+                  //               SizedBox(width: 16),
+                  //               Column(
+                  //                 crossAxisAlignment: CrossAxisAlignment.start,
+                  //                 children: [
+                  //                   Text(
+                  //                     'Geosat',
+                  //                     style: TextStyle(
+                  //                         fontSize: 16,
+                  //                         fontWeight: FontWeight.bold),
+                  //                   ),
+                  //                   SizedBox(height: 4),
+                  //                   Text(
+                  //                     '+6281908192559',
+                  //                     style: TextStyle(
+                  //                         color: Colors.grey, fontSize: 14),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //               Spacer(),
+                  //               IconButton(
+                  //                 icon: const Icon(
+                  //                   Icons.arrow_forward_ios,
+                  //                   color: Colors.black,
+                  //                 ),
+                  //                 onPressed: () {
+                  //                   Navigator.pushNamed(
+                  //                       context, AppRoutes.editMyProfile);
+                  //                 },
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  ContactCard(),
                   SizedBox(
                     child: Container(
                       height: 6,
@@ -1188,7 +1282,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   //     ),
                   //   ),
                   // ),
-                  SizedBox(height: 130),
+                  SizedBox(height: 110),
                 ],
               ),
             ),

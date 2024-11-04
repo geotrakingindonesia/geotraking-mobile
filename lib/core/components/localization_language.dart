@@ -515,4 +515,17 @@ class Localization {
         return 'Privacy Police';
     }
   }
+
+  static String socialMedia(String language) {
+    switch (language) {
+      case 'English':
+        return 'Social Media';
+      case 'Indonesia':
+        return 'Media Sosial';
+      default:
+        return 'Social Media';
+    }
+  }
+
+
 }
