@@ -100,12 +100,12 @@ class ProfileListTile extends StatelessWidget {
     // }
 
     return Ink(
-      height: 55,
+      // height: 55,
       child: InkWell(
         onTap: onTap,
         borderRadius: AppDefaults.borderRadius,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(4.0),
           child: Row(
             children: [
               Container(
@@ -146,9 +146,9 @@ class ProfileListTile extends StatelessWidget {
               //   ),
               const Spacer(),
               const Icon(
-                Icons.arrow_right_alt_rounded,
-                size: 35,
-                color: Colors.black54,
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: Colors.black,
               ),
             ],
           ),

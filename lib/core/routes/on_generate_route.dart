@@ -23,6 +23,7 @@ import 'package:geotraking/views/home/drawer/drawer_page.dart';
 import 'package:geotraking/views/profile/apn/profile_kapal_apn_page.dart';
 import 'package:geotraking/views/profile/apn/profile_tracking_apn_page.dart';
 import 'package:geotraking/views/profile/components/legend_information.dart';
+import 'package:geotraking/views/profile/components/privacy_policy.dart';
 // import 'package:geotraking/views/profile/components/profile_change_language_page.dart';
 import 'package:geotraking/views/profile/components/profile_change_password_page.dart';
 import 'package:geotraking/views/profile/components/profile_edit_page.dart';
@@ -182,6 +183,9 @@ class RouteGenerator {
       
       case AppRoutes.legendInformation:
         return CupertinoPageRoute(builder: (_) => LegendInformation());
+      
+      case AppRoutes.privacyPolice:
+        return CupertinoPageRoute(builder: (_) => PrivacyPolicy());
 
 
 

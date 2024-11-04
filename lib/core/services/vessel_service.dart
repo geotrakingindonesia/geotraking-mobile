@@ -6,6 +6,7 @@ import 'package:geotraking/core/services/auth/authenticate_service.dart';
 import 'package:geotraking/core/services/connection/connection.dart';
 import 'package:intl/intl.dart';
 import 'package:mysql1/mysql1.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class VesselService {
   AuthService _authService = AuthService();
@@ -511,7 +512,7 @@ class VesselService {
 
   //   String query = '''
   //   WITH DailyData AS (
-  //     SELECT 
+  //     SELECT
   //         DATE(varTimestamp) AS tgl_aktifasi,
   //         Latitude AS latitude,
   //         Longitude AS longitude,
@@ -519,15 +520,15 @@ class VesselService {
   //         varTimestamp,
   //         ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp ASC) AS row_num_first,
   //         ROW_NUMBER() OVER (PARTITION BY DATE(varTimestamp) ORDER BY varTimestamp DESC) AS row_num_last
-  //     FROM 
+  //     FROM
   //         psg_modata
-  //     WHERE 
+  //     WHERE
   //         serviceID = ?
   //         AND varTimestamp BETWEEN ? AND ?
   //         AND Speed IS NOT NULL
   //   ),
   //   BoundaryData AS (
-  //       SELECT 
+  //       SELECT
   //           tgl_aktifasi,
   //           MAX(CASE WHEN row_num_first = 1 THEN varTimestamp END) AS waktu_awal,
   //           MAX(CASE WHEN row_num_last = 1 THEN varTimestamp END) AS waktu_akhir,
@@ -535,23 +536,23 @@ class VesselService {
   //           MAX(CASE WHEN row_num_first = 1 THEN longitude END) AS start_longitude,
   //           MAX(CASE WHEN row_num_last = 1 THEN latitude END) AS end_latitude,
   //           MAX(CASE WHEN row_num_last = 1 THEN longitude END) AS end_longitude
-  //       FROM 
+  //       FROM
   //           DailyData
-  //       GROUP BY 
+  //       GROUP BY
   //           tgl_aktifasi
   //   ),
   //   DailyAverageSpeed AS (
-  //       SELECT 
+  //       SELECT
   //           tgl_aktifasi,
   //           AVG(Speed) * 1.9438 AS average_speed_knots,
   //           MAX(Speed) * 1.9438 AS high_speed_knots,
   //           MIN(Speed) * 1.9438 AS low_speed_knots
-  //       FROM 
+  //       FROM
   //           DailyData
-  //       GROUP BY 
+  //       GROUP BY
   //           tgl_aktifasi
   //   )
-  //   SELECT 
+  //   SELECT
   //       bd.tgl_aktifasi,
   //       bd.waktu_awal,
   //       bd.waktu_akhir,
@@ -566,11 +567,11 @@ class VesselService {
   //       ROUND(das.average_speed_knots, 1) AS average_speed_knots,
   //       ROUND(das.high_speed_knots, 1) AS high_speed_knots,
   //       ROUND(das.low_speed_knots, 1) AS low_speed_knots
-  //   FROM 
+  //   FROM
   //       BoundaryData bd
-  //   JOIN 
+  //   JOIN
   //       DailyAverageSpeed das ON bd.tgl_aktifasi = das.tgl_aktifasi
-  //   ORDER BY 
+  //   ORDER BY
   //       bd.tgl_aktifasi ASC;
   // ''';
 
@@ -761,5 +762,234 @@ class VesselService {
     await conn.close();
 
     return calcMileageTraking;
+  }
+
+  // Future<int> countDataKapal() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   int cachedCount = prefs.getInt('kapal_count') ?? -1;
+
+  //   if (cachedCount != -1) {
+  //     return cachedCount;
+  //   }
+
+  //   MemberUser? currentUser = await _authService.getCurrentUser();
+  //   int memberId = currentUser?.id ?? 0;
+  //   int adminLevel = currentUser?.isAdmin ?? 0;
+
+  //   print('Current User ID: $memberId, Admin Level: $adminLevel');
+
+  //   var settings = Connection.getSettings();
+  //   var conn = await MySqlConnection.connect(settings);
+  //   int count = 0;
+
+  //   if (adminLevel == 0) {
+  //     var result = await conn.query('''
+  //     SELECT COUNT(*) AS count
+  //     FROM ai_kapal_member
+  //     WHERE member_id = ?
+  //   ''', [memberId]);
+
+  //     count = result.first['count'] as int;
+  //   } else if (adminLevel == 1) {
+  //     var result = await conn.query('''
+  //     SELECT COUNT(*) AS count
+  //     FROM ai_mobile
+  //     WHERE type_id IN (1, 2, 4, 5, 15)
+  //   ''');
+
+  //     count = result.first['count'] as int;
+  //   }
+
+  //   await conn.close();
+  //   await prefs.setInt('kapal_count', count);
+
+  //   return count;
+  // }
+
+  Future<int> countDataKapal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int cachedCount = prefs.getInt('kapal_count') ?? -1;
+    String? lastUpdateStr = prefs.getString('last_update_kapal_count');
+    DateTime? lastUpdate =
+        lastUpdateStr != null ? DateTime.parse(lastUpdateStr) : null;
+    DateTime currentDate = DateTime.now();
+
+    // Check if we should update the count (i.e., more than a month since the last update)
+    if (cachedCount != -1 &&
+        lastUpdate != null &&
+        currentDate.difference(lastUpdate).inDays < 30) {
+      return cachedCount;
+    }
+
+    // Fetch current user info
+    MemberUser? currentUser = await _authService.getCurrentUser();
+    int memberId = currentUser?.id ?? 0;
+    int adminLevel = currentUser?.isAdmin ?? 0;
+    print('Current User ID: $memberId, Admin Level: $adminLevel');
+
+    // Fetch data from the database
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+    int count = 0;
+
+    if (adminLevel == 0) {
+      var result = await conn.query('''
+      SELECT COUNT(*) AS count 
+      FROM ai_kapal_member 
+      WHERE member_id = ?
+    ''', [memberId]);
+      count = result.first['count'] as int;
+    } else if (adminLevel == 1) {
+      var result = await conn.query('''
+      SELECT COUNT(*) AS count 
+      FROM ai_mobile 
+      WHERE type_id IN (1, 2, 4, 5, 15)
+    ''');
+      count = result.first['count'] as int;
+    }
+
+    await conn.close();
+
+    // Update cache with new count and timestamp
+    await prefs.setInt('kapal_count', count);
+    await prefs.setString(
+        'last_update_kapal_count', currentDate.toIso8601String());
+
+    return count;
+  }
+
+// calc airtime yg active
+  // Future<int> countActiveAirtime() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   int cachedCount = prefs.getInt('active_airtime_count') ?? -1;
+  //   String? lastUpdate = prefs.getString('last_update_airtime_count');
+
+  //   DateTime now = DateTime.now();
+  //   DateTime lastUpdateDate = lastUpdate != null
+  //       ? DateTime.parse(lastUpdate)
+  //       : now.subtract(Duration(days: 31));
+
+  //   // untuk pengecekan apakah airtime active atau tidak dia mengecek perbulan sekali
+  //   bool isCacheValid =
+  //       cachedCount != -1 && now.difference(lastUpdateDate).inDays < 30;
+
+  //   if (isCacheValid) {
+  //     return cachedCount;
+  //   }
+
+  //   MemberUser? currentUser = await _authService.getCurrentUser();
+  //   int memberId = currentUser?.id ?? 0;
+  //   int adminLevel = currentUser?.isAdmin ?? 0;
+
+  //   print('Current User ID: $memberId, Admin Level: $adminLevel');
+
+  //   var settings = Connection.getSettings();
+  //   var conn = await MySqlConnection.connect(settings);
+  //   int count = 0;
+
+  //   String currentDate = now.toIso8601String().split('T').first;
+
+  //   if (adminLevel == 0) {
+  //     var result = await conn.query('''
+  //     SELECT COUNT(*) AS count
+  //     FROM ai_mobile am
+  //     INNER JOIN ai_kapal_member akm ON am.id = akm.mobile_id
+  //     WHERE am.atp_end > ?
+  //       AND akm.member_id = ?
+  //   ''', [currentDate, memberId]);
+
+  //     count = result.first['count'] as int;
+  //   } else if (adminLevel == 1) {
+  //     var result = await conn.query('''
+  //     SELECT COUNT(*) AS count
+  //     FROM ai_mobile
+  //     WHERE atp_end > ?
+  //   ''', [currentDate]);
+
+  //     count = result.first['count'] as int;
+  //   }
+
+  //   await conn.close();
+
+  //   await prefs.setInt('active_airtime_count', count);
+  //   await prefs.setString('last_update_airtime_count', now.toIso8601String());
+
+  //   return count;
+  // }
+
+  Future<int> countActiveAirtime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Retrieve cached count, last update date, and cached user ID
+    int cachedCount = prefs.getInt('active_airtime_count') ?? -1;
+    String? lastUpdate = prefs.getString('last_update_airtime_count');
+    int cachedUserId = prefs.getInt('cached_user_id') ?? -1;
+
+    MemberUser? currentUser = await _authService.getCurrentUser();
+    int memberId = currentUser?.id ?? 0;
+    int adminLevel = currentUser?.isAdmin ?? 0;
+
+    DateTime now = DateTime.now();
+    DateTime lastUpdateDate = lastUpdate != null
+        ? DateTime.parse(lastUpdate)
+        : now.subtract(Duration(days: 31));
+
+    // Validate cache by checking user ID and update time (within 30 days)
+    bool isCacheValid = cachedCount != -1 &&
+        cachedUserId == memberId &&
+        now.difference(lastUpdateDate).inDays < 30;
+
+    if (isCacheValid) {
+      return cachedCount; // Return cached count if it's valid
+    }
+
+    print('Current User ID: $memberId, Admin Level: $adminLevel');
+
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+    int count = 0;
+
+    // Get the current date in the required format (YYYY-MM-DD)
+    String currentDate = now.toIso8601String().split('T').first;
+
+    if (adminLevel == 0) {
+      // Count with JOIN for non-admin users (adminLevel 0)
+      var result = await conn.query('''
+      SELECT COUNT(*) AS count
+      FROM ai_mobile am
+      INNER JOIN ai_kapal_member akm ON am.id = akm.mobile_id
+      WHERE am.atp_end > ?
+        AND akm.member_id = ?
+    ''', [currentDate, memberId]);
+
+      count = result.first['count'] as int;
+    } else if (adminLevel == 1) {
+      // Direct count from ai_mobile for admin users (adminLevel 1)
+      var result = await conn.query('''
+      SELECT COUNT(*) AS count
+      FROM ai_mobile 
+      WHERE atp_end > ?
+    ''', [currentDate]);
+
+      count = result.first['count'] as int;
+    }
+
+    await conn.close();
+
+    // Update cache with new count, timestamp, and user ID
+    await prefs.setInt('active_airtime_count', count);
+    await prefs.setString('last_update_airtime_count', now.toIso8601String());
+    await prefs.setInt('cached_user_id', memberId);
+
+    return count;
+  }
+
+  Future<void> resetCountCache() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('active_airtime_count');
+    await prefs.remove('last_update_airtime_count');
+    await prefs.remove('kapal_count');
+    await prefs.remove('last_update_kapal_count');
+    await prefs.remove('cached_user_id');
   }
 }

@@ -340,6 +340,7 @@ import 'package:geotraking/views/home/home_page.dart';
 import 'package:geotraking/views/profile/components/profile_tracking_page.dart';
 import 'package:geotraking/views/profile/geosat/profile_tracking_geosat_page.dart';
 import 'package:geotraking/views/profile/profile_page.dart';
+import 'package:geotraking/views/profile/test_profile.dart';
 // import 'package:geotraking/views/traking/traking_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -561,6 +562,7 @@ class _EntryPointUIState extends State<EntryPointUI> {
               // TrakingPage(),
               _isLoggedIn
                   ? ProfilePage(selectedLanguage: _selectedLanguage)
+                  // ? TestProfile()
                   : LoginPage(),
             ][_selectedIndex],
             BottomGradientWidget(),

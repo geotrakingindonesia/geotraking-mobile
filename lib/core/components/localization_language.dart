@@ -504,4 +504,15 @@ class Localization {
         return 'Legend Information';
     }
   }
+
+  static String privacyPolice(String language) {
+    switch (language) {
+      case 'English':
+        return 'Privacy Police';
+      case 'Indonesia':
+        return 'Kebijakan Privasi';
+      default:
+        return 'Privacy Police';
+    }
+  }
 }

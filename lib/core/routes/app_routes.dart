@@ -82,7 +82,7 @@ class AppRoutes {
   static const reportHistoryTrakingJarakTempuh = '/reportHistoryTrakingJarakTempuh';
 
 
-
+  static const privacyPolice = '/privacyPolice';
   // static const consolePage = '/consolePage';
 
 }

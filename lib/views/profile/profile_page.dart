@@ -9,8 +9,10 @@ import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/core/models/member.dart';
 import 'package:geotraking/core/routes/app_routes.dart';
 import 'package:geotraking/core/services/auth/authenticate_service.dart';
+import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/auth/login_page.dart';
 import 'package:geotraking/views/profile/apn/components/profile_apn_menu_options.dart';
+import 'package:geotraking/views/profile/components/card/profile_info_card.dart';
 import 'package:geotraking/views/profile/components/profile_list_tile.dart';
 import 'package:geotraking/views/profile/components/profile_menu_options.dart';
 import 'package:geotraking/views/profile/geosat/components/profile_admin_menu_options.dart';
@@ -60,8 +62,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _logout() async {
     try {
+      final vesselService = VesselService();
       await _authService.logout();
       await _authService.updateLogoutHistory(_user!.id);
+      await vesselService.resetCountCache();
 
       Navigator.pushReplacement(
         context,
@@ -501,120 +505,65 @@ class _ProfilePageState extends State<ProfilePage> {
                   //     ],
                   //   ),
                   // ),
-                  Padding(
-                    padding: const EdgeInsets.all(AppDefaults.padding),
-                    child: Center(
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          SizedBox(
-                            width: 125,
-                            height: 125,
-                            child: ClipOval(
-                              child: AspectRatio(
-                                aspectRatio: 1 / 1,
-                                child: _user!.avatar != null &&
-                                        _user!.avatar!.isNotEmpty
-                                    ? CircleAvatar(
-                                        radius: 25,
-                                        backgroundImage: FileImage(
-                                          File(
-                                              '${_directory?.path}/avatar_${_user!.id}.jpg'),
-                                        ),
-                                      )
-                                    : CircleAvatar(
-                                        radius: 25,
-                                        backgroundImage: AssetImage(
-                                            'assets/images/user.png'),
-                                      ),
-                              ),
-                            ),
-                          ),
-                          // Positioned(
-                          //   bottom: 0,
-                          //   right: 0,
-                          //   child: ElevatedButton(
-                          //     onPressed: () {
-                          //       Navigator.pushNamed(
-                          //           context, AppRoutes.editMyProfile);
-                          //     },
-                          //     style: ElevatedButton.styleFrom(
-                          //       backgroundColor: Colors.orangeAccent,
-                          //       shape: CircleBorder(),
-                          //     ),
-                          //     child: const Icon(
-                          //       Icons.mode_edit_outlined,
-                          //       color: Colors.black87,
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
+
+                  Container(
+                    margin: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/background_user.png'),
+                        fit: BoxFit.cover,
                       ),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    child: Row(
                       children: [
-                        Text(
-                          _user!.name.length > 20
-                              ? _user!.name.substring(0, 20) + '...'
-                              : _user!.name,
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundImage:
+                              _user!.avatar == null || _user!.avatar!.isEmpty
+                                  ? AssetImage('assets/images/user.png')
+                                  : FileImage(
+                                      File(
+                                          '${_directory?.path}/avatar_${_user!.id}.jpg'),
+                                    ),
                         ),
-                        const SizedBox(height: 3),
-                        Text(
-                          _user!.email,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: Colors.black87),
+                        SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _user!.name.length > 20
+                                  ? _user!.name.substring(0, 20) + '...'
+                                  : _user!.name,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              _user!.noHp,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                          ],
                         ),
-                        Text(
-                          _user!.noHp,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: Colors.black87),
-                        ),
-                        const SizedBox(height: 10),
+                        Spacer(),
+                        Icon(Icons.arrow_forward_ios, color: Colors.white),
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30, top: 20),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Localization.account(widget.selectedLanguage),
-                            // 'Account',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(color: Colors.black54),
-                          ),
-                        ],
-                      ),
+                  ProfileInfoCard(),
+                  SizedBox(
+                    child: Container(
+                      height: 6,
+                      color: Colors.grey.shade200,
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.all(16.0),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(40),
-                    ),
+                    // margin: const EdgeInsets.all(6.0),
+                    padding: const EdgeInsets.all(6),
                     child: _user!.isAdmin == 1
                         ? ProfileAdminMenuOptions(
                             selectedLanguage: widget.selectedLanguage)
@@ -623,6 +572,228 @@ class _ProfilePageState extends State<ProfilePage> {
                             : ProfileMemberMenuOptions(
                                 selectedLanguage: widget.selectedLanguage),
                   ),
+                  SizedBox(
+                    child: Container(
+                      height: 6,
+                      color: Colors.grey.shade200,
+                    ),
+                  ),
+                  Container(
+                    // margin: const EdgeInsets.all(6.0),
+                    padding: const EdgeInsets.all(6),
+                    child: SizedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            // ProfileListTile(
+                            //   title: 'Panduan Layanan',
+                            //   icon: Icons.info_outline_rounded,
+                            //   onTap: () => Navigator.pushNamed(
+                            //       context, AppRoutes.logBookHasilPenangkapan),
+                            // ),
+                            // const Divider(
+                            //   thickness: 0.5,
+                            //   color: Colors.black,
+                            // ),
+                            ProfileListTile(
+                              title: Localization.privacyPolice(widget.selectedLanguage),
+                              icon: Icons.privacy_tip_outlined,
+                              onTap: () => Navigator.pushNamed(context,
+                                  AppRoutes.privacyPolice),
+                            ),
+                            const Divider(
+                              thickness: 0.5,
+                              color: Colors.black,
+                            ),
+                            ProfileListTile(
+                              title: 'Media Sosial',
+                              icon: Icons.perm_media_outlined,
+                              onTap: () => Navigator.pushNamed(context,
+                                  AppRoutes.logBookHistoryHasilPenangkapan),
+                            ),
+                            const Divider(
+                              thickness: 0.5,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    child: Container(
+                      height: 6,
+                      color: Colors.grey.shade200,
+                    ),
+                  ),
+                  Container(
+                    // margin: const EdgeInsets.all(6.0),
+                    padding: const EdgeInsets.all(6),
+                    child: Ink(
+                      height: 55,
+                      child: InkWell(
+                        onTap: _logout,
+                        borderRadius: AppDefaults.borderRadius,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: AppDefaults.borderRadius,
+                                  ),
+                                  child: Text(
+                                    'Version 1.0.4',
+                                    style: TextStyle(color: Colors.black54),
+                                  )),
+                              // const SizedBox(width: 16),
+                              Spacer(),
+                              Text(
+                                Localization.logout(widget.selectedLanguage),
+                                // 'Logout',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // SizedBox(
+                  //   child: Container(
+                  //     height: 6,
+                  //     color: Colors.grey.shade200,
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(AppDefaults.padding),
+                  //   child: Center(
+                  //     child: Stack(
+                  //       alignment: Alignment.bottomRight,
+                  //       children: [
+                  //         SizedBox(
+                  //           width: 125,
+                  //           height: 125,
+                  //           child: ClipOval(
+                  //             child: AspectRatio(
+                  //               aspectRatio: 1 / 1,
+                  //               child: _user!.avatar != null &&
+                  //                       _user!.avatar!.isNotEmpty
+                  //                   ? CircleAvatar(
+                  //                       radius: 25,
+                  //                       backgroundImage: FileImage(
+                  //                         File(
+                  //                             '${_directory?.path}/avatar_${_user!.id}.jpg'),
+                  //                       ),
+                  //                     )
+                  //                   : CircleAvatar(
+                  //                       radius: 25,
+                  //                       backgroundImage: AssetImage(
+                  //                           'assets/images/user.png'),
+                  //                     ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         // Positioned(
+                  //         //   bottom: 0,
+                  //         //   right: 0,
+                  //         //   child: ElevatedButton(
+                  //         //     onPressed: () {
+                  //         //       Navigator.pushNamed(
+                  //         //           context, AppRoutes.editMyProfile);
+                  //         //     },
+                  //         //     style: ElevatedButton.styleFrom(
+                  //         //       backgroundColor: Colors.orangeAccent,
+                  //         //       shape: CircleBorder(),
+                  //         //     ),
+                  //         //     child: const Icon(
+                  //         //       Icons.mode_edit_outlined,
+                  //         //       color: Colors.black87,
+                  //         //     ),
+                  //         //   ),
+                  //         // ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Align(
+                  //   alignment: Alignment.center,
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.center,
+                  //     children: [
+                  //       Text(
+                  //         _user!.name.length > 20
+                  //             ? _user!.name.substring(0, 20) + '...'
+                  //             : _user!.name,
+                  //         style:
+                  //             Theme.of(context).textTheme.titleLarge?.copyWith(
+                  //                   fontWeight: FontWeight.bold,
+                  //                   color: Colors.black,
+                  //                 ),
+                  //         maxLines: 2,
+                  //         overflow: TextOverflow.ellipsis,
+                  //       ),
+                  //       const SizedBox(height: 3),
+                  //       Text(
+                  //         _user!.email,
+                  //         style: Theme.of(context)
+                  //             .textTheme
+                  //             .bodyLarge
+                  //             ?.copyWith(color: Colors.black87),
+                  //       ),
+                  //       Text(
+                  //         _user!.noHp,
+                  //         style: Theme.of(context)
+                  //             .textTheme
+                  //             .bodyLarge
+                  //             ?.copyWith(color: Colors.black87),
+                  //       ),
+                  //       const SizedBox(height: 10),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 30, top: 20),
+                  //   child: Align(
+                  //     alignment: Alignment.centerLeft,
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           Localization.account(widget.selectedLanguage),
+                  //           // 'Account',
+                  //           style: Theme.of(context)
+                  //               .textTheme
+                  //               .titleMedium
+                  //               ?.copyWith(color: Colors.black54),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   margin: const EdgeInsets.all(16.0),
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 16.0, vertical: 8.0),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey.withOpacity(0.2),
+                  //     borderRadius: BorderRadius.circular(40),
+                  //   ),
+                  //   child: _user!.isAdmin == 1
+                  //       ? ProfileAdminMenuOptions(
+                  //           selectedLanguage: widget.selectedLanguage)
+                  //       : _user!.isAdmin == 2
+                  //           ? ProfileAPNMenuOptions()
+                  //           : ProfileMemberMenuOptions(
+                  //               selectedLanguage: widget.selectedLanguage),
+                  // ),
+
                   // Padding(
                   //   padding: const EdgeInsets.only(left: 30),
                   //   child: Align(
@@ -665,24 +836,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   //     ),
                   //   ),
                   // ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Localization.report(widget.selectedLanguage),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(color: Colors.black54),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 30),
+                  //   child: Align(
+                  //     alignment: Alignment.centerLeft,
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           Localization.report(widget.selectedLanguage),
+                  //           style: Theme.of(context)
+                  //               .textTheme
+                  //               .titleMedium
+                  //               ?.copyWith(color: Colors.black54),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   // Container(
                   //   margin: const EdgeInsets.all(16.0),
                   //   padding: const EdgeInsets.symmetric(
@@ -737,147 +908,147 @@ class _ProfilePageState extends State<ProfilePage> {
                   //     ),
                   //   ),
                   // ),
-                  Container(
-                    margin: const EdgeInsets.all(16.0),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: SizedBox(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            ProfileListTile(
-                              title: 'Hasil Tangkapan',
-                              icon: Icons.archive,
-                              onTap: () => Navigator.pushNamed(
-                                  context, AppRoutes.logBookHasilPenangkapan),
-                            ),
-                            const Divider(
-                              thickness: 0.5,
-                              color: Colors.black,
-                            ),
-                            ProfileListTile(
-                              title: 'Histori Tangkapan',
-                              icon: Icons.history,
-                              onTap: () => Navigator.pushNamed(context,
-                                  AppRoutes.logBookHistoryHasilPenangkapan),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Localization.preferences(widget.selectedLanguage),
-                            // 'Preferences',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(color: Colors.black54),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(16.0),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: SizedBox(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            ProfileListTile(
-                              title: Localization.getNotification(
-                                  widget.selectedLanguage),
-                              icon: Icons.notifications,
-                              onTap: () => Navigator.pushNamed(
-                                  context, AppRoutes.notificationPage),
-                            ),
-                            const Divider(
-                              thickness: 0.5,
-                              color: Colors.black,
-                            ),
-                            ProfileListTile(
-                              title: Localization.getHelpCenter(
-                                  widget.selectedLanguage),
-                              icon: Icons.live_help_outlined,
-                              onTap: () => Navigator.pushNamed(
-                                  context, AppRoutes.supportPage),
-                            ),
-                            const Divider(
-                              thickness: 0.5,
-                              color: Colors.black,
-                            ),
-                            ProfileListTile(
-                              title: Localization.getSetting(
-                                  widget.selectedLanguage),
-                              icon: Icons.settings,
-                              onTap: () => Navigator.pushNamed(
-                                  context, AppRoutes.settingMyProfile),
-                            ),
-                            const Divider(
-                              thickness: 0.5,
-                              color: Colors.black,
-                            ),
-                            Ink(
-                              height: 55,
-                              child: InkWell(
-                                onTap: _logout,
-                                borderRadius: AppDefaults.borderRadius,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              AppDefaults.borderRadius,
-                                        ),
-                                        child: Icon(
-                                          Icons.logout_rounded,
-                                          size: 20,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Text(
-                                        Localization.logout(
-                                            widget.selectedLanguage),
-                                        // 'Logout',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.copyWith(color: Colors.red),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   margin: const EdgeInsets.all(16.0),
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 16.0, vertical: 8.0),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey.withOpacity(0.2),
+                  //     borderRadius: BorderRadius.circular(40),
+                  //   ),
+                  //   child: SizedBox(
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(10),
+                  //       child: Column(
+                  //         children: [
+                  //           ProfileListTile(
+                  //             title: 'Hasil Tangkapan',
+                  //             icon: Icons.archive,
+                  //             onTap: () => Navigator.pushNamed(
+                  //                 context, AppRoutes.logBookHasilPenangkapan),
+                  //           ),
+                  //           const Divider(
+                  //             thickness: 0.5,
+                  //             color: Colors.black,
+                  //           ),
+                  //           ProfileListTile(
+                  //             title: 'Histori Tangkapan',
+                  //             icon: Icons.history,
+                  //             onTap: () => Navigator.pushNamed(context,
+                  //                 AppRoutes.logBookHistoryHasilPenangkapan),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 30),
+                  //   child: Align(
+                  //     alignment: Alignment.centerLeft,
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           Localization.preferences(widget.selectedLanguage),
+                  //           // 'Preferences',
+                  //           style: Theme.of(context)
+                  //               .textTheme
+                  //               .titleMedium
+                  //               ?.copyWith(color: Colors.black54),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   margin: const EdgeInsets.all(16.0),
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 16.0, vertical: 8.0),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey.withOpacity(0.2),
+                  //     borderRadius: BorderRadius.circular(40),
+                  //   ),
+                  //   child: SizedBox(
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(10),
+                  //       child: Column(
+                  //         children: [
+                  //           ProfileListTile(
+                  //             title: Localization.getNotification(
+                  //                 widget.selectedLanguage),
+                  //             icon: Icons.notifications,
+                  //             onTap: () => Navigator.pushNamed(
+                  //                 context, AppRoutes.notificationPage),
+                  //           ),
+                  //           const Divider(
+                  //             thickness: 0.5,
+                  //             color: Colors.black,
+                  //           ),
+                  //           ProfileListTile(
+                  //             title: Localization.getHelpCenter(
+                  //                 widget.selectedLanguage),
+                  //             icon: Icons.live_help_outlined,
+                  //             onTap: () => Navigator.pushNamed(
+                  //                 context, AppRoutes.supportPage),
+                  //           ),
+                  //           const Divider(
+                  //             thickness: 0.5,
+                  //             color: Colors.black,
+                  //           ),
+                  //           ProfileListTile(
+                  //             title: Localization.getSetting(
+                  //                 widget.selectedLanguage),
+                  //             icon: Icons.settings,
+                  //             onTap: () => Navigator.pushNamed(
+                  //                 context, AppRoutes.settingMyProfile),
+                  //           ),
+                  //           const Divider(
+                  //             thickness: 0.5,
+                  //             color: Colors.black,
+                  //           ),
+                  //           Ink(
+                  //             height: 55,
+                  //             child: InkWell(
+                  //               onTap: _logout,
+                  //               borderRadius: AppDefaults.borderRadius,
+                  //               child: Padding(
+                  //                 padding: const EdgeInsets.all(8.0),
+                  //                 child: Row(
+                  //                   children: [
+                  //                     Container(
+                  //                       padding: const EdgeInsets.all(8),
+                  //                       decoration: BoxDecoration(
+                  //                         color: Colors.white,
+                  //                         borderRadius:
+                  //                             AppDefaults.borderRadius,
+                  //                       ),
+                  //                       child: Icon(
+                  //                         Icons.logout_rounded,
+                  //                         size: 20,
+                  //                         color: Colors.red,
+                  //                       ),
+                  //                     ),
+                  //                     const SizedBox(width: 16),
+                  //                     Text(
+                  //                       Localization.logout(
+                  //                           widget.selectedLanguage),
+                  //                       // 'Logout',
+                  //                       style: Theme.of(context)
+                  //                           .textTheme
+                  //                           .bodyLarge
+                  //                           ?.copyWith(color: Colors.red),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
                   // Padding(
                   //   padding: const EdgeInsets.all(AppDefaults.padding),
