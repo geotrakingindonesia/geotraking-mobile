@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/constants/constants.dart';
+import 'package:geotraking/core/models/member.dart';
 import 'package:geotraking/core/routes/app_routes.dart';
+import 'package:geotraking/core/services/auth/authenticate_service.dart';
 import 'package:geotraking/views/profile/components/profile_list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,10 +20,14 @@ class ProfileSettingPage extends StatefulWidget {
 class _ProfileSettingPageState extends State<ProfileSettingPage> {
   String _selectedLanguage = 'English';
 
+  final _authService = AuthService();
+  MemberUser? _user;
+
   @override
   void initState() {
     super.initState();
     _loadLanguageFromSharedPreferences();
+    _checkUser();
   }
 
   _loadLanguageFromSharedPreferences() async {
@@ -30,6 +36,15 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
     if (language != null) {
       setState(() {
         _selectedLanguage = language;
+      });
+    }
+  }
+
+  _checkUser() async {
+    final user = await _authService.getCurrentUser();
+    if (user != null) {
+      setState(() {
+        _user = user;
       });
     }
   }
@@ -67,6 +82,16 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
                       onTap: () => Navigator.pushNamed(
                           context, AppRoutes.legendInformation),
                     ),
+                    Divider(),
+                    if (_user?.isAdmin == 1) ...[
+                      ProfileListTile(
+                        title: 'Buat notif',
+                        icon: Icons.notifications,
+                        onTap: () => Navigator.pushNamed(
+                            context, AppRoutes.createNotificationPage),
+                      ),
+                      Divider(),
+                    ],
                   ],
                 ),
               ),

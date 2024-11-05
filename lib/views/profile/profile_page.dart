@@ -514,7 +514,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images/background_user.png'),
+                        // image: AssetImage('assets/images/background_user.png'),
+                        image: AssetImage('assets/images/card_user.jpg'),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(10)),

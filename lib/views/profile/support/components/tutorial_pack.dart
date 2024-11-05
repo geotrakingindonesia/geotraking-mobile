@@ -67,6 +67,10 @@ class _TutorialPackState extends State<TutorialPack> {
                   _selectedLanguage),
               pdfUrl: 'https://drive.google.com/file/d/14xtNLamirwIiRg_lKhxIq1tRW6lwUH7p/view?usp=sharing',
             ),
+            TutorialTilePdf(
+              title: 'Ais Cube Integration',
+              pdfUrl: 'https://drive.google.com/file/d/1Qm0Uekf7jNJd0UkOCNeAXJikELOrSgyl/view?usp=sharing',
+            ),
           ],
         ));
   }

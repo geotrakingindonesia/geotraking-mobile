@@ -100,16 +100,7 @@ class ProfileAdminMenuOptions extends StatelessWidget {
             //   icon: Icons.live_help_outlined,
             //   onTap: () => Navigator.pushNamed(context, AppRoutes.supportPage),
             // ),
-            const Divider(
-              thickness: 0.5,
-              color: Colors.black,
-            ),
-            ProfileListTile(
-              title: 'Buat notif',
-              icon: Icons.notifications,
-              onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.createNotificationPage),
-            ),
+            
             const Divider(
               thickness: 0.5,
               color: Colors.black,
