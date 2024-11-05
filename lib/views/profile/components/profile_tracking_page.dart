@@ -447,171 +447,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                         }).toList()
                       : [],
                 ),
-                // MarkerLayer(
-                //   markers: _kapalMemberList.map((kapalMember) {
-                //     bool isSelected = _selectedKapalMember == kapalMember;
-                //     return Marker(
-                //       width: 30,
-                //       height: 30,
-                //       point: LatLng(double.parse(kapalMember['lat']),
-                //           double.parse(kapalMember['lon'])),
-                //       child: GestureDetector(
-                //         onTap: () {
-                //           setState(() {
-                //             _selectedKapalMember = kapalMember;
-                //           });
-                //         },
-                //         child: InfoPopupWidget(
-                //           child: Stack(
-                //             children: [
-                //               MarkerImageWidget(
-                //                 timestamp: kapalMember['timestamp'],
-                //                 heading: kapalMember['heading'],
-                //               ),
-                //               if (isSelected)
-                //                 Positioned(
-                //                   left: 0,
-                //                   right: 0,
-                //                   top: 0,
-                //                   bottom: 0,
-                //                   child: Container(
-                //                     decoration: BoxDecoration(
-                //                       border: Border.all(
-                //                           color: Colors.red, width: 2),
-                //                       borderRadius: BorderRadius.circular(15),
-                //                     ),
-                //                   ),
-                //                 ),
-                //             ],
-                //           ),
-                //           customContent: () =>
-                //               VesselInfoWidget(vesselData: kapalMember),
-                //         ),
-                //       ),
-                //     );
-                //   }).toList(),
-                // ),
-                // MarkerLayer(
-                //   markers: _kapalMemberList.map((kapalMember) {
-                //     bool isSelected = _selectedKapalMember == kapalMember;
-
-                //     InfoPopupWidget infoPopup = InfoPopupWidget(
-                //       contentTitle: "ID: ${kapalMember['idfull']}",
-                //       child: Text('${kapalMember['nama_kapal']}'),
-                //     );
-                //     return Marker(
-                //       width: 30,
-                //       height: 30,
-                //       point: LatLng(double.parse(kapalMember['lat']),
-                //           double.parse(kapalMember['lon'])),
-                //       child: GestureDetector(
-                //         onTap: () {
-                //           setState(() {
-                //             _selectedKapalMember = kapalMember;
-                //           });
-                //           // showDialog(
-                //           //   context: context,
-                //           //   builder: (BuildContext context) {
-                //           //     return InfoPopupWidget(
-                //           //       contentTitle: "ID: ${kapalMember['idfull']}",
-                //           //       child: Text('${kapalMember['nama_kapal']}'),
-                //           //     );
-                //           //   },
-                //           // );
-                //         },
-                //         child: Stack(
-                //           children: [
-                //             MarkerImageWidget(
-                //               timestamp: kapalMember['timestamp'],
-                //               heading: kapalMember['heading'],
-                //             ),
-                //             if (isSelected)
-                //               Positioned(
-                //                 left: 0,
-                //                 right: 0,
-                //                 top: 0,
-                //                 bottom: 0,
-                //                 child: Container(
-                //                   decoration: BoxDecoration(
-                //                     border:
-                //                         Border.all(color: Colors.red, width: 2),
-                //                     borderRadius: BorderRadius.circular(15),
-                //                   ),
-                //                 ),
-                //               ),
-                //             if (isSelected)
-                //               Positioned(
-                //                 top: -40, // Adjust position as needed
-                //                 child: infoPopup,
-                //               ),
-                //           ],
-                //         ),
-                //       ),
-                //     );
-                //   }).toList(),
-                // ),
-
-                // MarkerLayer(
-                //   markers: _kapalMemberList.map((kapalMember) {
-                //     bool isSelected = _selectedKapalMember == kapalMember;
-                //     return Marker(
-                //       width: 30,
-                //       height: 30,
-                //       point: LatLng(double.parse(kapalMember['lat']),
-                //           double.parse(kapalMember['lon'])),
-                //       child: GestureDetector(
-                //         onTap: () {
-                //           setState(() {
-                //             _selectedKapalMember = kapalMember;
-                //           });
-                //         },
-                //         child: Stack(
-                //           children: [
-                //             MarkerImageWidget(
-                //               timestamp: kapalMember['timestamp'],
-                //               heading: kapalMember['heading'],
-                //             ),
-                //             if (isSelected)
-                //               Positioned(
-                //                 left: 0,
-                //                 right: 0,
-                //                 top: 0,
-                //                 bottom: 0,
-                //                 child: Container(
-                //                   decoration: BoxDecoration(
-                //                     border:
-                //                         Border.all(color: Colors.red, width: 2),
-                //                     borderRadius: BorderRadius.circular(15),
-                //                   ),
-                //                 ),
-                //               ),
-                //           ],
-                //         ),
-                //       ),
-                //     );
-                //   }).toList(),
-                // ),
-                // if (_selectedKapalMember != null)
-                //   MarkerLayer(
-                //     markers: _kapalMemberList.map((kapalMember) {
-                //       bool isSelected = _selectedKapalMember == kapalMember;
-                //       return Marker(
-                //         width: 30,
-                //         height: 30,
-                //         point: LatLng(double.parse(kapalMember['lat']),
-                //             double.parse(kapalMember['lon'])),
-                //         child: InfoPopupWidget(
-                //           child: MarkerImageWidget(
-                //             timestamp: kapalMember['timestamp'],
-                //             heading: kapalMember['heading'],
-                //           ),
-                //           customContent: () =>
-                //               VesselInfoWidget(vesselData: kapalMember),
-                //         ),
-                //       );
-                //     }).toList(),
-                //   ),
-
                 MarkerLayer(
                   markers: _kapalMemberList.map((kapalMember) {
                     bool isSelected = _selectedKapalMember == kapalMember;
@@ -626,8 +461,7 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedKapalMember =
-                                kapalMember; // Update the selected member
+                            _selectedKapalMember = kapalMember;
                           });
                         },
                         child: Stack(
@@ -636,7 +470,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                               timestamp: kapalMember['timestamp'],
                               heading: kapalMember['heading'],
                             ),
-                            // Circle around selected vessel
                             if (isSelected)
                               Container(
                                 decoration: BoxDecoration(
@@ -645,7 +478,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                               ),
-                            // Info popup
                             if (isSelected)
                               InfoPopupWidget(
                                 child: MarkerImageWidget(
@@ -661,104 +493,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                     );
                   }).toList(),
                 ),
-
-                // MarkerLayer(
-                //   markers: _kapalMemberList.map((kapalMember) {
-                //     bool isSelected = _selectedKapalMember == kapalMember;
-                //     return Marker(
-                //       width: 30,
-                //       height: 30,
-                //       point: LatLng(double.parse(kapalMember['lat']),
-                //           double.parse(kapalMember['lon'])),
-                //       child: InfoPopupWidget(
-                //         child: GestureDetector(
-                //           onTap: () {
-                //             setState(() {
-                //               _selectedKapalMember = kapalMember;
-                //             });
-                //           },
-                //           child: Stack(
-                //             children: [
-                //               MarkerImageWidget(
-                //                 timestamp: kapalMember['timestamp'],
-                //                 heading: kapalMember['heading'],
-                //               ),
-                //               if (isSelected)
-                //                 Positioned(
-                //                   left: 0,
-                //                   right: 0,
-                //                   top: 0,
-                //                   bottom: 0,
-                //                   child: Container(
-                //                     decoration: BoxDecoration(
-                //                       border: Border.all(
-                //                           color: Colors.red, width: 2),
-                //                       borderRadius: BorderRadius.circular(15),
-                //                     ),
-                //                   ),
-                //                 ),
-                //             ],
-                //           ),
-                //         ),
-                //         customContent: () =>
-                //             VesselInfoWidget(vesselData: _selectedKapalMember!),
-                //       ),
-                //     );
-                //   }).toList(),
-                // ),
-
-                // MarkerLayer(
-                //   markers: _kapalMemberList.map((kapalMember) {
-                //     bool isSelected = _selectedKapalMember == kapalMember;
-
-                //     return Marker(
-                //       width: 30,
-                //       height: 30,
-                //       point: LatLng(
-                //         double.parse(kapalMember['lat']),
-                //         double.parse(kapalMember['lon']),
-                //       ),
-                //       child: GestureDetector(
-                //         onTap: () {
-                //           setState(() {
-                //             _selectedKapalMember = kapalMember;
-                //           });
-                //         },
-                //         child: InfoPopupWidget(
-                //           child: Stack(
-                //             children: [
-                //               MarkerImageWidget(
-                //                 timestamp: kapalMember['timestamp'],
-                //                 heading: kapalMember['heading'],
-                //               ),
-                //               if (isSelected)
-                //                 Positioned(
-                //                   left: 0,
-                //                   right: 0,
-                //                   top: 0,
-                //                   bottom: 0,
-                //                   child: Container(
-                //                     decoration: BoxDecoration(
-                //                       border: Border.all(
-                //                           color: Colors.red, width: 2),
-                //                       borderRadius: BorderRadius.circular(15),
-                //                     ),
-                //                   ),
-                //                 ),
-                //             ],
-                //           ),
-                //           customContent: () {
-                //             if (_selectedKapalMember != null) {
-                //               return VesselInfoWidget(
-                //                   vesselData: _selectedKapalMember!);
-                //             }
-                //             return Container();
-                //           },
-                //         ),
-                //       ),
-                //     );
-                //   }).toList(),
-                // ),
 
                 if (_isShowNamaKapal)
                   MarkerLayer(

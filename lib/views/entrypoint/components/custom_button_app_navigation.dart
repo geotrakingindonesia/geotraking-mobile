@@ -217,10 +217,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return Container(
       color: Colors.transparent,
       child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
-        ),
+        // borderRadius: BorderRadius.only(
+        //   topLeft: Radius.circular(40),
+        //   topRight: Radius.circular(40),
+        // ),
         child: SizedBox(
           height: 70,
           child: BottomNavigationBar(

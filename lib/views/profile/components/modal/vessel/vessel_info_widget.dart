@@ -1,13 +1,15 @@
 // vessel_info_widget.dart
 
 import 'package:flutter/material.dart';
+import 'package:geotraking/core/components/formated_latlong.dart';
 import 'package:geotraking/core/components/info_row.dart';
 import 'package:intl/intl.dart';
 
 class VesselInfoWidget extends StatelessWidget {
   final Map<String, dynamic> vesselData;
+  final FormatedLatlong latlongFormatter = FormatedLatlong();
 
-  const VesselInfoWidget({Key? key, required this.vesselData}) : super(key: key);
+  VesselInfoWidget({Key? key, required this.vesselData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +77,9 @@ class VesselInfoWidget extends StatelessWidget {
             Divider(),
             buildInfoColumnInRow(
               'Latitude',
-              '${vesselData['lat']}',
+              '${latlongFormatter.formatLatitude(double.tryParse(vesselData['lat']))}',
               'Longitude',
-              '${vesselData['lon']}',
+              '${latlongFormatter.formatLongitude(double.tryParse(vesselData['lon']))}',
             ),
             Divider(),
             buildInfoColumnInRow(
