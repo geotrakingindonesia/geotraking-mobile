@@ -27,6 +27,7 @@ import 'package:geotraking/core/services/wpp_service.dart';
 import 'package:geotraking/views/profile/components/modal/airtime/airtime_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/traking/traking_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/vessel/vessel_data_modal.dart';
+import 'package:geotraking/views/profile/components/modal/vessel/vessel_info_widget.dart';
 import 'package:info_popup/info_popup.dart';
 import 'package:intl/intl.dart';
 // import 'package:info_popup/info_popup.dart';
@@ -446,6 +447,109 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                         }).toList()
                       : [],
                 ),
+                // MarkerLayer(
+                //   markers: _kapalMemberList.map((kapalMember) {
+                //     bool isSelected = _selectedKapalMember == kapalMember;
+                //     return Marker(
+                //       width: 30,
+                //       height: 30,
+                //       point: LatLng(double.parse(kapalMember['lat']),
+                //           double.parse(kapalMember['lon'])),
+                //       child: GestureDetector(
+                //         onTap: () {
+                //           setState(() {
+                //             _selectedKapalMember = kapalMember;
+                //           });
+                //         },
+                //         child: InfoPopupWidget(
+                //           child: Stack(
+                //             children: [
+                //               MarkerImageWidget(
+                //                 timestamp: kapalMember['timestamp'],
+                //                 heading: kapalMember['heading'],
+                //               ),
+                //               if (isSelected)
+                //                 Positioned(
+                //                   left: 0,
+                //                   right: 0,
+                //                   top: 0,
+                //                   bottom: 0,
+                //                   child: Container(
+                //                     decoration: BoxDecoration(
+                //                       border: Border.all(
+                //                           color: Colors.red, width: 2),
+                //                       borderRadius: BorderRadius.circular(15),
+                //                     ),
+                //                   ),
+                //                 ),
+                //             ],
+                //           ),
+                //           customContent: () =>
+                //               VesselInfoWidget(vesselData: kapalMember),
+                //         ),
+                //       ),
+                //     );
+                //   }).toList(),
+                // ),
+                // MarkerLayer(
+                //   markers: _kapalMemberList.map((kapalMember) {
+                //     bool isSelected = _selectedKapalMember == kapalMember;
+
+                //     InfoPopupWidget infoPopup = InfoPopupWidget(
+                //       contentTitle: "ID: ${kapalMember['idfull']}",
+                //       child: Text('${kapalMember['nama_kapal']}'),
+                //     );
+                //     return Marker(
+                //       width: 30,
+                //       height: 30,
+                //       point: LatLng(double.parse(kapalMember['lat']),
+                //           double.parse(kapalMember['lon'])),
+                //       child: GestureDetector(
+                //         onTap: () {
+                //           setState(() {
+                //             _selectedKapalMember = kapalMember;
+                //           });
+                //           // showDialog(
+                //           //   context: context,
+                //           //   builder: (BuildContext context) {
+                //           //     return InfoPopupWidget(
+                //           //       contentTitle: "ID: ${kapalMember['idfull']}",
+                //           //       child: Text('${kapalMember['nama_kapal']}'),
+                //           //     );
+                //           //   },
+                //           // );
+                //         },
+                //         child: Stack(
+                //           children: [
+                //             MarkerImageWidget(
+                //               timestamp: kapalMember['timestamp'],
+                //               heading: kapalMember['heading'],
+                //             ),
+                //             if (isSelected)
+                //               Positioned(
+                //                 left: 0,
+                //                 right: 0,
+                //                 top: 0,
+                //                 bottom: 0,
+                //                 child: Container(
+                //                   decoration: BoxDecoration(
+                //                     border:
+                //                         Border.all(color: Colors.red, width: 2),
+                //                     borderRadius: BorderRadius.circular(15),
+                //                   ),
+                //                 ),
+                //               ),
+                //             if (isSelected)
+                //               Positioned(
+                //                 top: -40, // Adjust position as needed
+                //                 child: infoPopup,
+                //               ),
+                //           ],
+                //         ),
+                //       ),
+                //     );
+                //   }).toList(),
+                // ),
                 MarkerLayer(
                   markers: _kapalMemberList.map((kapalMember) {
                     bool isSelected = _selectedKapalMember == kapalMember;
@@ -460,174 +564,150 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                             _selectedKapalMember = kapalMember;
                           });
                         },
-                        child: InfoPopupWidget(
-                          child: Stack(
-                            children: [
-                              MarkerImageWidget(
-                                timestamp: kapalMember['timestamp'],
-                                heading: kapalMember['heading'],
-                              ),
-                              if (isSelected)
-                                Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  top: 0,
-                                  bottom: 0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.red, width: 2),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
+                        child: Stack(
+                          children: [
+                            MarkerImageWidget(
+                              timestamp: kapalMember['timestamp'],
+                              heading: kapalMember['heading'],
+                            ),
+                            if (isSelected)
+                              Positioned(
+                                left: 0,
+                                right: 0,
+                                top: 0,
+                                bottom: 0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.red, width: 2),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                 ),
-                            ],
-                          ),
-                          // customContent: () => Container(
-                          //   padding: EdgeInsets.all(8),
-                          //   width: 250,
-                          //   height: 150,
-                          //   decoration: BoxDecoration(
-                          //     color: Colors.white,
-                          //     borderRadius: BorderRadius.circular(10),
-                          //   ),
-                          //   child: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       buildInfoRow(
-                          //           '${kapalMember['nama_kapal']} (${kapalMember['idfull']})', ''),
-                          //       Divider(),
-                          //       buildInfoRow(
-                          //           'SN/IMEI', ': ${kapalMember['sn']}/${kapalMember['imei']}'),
-                          //       Divider(),
-                          //       buildInfoRow(
-                          //           'Vessel type', ': ${kapalMember['type']}'),
-                          //       Divider(),
-                          //       buildInfoRow(
-                          //           'Category', ': ${kapalMember['kategori']}'),
-                          //       Divider(),
-                          //       buildInfoRow(
-                          //           'Owner', ': ${kapalMember['custamer']}'),
-                          //       Divider(),
-                          //       buildInfoRow('Received date',
-                          //           ': ${kapalMember['timestamp']}'),
-                          //       Divider(),
-                          //       buildInfoRow('Broadcast date',
-                          //           ': ${kapalMember['broadcast']}'),
-                          //       Divider(),
-                          //       buildInfoRow(
-                          //           'LatLong', ': ${kapalMember['lat']}, ${kapalMember['lon']}'),
-                          //     ],
-                          //   ),
-                          // ),
-                          customContent: () => Container(
-                            padding: EdgeInsets.all(8),
-                            width: 250,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  buildInfoRow('${kapalMember['nama_kapal']}',
-                                      '(${kapalMember['idfull']})'),
-                                  Divider(),
-                                  buildInfoColumnInRow(
-                                      'SN',
-                                      '${kapalMember['sn']}',
-                                      'IMEI',
-                                      '${kapalMember['imei']}'),
-                                  Divider(),
-                                  buildInfoColumnInRow(
-                                      'Vessel type',
-                                      '${kapalMember['type']}',
-                                      'Category',
-                                      '${kapalMember['kategori']}'),
-                                  Divider(),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Owner:',
-                                              style: TextStyle(fontSize: 10),
-                                            ),
-                                            Text(
-                                              '${kapalMember['custamer']}',
-                                              style: TextStyle(fontSize: 12),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(),
-                                  buildInfoColumnInRow(
-                                      'Received date',
-                                      '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(kapalMember['timestamp']))}',
-                                      'Broadcast date',
-                                      '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(kapalMember['broadcast']))}'),
-                                  Divider(),
-                                  buildInfoColumnInRow(
-                                      'Airtime Start',
-                                      '${DateFormat('dd MMM yyyy').format(DateTime.parse(kapalMember['atp_start']))}',
-                                      'Airtime End',
-                                      '${DateFormat('dd MMM yyyy').format(DateTime.parse(kapalMember['atp_end']))}'),
-                                  Divider(),
-                                  buildInfoColumnInRow(
-                                      'Latitude',
-                                      '${kapalMember['lat']}',
-                                      'Longitude',
-                                      '${kapalMember['lon']}'),
-                                  Divider(),
-                                  buildInfoColumnInRow(
-                                      'Power source',
-                                      '${kapalMember['powerstatus']}',
-                                      'Power value',
-                                      '${kapalMember['externalvoltagelon'] ?? '-'} kwh'),
-                                  Divider(),
-                                  buildInfoColumnInRow(
-                                      'Heading',
-                                      '${kapalMember['heading']}°',
-                                      'Speed',
-                                      '${kapalMember['speed_kn']} knots'),
-                                ],
                               ),
-                            ),
-                          ),
+                          ],
                         ),
-                        // child: Stack(
-                        //   children: [
-                        //     MarkerImageWidget(
-                        //       timestamp: kapalMember['timestamp'],
-                        //       heading: kapalMember['heading'],
-                        //     ),
-                        //     if (isSelected)
-                        //       Positioned(
-                        //         left: 0,
-                        //         right: 0,
-                        //         top: 0,
-                        //         bottom: 0,
-                        //         child: Container(
-                        //           decoration: BoxDecoration(
-                        //             border:
-                        //                 Border.all(color: Colors.red, width: 2),
-                        //             borderRadius: BorderRadius.circular(15),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //   ],
-                        // ),
                       ),
                     );
                   }).toList(),
                 ),
+                if (_selectedKapalMember != null)
+                  MarkerLayer(
+                    markers: _kapalMemberList.map((kapalMember) {
+                      bool isSelected = _selectedKapalMember == kapalMember;
+                      return Marker(
+                        width: 30,
+                        height: 30,
+                        point: LatLng(double.parse(kapalMember['lat']),
+                            double.parse(kapalMember['lon'])),
+                        child: InfoPopupWidget(
+                          child: MarkerImageWidget(
+                            timestamp: kapalMember['timestamp'],
+                            heading: kapalMember['heading'],
+                          ),
+                          customContent: () =>
+                              VesselInfoWidget(vesselData: kapalMember),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                // MarkerLayer(
+                //   markers: _kapalMemberList.map((kapalMember) {
+                //     bool isSelected = _selectedKapalMember == kapalMember;
+                //     return Marker(
+                //       width: 30,
+                //       height: 30,
+                //       point: LatLng(double.parse(kapalMember['lat']),
+                //           double.parse(kapalMember['lon'])),
+                //       child: InfoPopupWidget(
+                //         child: GestureDetector(
+                //           onTap: () {
+                //             setState(() {
+                //               _selectedKapalMember = kapalMember;
+                //             });
+                //           },
+                //           child: Stack(
+                //             children: [
+                //               MarkerImageWidget(
+                //                 timestamp: kapalMember['timestamp'],
+                //                 heading: kapalMember['heading'],
+                //               ),
+                //               if (isSelected)
+                //                 Positioned(
+                //                   left: 0,
+                //                   right: 0,
+                //                   top: 0,
+                //                   bottom: 0,
+                //                   child: Container(
+                //                     decoration: BoxDecoration(
+                //                       border: Border.all(
+                //                           color: Colors.red, width: 2),
+                //                       borderRadius: BorderRadius.circular(15),
+                //                     ),
+                //                   ),
+                //                 ),
+                //             ],
+                //           ),
+                //         ),
+                //         customContent: () =>
+                //             VesselInfoWidget(vesselData: _selectedKapalMember!),
+                //       ),
+                //     );
+                //   }).toList(),
+                // ),
+
+                // MarkerLayer(
+                //   markers: _kapalMemberList.map((kapalMember) {
+                //     bool isSelected = _selectedKapalMember == kapalMember;
+
+                //     return Marker(
+                //       width: 30,
+                //       height: 30,
+                //       point: LatLng(
+                //         double.parse(kapalMember['lat']),
+                //         double.parse(kapalMember['lon']),
+                //       ),
+                //       child: GestureDetector(
+                //         onTap: () {
+                //           setState(() {
+                //             _selectedKapalMember = kapalMember;
+                //           });
+                //         },
+                //         child: InfoPopupWidget(
+                //           child: Stack(
+                //             children: [
+                //               MarkerImageWidget(
+                //                 timestamp: kapalMember['timestamp'],
+                //                 heading: kapalMember['heading'],
+                //               ),
+                //               if (isSelected)
+                //                 Positioned(
+                //                   left: 0,
+                //                   right: 0,
+                //                   top: 0,
+                //                   bottom: 0,
+                //                   child: Container(
+                //                     decoration: BoxDecoration(
+                //                       border: Border.all(
+                //                           color: Colors.red, width: 2),
+                //                       borderRadius: BorderRadius.circular(15),
+                //                     ),
+                //                   ),
+                //                 ),
+                //             ],
+                //           ),
+                //           customContent: () {
+                //             if (_selectedKapalMember != null) {
+                //               return VesselInfoWidget(
+                //                   vesselData: _selectedKapalMember!);
+                //             }
+                //             return Container();
+                //           },
+                //         ),
+                //       ),
+                //     );
+                //   }).toList(),
+                // ),
+
                 if (_isShowNamaKapal)
                   MarkerLayer(
                     markers: _kapalMemberList.map((kapalMember) {
