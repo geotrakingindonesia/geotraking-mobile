@@ -9,14 +9,16 @@ import 'package:geotraking/views/profile/components/profile_list_tile.dart';
 class ProfileAdminMenuOptions extends StatelessWidget {
   final String selectedLanguage;
   const ProfileAdminMenuOptions({
-    Key? key, required this.selectedLanguage,
+    Key? key,
+    required this.selectedLanguage,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+        padding:
+            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
         child: Column(
           children: [
             ProfileListTile(
@@ -100,7 +102,7 @@ class ProfileAdminMenuOptions extends StatelessWidget {
             //   icon: Icons.live_help_outlined,
             //   onTap: () => Navigator.pushNamed(context, AppRoutes.supportPage),
             // ),
-            
+
             const Divider(
               thickness: 0.5,
               color: Colors.black,
@@ -141,15 +143,7 @@ class ProfileAdminMenuOptions extends StatelessWidget {
               thickness: 0.5,
               color: Colors.black,
             ),
-            ProfileListTile(
-              title: Localization.getHelpCenter(selectedLanguage),
-              icon: Icons.live_help_outlined,
-              onTap: () => Navigator.pushNamed(context, AppRoutes.supportPage),
-            ),
-            const Divider(
-              thickness: 0.5,
-              color: Colors.black,
-            ),
+
             ProfileListTile(
               title: Localization.getSetting(selectedLanguage),
               icon: Icons.settings,

@@ -23,6 +23,8 @@ import 'package:geotraking/views/home/drawer/drawer_page.dart';
 import 'package:geotraking/views/profile/apn/profile_kapal_apn_page.dart';
 import 'package:geotraking/views/profile/apn/profile_tracking_apn_page.dart';
 import 'package:geotraking/views/profile/components/legend_information.dart';
+import 'package:geotraking/views/profile/components/map_preferences.dart';
+import 'package:geotraking/views/profile/components/map_preferences/vessel_name_preferences.dart';
 import 'package:geotraking/views/profile/components/privacy_policy.dart';
 // import 'package:geotraking/views/profile/components/profile_change_language_page.dart';
 import 'package:geotraking/views/profile/components/profile_change_password_page.dart';
@@ -186,6 +188,12 @@ class RouteGenerator {
       
       case AppRoutes.privacyPolice:
         return CupertinoPageRoute(builder: (_) => PrivacyPolicy());
+
+      case AppRoutes.mapPreferences:
+        return CupertinoPageRoute(builder: (_) => MapPreferences());
+
+      case AppRoutes.showNameOfVessel:
+        return CupertinoPageRoute(builder: (_) => VesselName());
 
 
 

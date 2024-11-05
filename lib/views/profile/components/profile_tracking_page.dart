@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/card_vessel_color.dart';
+import 'package:geotraking/core/components/info_row.dart';
 import 'package:geotraking/core/components/loading_map.dart';
 // import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/components/map_config.dart';
@@ -26,6 +27,8 @@ import 'package:geotraking/core/services/wpp_service.dart';
 import 'package:geotraking/views/profile/components/modal/airtime/airtime_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/traking/traking_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/vessel/vessel_data_modal.dart';
+import 'package:info_popup/info_popup.dart';
+import 'package:intl/intl.dart';
 // import 'package:info_popup/info_popup.dart';
 // import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
@@ -457,98 +460,170 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                             _selectedKapalMember = kapalMember;
                           });
                         },
-                        // child: InfoPopupWidget(
-                        //   child: Stack(
-                        //     children: [
-                        //       MarkerImageWidget(
-                        //         timestamp: kapalMember['timestamp'],
-                        //         heading: kapalMember['heading'],
-                        //       ),
-                        //       if (isSelected)
-                        //         Positioned(
-                        //           left: 0,
-                        //           right: 0,
-                        //           top: 0,
-                        //           bottom: 0,
-                        //           child: Container(
-                        //             decoration: BoxDecoration(
-                        //               border: Border.all(
-                        //                   color: Colors.red, width: 2),
-                        //               borderRadius: BorderRadius.circular(15),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //     ],
-                        //   ),
-                        //   customContent: () => Container(
-                        //     padding: EdgeInsets.all(8),
-                        //     width: 290,
-                        //     decoration: BoxDecoration(
-                        //       color: Colors.white,
-                        //       borderRadius: BorderRadius.circular(10),
-                        //     ),
-                        //     child: DefaultTabController(
-                        //       length: 4, // Number of tabs
-                        //       child: Column(
-                        //         children: [
-                        //           TabBar(
-                        //             tabs: [
-                        //               Tab(text: 'Vessel'),
-                        //               Tab(text: 'Tracking'),
-                        //               Tab(text: 'Airtime'),
-                        //               Tab(text: 'Close'),
-                        //             ],
-                        //           ),
-                        //           Expanded(
-                        //             child: TabBarView(
-                        //               children: [
-                        //                 // Content for Tracking tab
-                        //                 Center(
-                        //                   child: Text('Tracking Information'),
-                        //                 ),
-
-                        //                 // Content for Airtime tab
-                        //                 Center(
-                        //                   child: Text('Airtime Information'),
-                        //                 ),
-
-                        //                 // Content for Close tab
-                        //                 Center(
-                        //                   child: Text('Close the popup'),
-                        //                 ),
-                        //                 Center(
-                        //                   child: Text('Close the popup'),
-                        //                 ),
-                        //               ],
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        child: Stack(
-                          children: [
-                            MarkerImageWidget(
-                              timestamp: kapalMember['timestamp'],
-                              heading: kapalMember['heading'],
-                            ),
-                            if (isSelected)
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                top: 0,
-                                bottom: 0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.red, width: 2),
-                                    borderRadius: BorderRadius.circular(15),
+                        child: InfoPopupWidget(
+                          child: Stack(
+                            children: [
+                              MarkerImageWidget(
+                                timestamp: kapalMember['timestamp'],
+                                heading: kapalMember['heading'],
+                              ),
+                              if (isSelected)
+                                Positioned(
+                                  left: 0,
+                                  right: 0,
+                                  top: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.red, width: 2),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
                                   ),
                                 ),
+                            ],
+                          ),
+                          // customContent: () => Container(
+                          //   padding: EdgeInsets.all(8),
+                          //   width: 250,
+                          //   height: 150,
+                          //   decoration: BoxDecoration(
+                          //     color: Colors.white,
+                          //     borderRadius: BorderRadius.circular(10),
+                          //   ),
+                          //   child: Column(
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: [
+                          //       buildInfoRow(
+                          //           '${kapalMember['nama_kapal']} (${kapalMember['idfull']})', ''),
+                          //       Divider(),
+                          //       buildInfoRow(
+                          //           'SN/IMEI', ': ${kapalMember['sn']}/${kapalMember['imei']}'),
+                          //       Divider(),
+                          //       buildInfoRow(
+                          //           'Vessel type', ': ${kapalMember['type']}'),
+                          //       Divider(),
+                          //       buildInfoRow(
+                          //           'Category', ': ${kapalMember['kategori']}'),
+                          //       Divider(),
+                          //       buildInfoRow(
+                          //           'Owner', ': ${kapalMember['custamer']}'),
+                          //       Divider(),
+                          //       buildInfoRow('Received date',
+                          //           ': ${kapalMember['timestamp']}'),
+                          //       Divider(),
+                          //       buildInfoRow('Broadcast date',
+                          //           ': ${kapalMember['broadcast']}'),
+                          //       Divider(),
+                          //       buildInfoRow(
+                          //           'LatLong', ': ${kapalMember['lat']}, ${kapalMember['lon']}'),
+                          //     ],
+                          //   ),
+                          // ),
+                          customContent: () => Container(
+                            padding: EdgeInsets.all(8),
+                            width: 250,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  buildInfoRow('${kapalMember['nama_kapal']}',
+                                      '(${kapalMember['idfull']})'),
+                                  Divider(),
+                                  buildInfoColumnInRow(
+                                      'SN',
+                                      '${kapalMember['sn']}',
+                                      'IMEI',
+                                      '${kapalMember['imei']}'),
+                                  Divider(),
+                                  buildInfoColumnInRow(
+                                      'Vessel type',
+                                      '${kapalMember['type']}',
+                                      'Category',
+                                      '${kapalMember['kategori']}'),
+                                  Divider(),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Owner:',
+                                              style: TextStyle(fontSize: 10),
+                                            ),
+                                            Text(
+                                              '${kapalMember['custamer']}',
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(),
+                                  buildInfoColumnInRow(
+                                      'Received date',
+                                      '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(kapalMember['timestamp']))}',
+                                      'Broadcast date',
+                                      '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(kapalMember['broadcast']))}'),
+                                  Divider(),
+                                  buildInfoColumnInRow(
+                                      'Airtime Start',
+                                      '${DateFormat('dd MMM yyyy').format(DateTime.parse(kapalMember['atp_start']))}',
+                                      'Airtime End',
+                                      '${DateFormat('dd MMM yyyy').format(DateTime.parse(kapalMember['atp_end']))}'),
+                                  Divider(),
+                                  buildInfoColumnInRow(
+                                      'Latitude',
+                                      '${kapalMember['lat']}',
+                                      'Longitude',
+                                      '${kapalMember['lon']}'),
+                                  Divider(),
+                                  buildInfoColumnInRow(
+                                      'Power source',
+                                      '${kapalMember['powerstatus']}',
+                                      'Power value',
+                                      '${kapalMember['externalvoltagelon'] ?? '-'} kwh'),
+                                  Divider(),
+                                  buildInfoColumnInRow(
+                                      'Heading',
+                                      '${kapalMember['heading']}°',
+                                      'Speed',
+                                      '${kapalMember['speed_kn']} knots'),
+                                ],
                               ),
-                          ],
+                            ),
+                          ),
                         ),
+                        // child: Stack(
+                        //   children: [
+                        //     MarkerImageWidget(
+                        //       timestamp: kapalMember['timestamp'],
+                        //       heading: kapalMember['heading'],
+                        //     ),
+                        //     if (isSelected)
+                        //       Positioned(
+                        //         left: 0,
+                        //         right: 0,
+                        //         top: 0,
+                        //         bottom: 0,
+                        //         child: Container(
+                        //           decoration: BoxDecoration(
+                        //             border:
+                        //                 Border.all(color: Colors.red, width: 2),
+                        //             borderRadius: BorderRadius.circular(15),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //   ],
+                        // ),
                       ),
                     );
                   }).toList(),

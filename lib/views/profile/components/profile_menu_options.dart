@@ -92,15 +92,15 @@ class _ProfileMemberMenuOptionsState extends State<ProfileMemberMenuOptions> {
             thickness: 0.5,
             color: Colors.black,
           ),
-          ProfileListTile(
-            title: Localization.getHelpCenter(widget.selectedLanguage),
-            icon: Icons.live_help_outlined,
-            onTap: () => Navigator.pushNamed(context, AppRoutes.supportPage),
-          ),
-          const Divider(
-            thickness: 0.5,
-            color: Colors.black,
-          ),
+          // ProfileListTile(
+          //   title: Localization.getHelpCenter(widget.selectedLanguage),
+          //   icon: Icons.live_help_outlined,
+          //   onTap: () => Navigator.pushNamed(context, AppRoutes.supportPage),
+          // ),
+          // const Divider(
+          //   thickness: 0.5,
+          //   color: Colors.black,
+          // ),
           ProfileListTile(
             title: Localization.getSetting(widget.selectedLanguage),
             icon: Icons.settings,

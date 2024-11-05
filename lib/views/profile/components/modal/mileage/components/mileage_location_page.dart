@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/formated_latlong.dart';
+import 'package:geotraking/core/components/info_row.dart';
 import 'package:geotraking/core/components/map_config.dart';
 import 'package:geotraking/core/components/map_tool.dart';
 import 'package:info_popup/info_popup.dart';
@@ -35,26 +36,6 @@ class _MileageLocationPageState extends State<MileageLocationPage> {
         return LatLng(lat, lng);
       }).toList() ??
       [];
-
-  Widget _buildInfoRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: TextStyle(fontSize: 12),
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: TextStyle(fontSize: 12),
-          ),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,18 +120,18 @@ class _MileageLocationPageState extends State<MileageLocationPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildInfoRow('Received Date', ': ${received}'),
+                                buildInfoRow('Received Date', ': ${received}'),
                                 Divider(),
-                                _buildInfoRow('Latitude',
+                                buildInfoRow('Latitude',
                                     ': ${formatterLatlong.formatLatitude(lat)}'),
                                 Divider(),
-                                _buildInfoRow('Longitude',
+                                buildInfoRow('Longitude',
                                     ': ${formatterLatlong.formatLongitude(lng)}'),
                                 Divider(),
-                                _buildInfoRow('Heading',
+                                buildInfoRow('Heading',
                                     ': ${heading.toStringAsFixed(2)}°'),
                                 Divider(),
-                                _buildInfoRow('Speed',
+                                buildInfoRow('Speed',
                                     ': ${speedKn.toStringAsFixed(2)} Knots'),
                               ],
                             ),

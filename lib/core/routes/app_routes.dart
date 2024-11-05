@@ -83,6 +83,8 @@ class AppRoutes {
 
 
   static const privacyPolice = '/privacyPolice';
+  static const mapPreferences = '/mapPreferences';
+  static const showNameOfVessel = '/showNameOfVessel';
   // static const consolePage = '/consolePage';
 
 }
