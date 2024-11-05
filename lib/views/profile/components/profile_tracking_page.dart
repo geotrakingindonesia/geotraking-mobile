@@ -550,18 +550,84 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                 //     );
                 //   }).toList(),
                 // ),
+
+                // MarkerLayer(
+                //   markers: _kapalMemberList.map((kapalMember) {
+                //     bool isSelected = _selectedKapalMember == kapalMember;
+                //     return Marker(
+                //       width: 30,
+                //       height: 30,
+                //       point: LatLng(double.parse(kapalMember['lat']),
+                //           double.parse(kapalMember['lon'])),
+                //       child: GestureDetector(
+                //         onTap: () {
+                //           setState(() {
+                //             _selectedKapalMember = kapalMember;
+                //           });
+                //         },
+                //         child: Stack(
+                //           children: [
+                //             MarkerImageWidget(
+                //               timestamp: kapalMember['timestamp'],
+                //               heading: kapalMember['heading'],
+                //             ),
+                //             if (isSelected)
+                //               Positioned(
+                //                 left: 0,
+                //                 right: 0,
+                //                 top: 0,
+                //                 bottom: 0,
+                //                 child: Container(
+                //                   decoration: BoxDecoration(
+                //                     border:
+                //                         Border.all(color: Colors.red, width: 2),
+                //                     borderRadius: BorderRadius.circular(15),
+                //                   ),
+                //                 ),
+                //               ),
+                //           ],
+                //         ),
+                //       ),
+                //     );
+                //   }).toList(),
+                // ),
+                // if (_selectedKapalMember != null)
+                //   MarkerLayer(
+                //     markers: _kapalMemberList.map((kapalMember) {
+                //       bool isSelected = _selectedKapalMember == kapalMember;
+                //       return Marker(
+                //         width: 30,
+                //         height: 30,
+                //         point: LatLng(double.parse(kapalMember['lat']),
+                //             double.parse(kapalMember['lon'])),
+                //         child: InfoPopupWidget(
+                //           child: MarkerImageWidget(
+                //             timestamp: kapalMember['timestamp'],
+                //             heading: kapalMember['heading'],
+                //           ),
+                //           customContent: () =>
+                //               VesselInfoWidget(vesselData: kapalMember),
+                //         ),
+                //       );
+                //     }).toList(),
+                //   ),
+
                 MarkerLayer(
                   markers: _kapalMemberList.map((kapalMember) {
                     bool isSelected = _selectedKapalMember == kapalMember;
+
                     return Marker(
                       width: 30,
                       height: 30,
-                      point: LatLng(double.parse(kapalMember['lat']),
-                          double.parse(kapalMember['lon'])),
+                      point: LatLng(
+                        double.parse(kapalMember['lat']),
+                        double.parse(kapalMember['lon']),
+                      ),
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedKapalMember = kapalMember;
+                            _selectedKapalMember =
+                                kapalMember; // Update the selected member
                           });
                         },
                         child: Stack(
@@ -570,19 +636,24 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                               timestamp: kapalMember['timestamp'],
                               heading: kapalMember['heading'],
                             ),
+                            // Circle around selected vessel
                             if (isSelected)
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                top: 0,
-                                bottom: 0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.red, width: 2),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.red, width: 2),
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
+                              ),
+                            // Info popup
+                            if (isSelected)
+                              InfoPopupWidget(
+                                child: MarkerImageWidget(
+                                  timestamp: kapalMember['timestamp'],
+                                  heading: kapalMember['heading'],
+                                ),
+                                customContent: () =>
+                                    VesselInfoWidget(vesselData: kapalMember),
                               ),
                           ],
                         ),
@@ -590,26 +661,7 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                     );
                   }).toList(),
                 ),
-                if (_selectedKapalMember != null)
-                  MarkerLayer(
-                    markers: _kapalMemberList.map((kapalMember) {
-                      bool isSelected = _selectedKapalMember == kapalMember;
-                      return Marker(
-                        width: 30,
-                        height: 30,
-                        point: LatLng(double.parse(kapalMember['lat']),
-                            double.parse(kapalMember['lon'])),
-                        child: InfoPopupWidget(
-                          child: MarkerImageWidget(
-                            timestamp: kapalMember['timestamp'],
-                            heading: kapalMember['heading'],
-                          ),
-                          customContent: () =>
-                              VesselInfoWidget(vesselData: kapalMember),
-                        ),
-                      );
-                    }).toList(),
-                  ),
+
                 // MarkerLayer(
                 //   markers: _kapalMemberList.map((kapalMember) {
                 //     bool isSelected = _selectedKapalMember == kapalMember;
@@ -860,34 +912,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black38,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.location_history_rounded,
-                          size: 20,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return VesselDataModal(
-                                  vesselData: _selectedKapalMember!);
-                            },
-                            constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width,
-                                maxHeight:
-                                    MediaQuery.of(context).size.height / 3),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 2),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.black38,
