@@ -34,7 +34,7 @@ class _AnimatedTrakingState extends State<AnimatedTraking> with TickerProviderSt
 
     // Mulai animasi setelah 1 detik
     Future.delayed(const Duration(seconds: 1)).then((value) {
-      animateCar(
+      animateVessel(
         37.42796133580664,
         -122.085749655962,
         37.428714,
@@ -96,7 +96,7 @@ class _AnimatedTrakingState extends State<AnimatedTraking> with TickerProviderSt
         .asUint8List();
   }
 
-  animateCar(
+  animateVessel(
     double fromLat,
     double fromLong,
     double toLat,

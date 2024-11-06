@@ -535,8 +535,8 @@ class _EntryPointUIState extends State<EntryPointUI> {
             [
               HomePage(selectedLanguage: _selectedLanguage),
               ProductPage(),
-              ChatPage(),
-              // AnimatedTraking(),
+              // ChatPage(),
+              AnimatedTraking(),
               if (_isLoggedIn)
                 _user!.isAdmin == 0
                     ? ProfileTrackingPage()

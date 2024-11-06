@@ -75,6 +75,20 @@ class _MapPreferencesState extends State<MapPreferences> {
                           context, AppRoutes.legendInformation),
                     ),
                     Divider(),
+                    ProfileListTile(
+                      title: 'Timezone',
+                      icon: Icons.info,
+                      onTap: () => Navigator.pushNamed(
+                          context, AppRoutes.legendInformation),
+                    ),
+                    Divider(),
+                    ProfileListTile(
+                      title: 'Geofencing',
+                      icon: Icons.info,
+                      onTap: () => Navigator.pushNamed(
+                          context, AppRoutes.legendInformation),
+                    ),
+                    Divider(),
                   ],
                 ),
               ),
