@@ -564,8 +564,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
                         // initialLon:
                         //     double.parse(widget.lon!), // Starting longitude
                       )
-                    : 
-                    FlutterMap(
+                    : FlutterMap(
                         mapController: mapController,
                         options: MapOptions(
                           initialCenter: LatLng(double.parse(widget.lat!),
@@ -624,18 +623,48 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (_polylinePointsTraking.isNotEmpty)
-                        FloatingActionButton(
-                          onPressed: isPlaybackActive ? null : _startPlayback,
-                          child: Icon(Icons.play_arrow),
-                          tooltip: 'Start Playback',
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black38,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              isPlaybackActive ? Icons.stop : Icons.play_arrow,
+                              // isPlaybackActive ? Icons.stop : Icons.play_arrow,
+                              color:
+                                  isPlaybackActive ? Colors.red : Colors.white,
+                            ),
+                            tooltip: isPlaybackActive
+                                ? 'Stop Playback'
+                                : 'Start Playback',
+                            onPressed: isPlaybackActive
+                                ? _stopPlayback
+                                : _startPlayback,
+                          ),
                         ),
-                      SizedBox(width: 10),
-                      if (_polylinePointsTraking.isNotEmpty)
-                        FloatingActionButton(
-                          onPressed: isPlaybackActive ? _stopPlayback : null,
-                          child: Icon(Icons.stop),
-                          tooltip: 'Stop Playback',
-                        ),
+                      // FloatingActionButton(
+                      //   onPressed:
+                      //       isPlaybackActive ? _stopPlayback : _startPlayback,
+                      //   child: Icon(
+                      //       isPlaybackActive ? Icons.stop : Icons.play_arrow),
+                      //   tooltip: isPlaybackActive
+                      //       ? 'Stop Playback'
+                      //       : 'Start Playback',
+                      // ),
+
+                      // FloatingActionButton(
+                      //   onPressed: isPlaybackActive ? null : _startPlayback,
+                      //   child: Icon(Icons.play_arrow),
+                      //   tooltip: 'Start Playback',
+                      // ),
+                      // SizedBox(width: 10),
+                      // if (_polylinePointsTraking.isNotEmpty)
+                      //   FloatingActionButton(
+                      //     onPressed: isPlaybackActive ? _stopPlayback : null,
+                      //     child: Icon(Icons.stop),
+                      //     tooltip: 'Stop Playback',
+                      //   ),
 
                       // if (_polylinePointsTraking.isNotEmpty)
                       //   Container(
@@ -644,21 +673,30 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
                       //       borderRadius: BorderRadius.circular(5),
                       //     ),
                       //     child: IconButton(
-                      //       icon: Icon(isPlaybackActive
-                      //           ? Icons.stop
-                      //           : Icons.play_arrow),
-                      //       color: isPlaybackActive ? Colors.red : Colors.white,
-                      //       // onPressed: isPlaybackActive ? null : _startPlayback,
+                      //       icon: Icon(
+                      //         isPlaybackActive ? Icons.stop : Icons.play_arrow,
+                      //         // isPlaybackActive ? Icons.stop : Icons.play_arrow,
+                      //         color:
+                      //             isPlaybackActive ? Colors.red : Colors.white,
+                      //       ),
+                      //       tooltip: isPlaybackActive
+                      //           ? 'Stop Playback'
+                      //           : 'Start Playback',
                       //       onPressed: () {
-                      //         if (isPlaybackActive) {
-                      //           _startPlayback();
-                      //         } else {
-                      //           null;
-                      //           // _startMovingMarkers();
-                      //         }
+                      //         isPlaybackActive ? _stopPlayback : _startPlayback;
+
+                      //         // if (isPlaybackActive) {
+                      //         //   _stopPlayback();
+                      //         // } else {
+                      //         //   _startPlayback();
+                      //         // }
+                      //         // setState(() {
+                      //         // isPlaybackActive = !isPlaybackActive;
+                      //         // });
                       //       },
                       //     ),
                       //   ),
+
                       // // if (_isPlaying) SizedBox(height: 2),
                       // // if (_isPlaying)
                       // //   Container(
