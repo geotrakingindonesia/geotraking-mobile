@@ -68,13 +68,13 @@ class _PreferencesToolState extends State<PreferencesTool> {
                     //       context, AppRoutes.mapPreferences),
                     // ),
                     // Divider(),
-                    ProfileListTile(
-                      title: 'Geofencing',
-                      icon: Icons.info,
-                      onTap: () => Navigator.pushNamed(
-                          context, AppRoutes.setGeofencing),
-                    ),
-                    Divider(),
+                    // ProfileListTile(
+                    //   title: 'Geofencing',
+                    //   icon: Icons.info,
+                    //   onTap: () => Navigator.pushNamed(
+                    //       context, AppRoutes.setGeofencing),
+                    // ),
+                    // Divider(),
                   ],
                 ),
               ),

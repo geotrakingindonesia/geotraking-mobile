@@ -436,7 +436,11 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                         prefs.remove('textFieldValue');
                         prefs.remove('mobileId');
                       },
-                      child: Icon(Icons.refresh_rounded, color: Colors.white),
+                      child: Text(
+                        'Reset',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      // child: Icon(Icons.refresh_rounded, color: Colors.white),
                     ),
                   ),
                 ],
