@@ -26,7 +26,7 @@ import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/core/services/wpp_service.dart';
 import 'package:geotraking/views/profile/components/modal/airtime/airtime_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/traking/traking_data_modal.dart';
-import 'package:geotraking/views/profile/geosat/components/vessel_data_geosat_modal.dart';
+import 'package:geotraking/views/profile/geosat/components/modal/vessel_data_geosat_modal.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -911,7 +911,7 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
                   isScrollControlled: true,
                   builder: (context) {
                     return index == 0
-                        ? VesselDataGeosatModal(kapalGeosat: _selectedKapal!)
+                        ? VesselDataGeosatModal(vesselData: _selectedKapal!)
                         : AirtimeDataModal(
                             future: vesselService.getAirtimeKapal(
                                 _selectedKapal!['idfull'] ?? ''));

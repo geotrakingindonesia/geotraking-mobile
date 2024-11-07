@@ -40,7 +40,10 @@ class _VesselPlaybackState extends State<VesselPlayback>
         setState(() {
           // Gerakkan peta ke posisi animasi saat ini
           if (_animation.value != null) {
-            _mapController.move(_animation.value, _mapController.camera.zoom);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _mapController.move(_animation.value, _mapController.camera.zoom);
+            });
+            // _mapController.move(_animation.value, _mapController.camera.zoom);
           }
         });
       });
@@ -119,7 +122,7 @@ class _VesselPlaybackState extends State<VesselPlayback>
           initialCenter: widget.markers.isNotEmpty
               ? widget.markers[widget.markers.length - 1].point
               : LatLng(0, 0),
-          initialZoom: 12,
+          initialZoom: 10,
           interactionOptions: const InteractionOptions(
             flags: InteractiveFlag.pinchZoom |
                 InteractiveFlag.drag |

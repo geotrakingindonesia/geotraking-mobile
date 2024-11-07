@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:geotraking/core/services/kapal_geosat_service.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/profile/components/profile_kapal_preview_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:geotraking/views/profile/geosat/components/profile_kapal_geosat_preview_tile.dart';
 
 class ProfileKapalGeosatList extends StatefulWidget {
@@ -37,10 +38,27 @@ class _ProfileKapalGeosatListState extends State<ProfileKapalGeosatList> {
   int _currentPage = 0;
   final int _itemsPerPage = 25;
 
+  String _selectedTimezonePreferences = 'UTC+7';
+  String _selectedSpeedPreferences = 'Knots';
+  String _selectedCoordinatePreferences = 'Degrees';
+
   @override
   void initState() {
     super.initState();
     _fetchKapalGeosat();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedSpeedPreferences =
+          prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      _selectedCoordinatePreferences =
+          prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedTimezonePreferences =
+          prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+    });
   }
 
   Future _fetchKapalGeosat() async {
@@ -325,9 +343,31 @@ class _ProfileKapalGeosatListState extends State<ProfileKapalGeosatList> {
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
+                            String getSpeedValue(Map<String, dynamic> data,
+                                String selectedSpeed) {
+                              switch (selectedSpeed) {
+                                case 'Knots':
+                                  return (data['speed_kn'] ?? 0).toString();
+                                case 'Km/h':
+                                  return (data['speed_kmh'] ?? 0).toString();
+                                case 'm/s':
+                                  return (data['speed_ms'] ?? 0).toString();
+                                case 'mp/h':
+                                  return (data['speed_mph'] ?? 0).toString();
+                                default:
+                                  return '0';
+                              }
+                            }
+
                             return Padding(
                               padding: const EdgeInsets.only(top: 2),
                               child: ProfileKapalPreviewTile(
+                                selectedTimeZonePreferences:
+                                    _selectedTimezonePreferences,
+                                selectedSpeedPreferences:
+                                    _selectedSpeedPreferences,
+                                selectedCoordinatePreferences:
+                                    _selectedCoordinatePreferences,
                                 mobileId: _pagedData[index]['id'] ?? '-',
                                 idfull: _pagedData[index]['idfull'] ?? '-',
                                 namaKapal:
@@ -342,7 +382,9 @@ class _ProfileKapalGeosatListState extends State<ProfileKapalGeosatList> {
                                 externalVoltage:
                                     _pagedData[index]['externalvoltage'] ?? '-',
                                 heading: _pagedData[index]['heading'] ?? '0',
-                                speed: _pagedData[index]['speed'] ?? '0',
+                                // speed: _pagedData[index]['speed'] ?? '0',
+                                speed: getSpeedValue(_pagedData[index],
+                                    _selectedSpeedPreferences),
                                 speedKmh: _pagedData[index]['speed_kmh'] ?? '0',
                                 speedKn: _pagedData[index]['speed_kn'] ?? '0',
                                 lat: _pagedData[index]['lat'] ?? '0',

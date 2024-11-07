@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class VesselService {
   AuthService _authService = AuthService();
-  
+
   // fungsi get data kapal(vessel) member
   Future<List<Map<String, dynamic>>?> getDataKapal() async {
     MemberUser? currentUser = await _authService.getCurrentUser();
@@ -18,7 +18,7 @@ class VesselService {
 
     final prefs = await SharedPreferences.getInstance();
     final timeZonePreferences = prefs.getString('SetTimezonePreferences');
-    
+
     print('select time: $timeZonePreferences');
     print('Current User ID: $memberId');
 
@@ -141,6 +141,9 @@ class VesselService {
 
   // fungsi get data kapal(vessel) admin(geosat)
   Future<List<Map<String, dynamic>>?> getDataKapalGeosat() async {
+    final prefs = await SharedPreferences.getInstance();
+    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+
     var settings = Connection.getSettings();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
@@ -168,7 +171,9 @@ class VesselService {
 				COALESCE(m.heading, 0) AS heading,
 				COALESCE(m.speed, 0) AS speed, 
         COALESCE(speed * 3.6, 0) AS speed_kmh,
-        COALESCE(speed * 1, 0) AS speed_kn,  
+        COALESCE(speed * 1, 0) AS speed_kn,
+        COALESCE(speed * 0.51444, 0) AS speed_ms,
+        COALESCE(speed * 1.15078, 0) AS speed_mph,
         CASE WHEN m.rpm1 IS NULL THEN 0 ELSE m.rpm1 END AS rpm1,
         CASE WHEN m.rpm2 IS NULL THEN 0 ELSE m.rpm2 END AS rpm2,
         m.powerstatus, 
@@ -188,6 +193,33 @@ class VesselService {
 
     if (results.isNotEmpty) {
       for (var row in results) {
+        DateTime originalTimestamp = DateTime.parse(row['tgl_aktifasi']);
+        DateTime originalBroadcast = DateTime.parse(row['broadcast']);
+        DateTime adjustedTimestamp;
+        DateTime adjustedBroadcast;
+
+        switch (timeZonePreferences) {
+          case 'UTC':
+            adjustedTimestamp = originalTimestamp.subtract(Duration(hours: 7));
+            adjustedBroadcast = originalBroadcast.subtract(Duration(hours: 7));
+            break;
+          case 'UTC+7':
+            adjustedTimestamp = originalTimestamp;
+            adjustedBroadcast = originalBroadcast;
+            break;
+          case 'UTC+8':
+            adjustedTimestamp = originalTimestamp.add(Duration(hours: 1));
+            adjustedBroadcast = originalBroadcast.add(Duration(hours: 1));
+            break;
+          case 'UTC+9':
+            adjustedTimestamp = originalTimestamp.add(Duration(hours: 2));
+            adjustedBroadcast = originalBroadcast.add(Duration(hours: 2));
+            break;
+          default:
+            adjustedTimestamp = originalTimestamp;
+            adjustedBroadcast = originalBroadcast;
+        }
+
         dataKapalGeosatList.add({
           'id': row['id'],
           'idfull': row['idfull'],
@@ -197,13 +229,17 @@ class VesselService {
           'kategori': row['kategori'],
           'type': row['type'],
           'custamer': row['custamer'],
-          'tgl_aktifasi': row['tgl_aktifasi'],
-          'broadcast': row['broadcast'],
+          // 'tgl_aktifasi': row['tgl_aktifasi'],
+          // 'broadcast': row['broadcast'],
+          'tgl_aktifasi': adjustedTimestamp.toIso8601String(),
+          'broadcast': adjustedBroadcast.toIso8601String(),
           'lat': row['lat'],
           'lon': row['lon'],
           'speed': row['speed'],
           'speed_kmh': row['speed_kmh'],
           'speed_kn': row['speed_kn'],
+          'speed_ms': row['speed_ms'],
+          'speed_mph': row['speed_mph'],
           'heading': row['heading'],
           'rpm1': row['rpm1'],
           'rpm2': row['rpm2'],

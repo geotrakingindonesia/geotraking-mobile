@@ -4,9 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class VesselDataGeosatModal extends StatelessWidget {
-  final Map<String, dynamic>? kapalGeosat;
+  final Map<String, dynamic>? vesselData;
 
-  VesselDataGeosatModal({required this.kapalGeosat});
+  final String? selectedTimeZonePreferences;
+  final String? selectedSpeedPreferences;
+  final String? selectedCoordinatePreferences;
+
+  VesselDataGeosatModal(
+      {required this.vesselData,
+      this.selectedTimeZonePreferences,
+      this.selectedSpeedPreferences,
+      this.selectedCoordinatePreferences});
 
   String _formatLatitude(double? lat) {
     if (lat == null) return '';
@@ -52,9 +60,26 @@ class VesselDataGeosatModal extends StatelessWidget {
   //   }
   // }
 
+  String getSpeedValue(
+      Map<String, dynamic>? data, String? selectedSpeedPreferences) {
+    if (data == null) return '-';
+    switch (selectedSpeedPreferences) {
+      case 'Knots':
+        return (data['speed_kn'] ?? 0).toString() + ' Knots';
+      case 'Km/h':
+        return (data['speed_kmh'] ?? 0).toString() + ' Km/h';
+      case 'm/s':
+        return (data['speed_ms'] ?? 0).toString() + ' m/s';
+      case 'mp/h':
+        return (data['speed_mph'] ?? 0).toString() + ' mp/h';
+      default:
+        return '-';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (kapalGeosat == null) {
+    if (vesselData == null) {
       return Center(child: Text('No data available'));
     }
     return Padding(
@@ -66,7 +91,7 @@ class VesselDataGeosatModal extends StatelessWidget {
             Align(
               alignment: Alignment.topLeft,
               child: Text(
-                kapalGeosat?['nama_kapal'] ?? '',
+                vesselData?['nama_kapal'] ?? '',
                 style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18,
@@ -85,7 +110,7 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        kapalGeosat?['idfull'] ?? '',
+                        vesselData?['idfull'] ?? '',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -100,7 +125,7 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        '${kapalGeosat?['sn']}/${kapalGeosat?['imei']}',
+                        '${vesselData?['sn']}/${vesselData?['imei']}',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -123,7 +148,7 @@ class VesselDataGeosatModal extends StatelessWidget {
                       ),
                       Text(
                         // kapalMember.type!,
-                        kapalGeosat?['type'] ?? '',
+                        vesselData?['type'] ?? '',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -138,7 +163,7 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        kapalGeosat?['kategori'] ?? '',
+                        vesselData?['kategori'] ?? '',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -156,19 +181,19 @@ class VesselDataGeosatModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Received Date:',
+                        'Received Date (${selectedTimeZonePreferences}):',
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        kapalGeosat?['tgl_aktifasi'] != null
-                            ? _formatDate(kapalGeosat?['tgl_aktifasi'])
+                        vesselData?['tgl_aktifasi'] != null
+                            ? _formatDate(vesselData?['tgl_aktifasi'])
                             : '-',
                         style: const TextStyle(color: Colors.black),
                       ),
                       // Text(
                       //   // kapalMember.timestamp != null
-                      //   kapalGeosat?['tgl_aktifasi'] != null
-                      //       ? '${DateFormat('dd MMM y (HH:mm:ss)').format(kapalGeosat?['tgl_aktifasi'])}'
+                      //   vesselData?['tgl_aktifasi'] != null
+                      //       ? '${DateFormat('dd MMM y (HH:mm:ss)').format(vesselData?['tgl_aktifasi'])}'
                       //       : '-',
                       //   style: TextStyle(color: Colors.black),
                       // ),
@@ -180,12 +205,12 @@ class VesselDataGeosatModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Broadcast Date:',
+                        'Broadcast Date (${selectedTimeZonePreferences}):',
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        kapalGeosat?['broadcast'] != null
-                            ? _formatDate(kapalGeosat?['broadcast'])
+                        vesselData?['broadcast'] != null
+                            ? _formatDate(vesselData?['broadcast'])
                             : '-',
                         style: const TextStyle(color: Colors.black),
                       ),
@@ -208,9 +233,9 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        '${DateFormat('dd MMM y').format(DateTime.parse(kapalGeosat?['atp_start']))}',
-                        // kapalGeosat?['atp_start'] != null
-                        //     ? _formatDate(kapalGeosat?['atp_start'])
+                        '${DateFormat('dd MMM y').format(DateTime.parse(vesselData?['atp_start']))}',
+                        // vesselData?['atp_start'] != null
+                        //     ? _formatDate(vesselData?['atp_start'])
                         //     : '-',
                         style: const TextStyle(color: Colors.black),
                       ),
@@ -226,9 +251,9 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        '${DateFormat('dd MMM y').format(DateTime.parse(kapalGeosat?['atp_end']))}',
-                        // kapalGeosat?['atp_end'] != null
-                        //     ? _formatDate(kapalGeosat?['atp_end'])
+                        '${DateFormat('dd MMM y').format(DateTime.parse(vesselData?['atp_end']))}',
+                        // vesselData?['atp_end'] != null
+                        //     ? _formatDate(vesselData?['atp_end'])
                         //     : '-',
                         style: const TextStyle(color: Colors.black),
                       ),
@@ -251,7 +276,13 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        _formatLatitude(double.parse(kapalGeosat?['lat'])),
+                        selectedCoordinatePreferences == 'Degrees'
+                            ? _formatLatitude(
+                                double.parse(vesselData?['lat'] ?? '0'))
+                            : double.parse(vesselData?['lat'] ?? '0')
+                                .toString(),
+
+                        // _formatLatitude(double.parse(vesselData?['lat'])),
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -266,7 +297,12 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        _formatLongitude(double.parse(kapalGeosat?['lon'])),
+                        selectedCoordinatePreferences == 'Degrees'
+                            ? _formatLongitude(
+                                double.parse(vesselData?['lon'] ?? '0'))
+                            : double.parse(vesselData?['lon'] ?? '0')
+                                .toString(),
+                        // _formatLongitude(double.parse(vesselData?['lon'])),
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -288,7 +324,7 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        '${kapalGeosat?['powerstatus']}°',
+                        '${vesselData?['powerstatus']}°',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -303,7 +339,7 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        '${kapalGeosat?['externalvoltage']} kwh',
+                        '${vesselData?['externalvoltage']} kwh',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -325,7 +361,7 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        '${kapalGeosat?['heading']}°',
+                        '${vesselData?['heading']}°',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -340,8 +376,10 @@ class VesselDataGeosatModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
-                        '${kapalGeosat?['speed_kn']} Knot/${kapalGeosat?['speed_kmh']} Kmh',
-                        // '${kapalGeosat?['speed']} knot',
+                        getSpeedValue(vesselData, selectedSpeedPreferences),
+
+                        // '${vesselData?['speed_kn']} Knot/${vesselData?['speed_kmh']} Kmh',
+                        // '${vesselData?['speed']} knot',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],

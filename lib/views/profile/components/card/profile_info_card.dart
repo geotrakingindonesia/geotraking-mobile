@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geotraking/core/models/member.dart';
+import 'package:geotraking/core/services/auth/authenticate_service.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 
 class ProfileInfoCard extends StatefulWidget {
@@ -10,11 +12,23 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
   int jumlahKapal = 0;
   int airtimeActive = 0;
   final VesselService _vesselService = VesselService();
+  final AuthService _authService = AuthService();
+  MemberUser? _user;
 
   @override
   void initState() {
     super.initState();
     fetchCountData();
+    _checkUserLoggedIn();
+  }
+
+  _checkUserLoggedIn() async {
+    final user = await _authService.getCurrentUser();
+    if (user != null) {
+      setState(() {
+        _user = user;
+      });
+    }
   }
 
   Future<void> fetchCountData() async {
@@ -28,6 +42,8 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
 
   @override
   Widget build(BuildContext context) {
+    bool isAdmin = _user?.isAdmin == 1;
+
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 25),
       child: Container(
@@ -63,29 +79,41 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
                 ),
               ],
             ),
+            // if (!isAdmin)
             Container(
               width: 1,
               height: 40,
               color: Colors.black,
               margin: EdgeInsets.symmetric(horizontal: 20),
             ),
-            Column(
-              children: [
-                Text(
-                  '$airtimeActive',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+            if (!isAdmin)
+              Column(
+                children: [
+                  Text(
+                    '$airtimeActive',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'Airtime Active',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-              ],
-            ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Airtime Active',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ],
+              ),
+            if (isAdmin)
+              Column(
+                children: [
+                  Image.asset(
+                    'assets/images/ic_launcher.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                ],
+              ),
           ],
         ),
       ),

@@ -15,8 +15,9 @@ import 'package:geotraking/views/profile/components/modal/airtime/airtime_data_m
 import 'package:geotraking/views/profile/components/modal/mileage/mileage_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/weather/weather_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/traking/traking_data_modal.dart';
-import 'package:geotraking/views/profile/geosat/components/vessel_data_geosat_modal.dart';
+import 'package:geotraking/views/profile/geosat/components/modal/vessel_data_geosat_modal.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileTrackingOneGeosatPage extends StatefulWidget {
   final String idFull;
@@ -58,6 +59,10 @@ class _ProfileTrackingOneGeosatPageState
   bool _showWeatherModal = false;
   bool _showMileageModal = false;
 
+  String _selectedTimezonePreferences = 'UTC+7';
+  String _selectedSpeedPreferences = 'Knots';
+  String _selectedCoordinatePreferences = 'Degrees';
+
   @override
   void initState() {
     super.initState();
@@ -69,6 +74,20 @@ class _ProfileTrackingOneGeosatPageState
     });
     _showVesselModal = true;
     _fetchAndShowVesselData();
+
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedSpeedPreferences =
+          prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      _selectedCoordinatePreferences =
+          prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedTimezonePreferences =
+          prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+    });
   }
 
   void _onTrackVessel(List<LatLng> polylinePoints, List<Marker> markers,
@@ -518,7 +537,14 @@ class _ProfileTrackingOneGeosatPageState
                               children: [
                                 if (_showVesselModal)
                                   VesselDataGeosatModal(
-                                      kapalGeosat: kapalGeosat),
+                                    vesselData: kapalGeosat,
+                                    selectedTimeZonePreferences:
+                                        _selectedTimezonePreferences,
+                                    selectedSpeedPreferences:
+                                        _selectedSpeedPreferences,
+                                    selectedCoordinatePreferences:
+                                        _selectedCoordinatePreferences,
+                                  ),
                                 if (_showTrackingModal)
                                   TrakingDataModal(
                                     mobileId: widget.mobileId ?? '',
