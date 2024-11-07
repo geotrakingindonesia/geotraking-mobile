@@ -449,6 +449,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
                                 if (_showVesselModal)
                                   VesselDataModal(
                                     vesselData: _vesselData,
+                                    selectedTimeZone: _selectedTimezone,
                                   ),
                                 if (_showTrackingModal)
                                   TrakingDataModal(

@@ -7,9 +7,10 @@ import 'package:intl/intl.dart';
 
 class VesselInfoWidget extends StatelessWidget {
   final Map<String, dynamic> vesselData;
+  final String? selectedTimeZone;
   final FormatedLatlong latlongFormatter = FormatedLatlong();
 
-  VesselInfoWidget({Key? key, required this.vesselData}) : super(key: key);
+  VesselInfoWidget({Key? key, required this.vesselData, this.selectedTimeZone}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,8 @@ class VesselInfoWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildInfoRow('${vesselData['nama_kapal']}', '(${vesselData['idfull']})'),
+            buildInfoRow(
+                '${vesselData['nama_kapal']}', '(${vesselData['idfull']})'),
             Divider(),
             buildInfoColumnInRow(
               'SN',
@@ -62,9 +64,9 @@ class VesselInfoWidget extends StatelessWidget {
             ),
             Divider(),
             buildInfoColumnInRow(
-              'Received date',
+              'Received date ($selectedTimeZone)',
               '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(vesselData['timestamp']))}',
-              'Broadcast date',
+              'Broadcast date ($selectedTimeZone)',
               '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(vesselData['broadcast']))}',
             ),
             Divider(),

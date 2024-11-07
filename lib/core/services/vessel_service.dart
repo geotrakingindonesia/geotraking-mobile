@@ -13,7 +13,6 @@ class VesselService {
   
   // fungsi get data kapal(vessel) member
   Future<List<Map<String, dynamic>>?> getDataKapal() async {
-  // Future<List<Map<String, dynamic>>?> getDataKapal(String timezone) async {
     MemberUser? currentUser = await _authService.getCurrentUser();
     int memberId = currentUser?.id ?? 0;
 

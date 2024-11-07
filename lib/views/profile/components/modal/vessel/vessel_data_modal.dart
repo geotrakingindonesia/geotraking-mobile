@@ -5,8 +5,9 @@ import 'package:intl/intl.dart';
 
 class VesselDataModal extends StatelessWidget {
   final Map<String, dynamic>? vesselData;
+  final String? selectedTimeZone;
 
-  VesselDataModal({required this.vesselData});
+  VesselDataModal({required this.vesselData, this.selectedTimeZone});
 
   String _formatLatitude(double? lat) {
     if (lat == null) return '';
@@ -166,7 +167,7 @@ class VesselDataModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Received Date:',
+                        'Received Date (${selectedTimeZone}):',
                         style: const TextStyle(color: Colors.black54),
                       ),
                       Text(
@@ -181,7 +182,7 @@ class VesselDataModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Broadcast Date:',
+                        'Broadcast Date (${selectedTimeZone}):',
                         style: const TextStyle(color: Colors.black54),
                       ),
                       Text(

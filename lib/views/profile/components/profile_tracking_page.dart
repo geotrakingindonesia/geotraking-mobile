@@ -498,8 +498,10 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                                   timestamp: kapalMember['timestamp'],
                                   heading: kapalMember['heading'],
                                 ),
-                                customContent: () =>
-                                    VesselInfoWidget(vesselData: kapalMember),
+                                customContent: () => VesselInfoWidget(
+                                  vesselData: kapalMember,
+                                  selectedTimeZone: _selectedTimezone,
+                                ),
                               ),
                           ],
                         ),
