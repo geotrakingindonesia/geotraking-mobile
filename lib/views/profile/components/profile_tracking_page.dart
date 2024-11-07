@@ -101,11 +101,24 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
 
   String _selectedMapProvider = 'OpenStreetMap';
 
+  String _selectedTimezone = 'UTC+7';
+
   @override
   void initState() {
     super.initState();
     _fetchData();
     _loadLanguageFromSharedPreferences();
+    _loadTimeZonePreferencesFromSharedPreferences();
+  }
+
+  _loadTimeZonePreferencesFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+    if (timeZonePreferences != null) {
+      setState(() {
+        _selectedTimezone = timeZonePreferences;
+      });
+    }
   }
 
   void _toggleSidebar() {
@@ -228,6 +241,7 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
 
       final basarnasData = await _basarnasService.getCachedData();
       final portPelabuhanData = await _portPelabuhanService.getCachedData();
+      // final kapalMemberData = await vesselService.getDataKapal(_selectedTimezone);
       final kapalMemberData = await vesselService.getDataKapal();
 
       _calculateDistancesAndCreatePolylines(
@@ -493,7 +507,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                     );
                   }).toList(),
                 ),
-
                 if (_isShowNamaKapal)
                   MarkerLayer(
                     markers: _kapalMemberList.map((kapalMember) {

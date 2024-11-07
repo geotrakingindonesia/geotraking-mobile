@@ -10,12 +10,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class VesselService {
   AuthService _authService = AuthService();
+  
   // fungsi get data kapal(vessel) member
-  // Future<List<Map<String, dynamic>>?> getDataKapal() async {
-  Future<List<Map<String, dynamic>>?> getDataKapal(String timezone) async {
+  Future<List<Map<String, dynamic>>?> getDataKapal() async {
+  // Future<List<Map<String, dynamic>>?> getDataKapal(String timezone) async {
     MemberUser? currentUser = await _authService.getCurrentUser();
     int memberId = currentUser?.id ?? 0;
 
+    final prefs = await SharedPreferences.getInstance();
+    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+    
+    print('select time: $timeZonePreferences');
     print('Current User ID: $memberId');
 
     var settings = Connection.getSettings();
@@ -70,33 +75,31 @@ class VesselService {
     List<Map<String, dynamic>> kapalMemberList = [];
 
     for (var row in results) {
-      // DateTime originalTimestamp = DateTime.parse(row['timestamp']);
-      // DateTime adjustedTimestamp;
+      DateTime originalTimestamp = DateTime.parse(row['timestamp']);
+      DateTime originalBroadcast = DateTime.parse(row['broadcast']);
+      DateTime adjustedTimestamp;
+      DateTime adjustedBroadcast;
 
-      // switch (timezone) {
-      //   case 'UTC':
-      //     adjustedTimestamp = originalTimestamp.subtract(Duration(hours: 7));
-      //     break;
-      //   case 'UTC+7':
-      //     adjustedTimestamp = originalTimestamp;
-      //     break;
-      //   case 'UTC+8':
-      //     adjustedTimestamp = originalTimestamp.add(Duration(hours: 1));
-      //     break;
-      //   case 'UTC+9':
-      //     adjustedTimestamp = originalTimestamp.add(Duration(hours: 2));
-      //     break;
-      //   default:
-      //     adjustedTimestamp = originalTimestamp;
-      // }
-
-      DateTime timestamp = DateTime.parse(row['timestamp']);
-      if (timezone == 'UTC') {
-        timestamp = timestamp.subtract(Duration(hours: 7));
-      } else if (timezone == 'UTC+8') {
-        timestamp = timestamp.add(Duration(hours: 1));
-      } else if (timezone == 'UTC+9') {
-        timestamp = timestamp.add(Duration(hours: 2));
+      switch (timeZonePreferences) {
+        case 'UTC':
+          adjustedTimestamp = originalTimestamp.subtract(Duration(hours: 7));
+          adjustedBroadcast = originalBroadcast.subtract(Duration(hours: 7));
+          break;
+        case 'UTC+7':
+          adjustedTimestamp = originalTimestamp;
+          adjustedBroadcast = originalBroadcast;
+          break;
+        case 'UTC+8':
+          adjustedTimestamp = originalTimestamp.add(Duration(hours: 1));
+          adjustedBroadcast = originalBroadcast.add(Duration(hours: 1));
+          break;
+        case 'UTC+9':
+          adjustedTimestamp = originalTimestamp.add(Duration(hours: 2));
+          adjustedBroadcast = originalBroadcast.add(Duration(hours: 2));
+          break;
+        default:
+          adjustedTimestamp = originalTimestamp;
+          adjustedBroadcast = originalBroadcast;
       }
 
       kapalMemberList.add({
@@ -124,8 +127,9 @@ class VesselService {
         'rpm2': row['rpm2'],
         'create_at': row['create_at'],
         // 'timestamp': row['timestamp'],
-        'timestamp': timestamp.toIso8601String(),
-        'broadcast': row['broadcast'],
+        // 'broadcast': row['broadcast'],
+        'timestamp': adjustedTimestamp.toIso8601String(),
+        'broadcast': adjustedBroadcast.toIso8601String(),
         'atp_start': row['atp_start'],
         'atp_end': row['atp_end'],
       });

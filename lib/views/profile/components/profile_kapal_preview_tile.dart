@@ -6,6 +6,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
 import 'package:geotraking/core/components/card_vessel_color.dart';
+import 'package:geotraking/core/components/formated_latlong.dart';
 import 'package:geotraking/core/components/marker_image_widget.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
 // import 'package:geotraking/core/models/member.dart';
@@ -46,6 +47,7 @@ class ProfileKapalPreviewTile extends StatefulWidget {
     this.broadcast,
     this.atpStart,
     this.atpEnd,
+    this.selectedTimeZone,
   }) : super(key: key);
 
   final String idfull;
@@ -71,6 +73,8 @@ class ProfileKapalPreviewTile extends StatefulWidget {
   final String? broadcast;
   final String? atpStart;
   final String? atpEnd;
+  // set time zone data kapal
+  final String? selectedTimeZone;
 
   @override
   _ProfileKapalPreviewTileState createState() =>
@@ -85,33 +89,34 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
   // final StatusPaymentMemberService statusPaymentMemberService =
   //     StatusPaymentMemberService();
   String _keluhan = '';
+  final FormatedLatlong _formatedLatlong = FormatedLatlong();
   // MemberUser? _user;
 
-  String _formatLatitude(double? lat) {
-    if (lat == null) return '';
-    try {
-      int degrees = lat.toInt();
-      double minutes = (lat - degrees) * 60;
-      int minutesInt = minutes.toInt();
-      double seconds = (minutes - minutesInt) * 60;
-      return '${degrees.abs()} ${degrees < 0 ? 'S' : 'N'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
-    } catch (e) {
-      return '';
-    }
-  }
+  // String _formatLatitude(double? lat) {
+  //   if (lat == null) return '';
+  //   try {
+  //     int degrees = lat.toInt();
+  //     double minutes = (lat - degrees) * 60;
+  //     int minutesInt = minutes.toInt();
+  //     double seconds = (minutes - minutesInt) * 60;
+  //     return '${degrees.abs()} ${degrees < 0 ? 'S' : 'N'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
+  //   } catch (e) {
+  //     return '';
+  //   }
+  // }
 
-  String _formatLongitude(double? lon) {
-    if (lon == null) return '';
-    try {
-      int degrees = lon.toInt();
-      double minutes = (lon - degrees) * 60;
-      int minutesInt = minutes.toInt();
-      double seconds = (minutes - minutesInt) * 60;
-      return '${degrees.abs()} ${degrees < 0 ? 'W' : 'E'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
-    } catch (e) {
-      return '';
-    }
-  }
+  // String _formatLongitude(double? lon) {
+  //   if (lon == null) return '';
+  //   try {
+  //     int degrees = lon.toInt();
+  //     double minutes = (lon - degrees) * 60;
+  //     int minutesInt = minutes.toInt();
+  //     double seconds = (minutes - minutesInt) * 60;
+  //     return '${degrees.abs()} ${degrees < 0 ? 'W' : 'E'} ${minutesInt}\' ${seconds.toStringAsFixed(3)}"';
+  //   } catch (e) {
+  //     return '';
+  //   }
+  // }
 
   onSimpanTrouble() async {
     if (_key.currentState!.validate()) {
@@ -482,7 +487,7 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Received Date :',
+                              'Received Date (${widget.selectedTimeZone}):',
                               style: TextStyle(
                                   color:
                                       cardHeadlineTextColor(widget.timestamp!)),
@@ -502,7 +507,7 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Broadcast Date :',
+                              'Broadcast Date (${widget.selectedTimeZone}):',
                               style: TextStyle(
                                   color:
                                       cardHeadlineTextColor(widget.timestamp!)),
@@ -740,7 +745,8 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                                       cardHeadlineTextColor(widget.timestamp!)),
                             ),
                             Text(
-                              _formatLatitude(double.parse(widget.lat!)),
+                              // _formatLatitude(double.parse(widget.lat!)),
+                              _formatedLatlong.formatLatitude(double.parse(widget.lat!)),
                               style: TextStyle(
                                   color: cardTextColor(widget.timestamp!)),
                             ),
@@ -759,7 +765,8 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                                       cardHeadlineTextColor(widget.timestamp!)),
                             ),
                             Text(
-                              _formatLongitude(double.parse(widget.lon!)),
+                              // _formatLongitude(double.parse(widget.lon!)),
+                              _formatedLatlong.formatLongitude(double.parse(widget.lon!)),
                               style: TextStyle(
                                   color: cardTextColor(widget.timestamp!)),
                             ),

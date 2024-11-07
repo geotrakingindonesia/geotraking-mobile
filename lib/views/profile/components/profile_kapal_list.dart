@@ -50,7 +50,8 @@ class _ProfileKapalListState extends State<ProfileKapalList> {
 
   Future _fetchKapalMember() async {
     try {
-      final kapalMemberList = await vesselService.getDataKapal(_selectedTimezone);
+      // final kapalMemberList = await vesselService.getDataKapal(_selectedTimezone);
+      final kapalMemberList = await vesselService.getDataKapal();
       print(kapalMemberList);
       setState(() {
         _kapalMemberList = kapalMemberList;
@@ -303,6 +304,7 @@ class _ProfileKapalListState extends State<ProfileKapalList> {
                           return Padding(
                             padding: const EdgeInsets.only(top: 2),
                             child: ProfileKapalPreviewTile(
+                              selectedTimeZone: _selectedTimezone,
                               isAdmin: '0',
                               mobileId: _pagedData[index]['mobile_id'] ?? '-',
                               idfull: _pagedData[index]['idfull'] ?? '-',

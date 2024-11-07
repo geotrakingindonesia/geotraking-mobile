@@ -65,12 +65,15 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
   String _selectedMapProvider = 'OpenStreetMap';
   Map<String, dynamic>? _vesselData;
 
-  bool isPlaybackActive = false; 
+  bool isPlaybackActive = false;
+
+  String _selectedTimezone = 'UTC+7';
 
   @override
   void initState() {
     super.initState();
     _loadLanguageFromSharedPreferences();
+    _loadTimeZonePreferencesFromSharedPreferences();
     _showVesselModal = true;
     _fetchAndShowVesselData();
   }
@@ -79,6 +82,16 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  _loadTimeZonePreferencesFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+    if (timeZonePreferences != null) {
+      setState(() {
+        _selectedTimezone = timeZonePreferences;
+      });
+    }
   }
 
   _loadLanguageFromSharedPreferences() async {
@@ -103,17 +116,18 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
 
   void _startPlayback() {
     setState(() {
-      isPlaybackActive = true; 
+      isPlaybackActive = true;
     });
   }
 
   void _stopPlayback() {
     setState(() {
-      isPlaybackActive = false; 
+      isPlaybackActive = false;
     });
   }
 
   Future<void> _fetchAndShowVesselData() async {
+    // final vesselDataList = await vesselService.getDataKapal(_selectedTimezone);
     final vesselDataList = await vesselService.getDataKapal();
     final vesselData = vesselDataList!
         .firstWhere((data) => data['mobile_id'] == widget.mobileId);
@@ -246,8 +260,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
                     child: Column(
                       children: [
                         SingleChildScrollView(
-                          scrollDirection:
-                              Axis.horizontal, 
+                          scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
                               ElevatedButton(

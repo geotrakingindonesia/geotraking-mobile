@@ -254,7 +254,7 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('speed', _selectedSpeed);
     await prefs.setString('coordinate', _selectedCoordinate);
-    await prefs.setString('timezone', _selectedTimezone);
+    await prefs.setString('SetTimezonePreferences', _selectedTimezone);
 
     ElegantNotification.success(
       title: Text('Preferences Saved', style: TextStyle(color: Colors.white)),
