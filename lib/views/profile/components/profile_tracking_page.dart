@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/card_vessel_color.dart';
 import 'package:geotraking/core/components/info_row.dart';
+import 'package:geotraking/core/components/legend_vessel_information.dart';
 import 'package:geotraking/core/components/loading_map.dart';
 // import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/components/map_config.dart';
@@ -793,7 +794,7 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                 });
               },
             ),
-            _isLoading ? LoadingMap() : Container(),
+            _isLoading ? LoadingMap() : LegendVesselInformation(),
             if (_isSidebarVisible)
               Positioned(
                 right: 0,

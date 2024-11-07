@@ -13,9 +13,10 @@ import 'package:geotraking/core/constants/app_colors.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/profile/components/modal/airtime/airtime_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/mileage/mileage_data_modal.dart';
+import 'package:geotraking/views/profile/components/modal/traking/components/vessel_playback.dart';
 import 'package:geotraking/views/profile/components/modal/weather/weather_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/traking/traking_data_modal.dart';
-import 'package:geotraking/views/profile/geosat/components/modal/vessel_data_geosat_modal.dart';
+import 'package:geotraking/views/profile/geosat/components/modal/vessel/vessel_data_geosat_modal.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -63,6 +64,8 @@ class _ProfileTrackingOneGeosatPageState
   String _selectedSpeedPreferences = 'Knots';
   String _selectedCoordinatePreferences = 'Degrees';
 
+  bool isPlaybackActive = false;
+
   @override
   void initState() {
     super.initState();
@@ -98,6 +101,18 @@ class _ProfileTrackingOneGeosatPageState
     });
   }
 
+  void _startPlayback() {
+    setState(() {
+      isPlaybackActive = true;
+    });
+  }
+
+  void _stopPlayback() {
+    setState(() {
+      isPlaybackActive = false;
+    });
+  }
+
   Future<void> _fetchAndShowVesselData() async {
     final vesselDataList = await vesselService.getDataKapalGeosat();
     final vesselData =
@@ -125,47 +140,52 @@ class _ProfileTrackingOneGeosatPageState
           Expanded(
             child: Stack(
               children: [
-                FlutterMap(
-                  mapController: mapController,
-                  options: MapOptions(
-                    initialCenter: LatLng(widget.lat, widget.lon),
-                    initialZoom: 12,
-                    interactionOptions: const InteractionOptions(
-                      flags: InteractiveFlag.pinchZoom |
-                          InteractiveFlag.drag |
-                          InteractiveFlag.doubleTapZoom,
-                    ),
-                  ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          MapConfig.getUrlTemplate(_selectedMapProvider),
-                      userAgentPackageName: 'com.example.app',
-                    ),
-                    MarkerLayer(markers: [
-                      Marker(
-                        point: LatLng(widget.lat, widget.lon),
-                        width: 30,
-                        height: 30,
-                        child: MarkerImageWidget(
-                            timestamp: widget.timestamp,
-                            heading: widget.heading),
-                      ),
-                    ]),
-                    PolylineLayer(
-                      polylines: [
-                        Polyline(
-                          points: _polylinePointsTraking,
-                          color: Colors.blue,
-                          strokeWidth: 2,
+                isPlaybackActive
+                    ? VesselPlayback(
+                        polylinePoints: _polylinePointsTraking,
+                        markers: _markersTraking,
+                      )
+                    : FlutterMap(
+                        mapController: mapController,
+                        options: MapOptions(
+                          initialCenter: LatLng(widget.lat, widget.lon),
+                          initialZoom: 12,
+                          interactionOptions: const InteractionOptions(
+                            flags: InteractiveFlag.pinchZoom |
+                                InteractiveFlag.drag |
+                                InteractiveFlag.doubleTapZoom,
+                          ),
                         ),
-                      ],
-                    ),
-                    MarkerLayer(
-                      markers: _markersTraking,
-                    ),
-                  ],
-                ),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                MapConfig.getUrlTemplate(_selectedMapProvider),
+                            userAgentPackageName: 'com.example.app',
+                          ),
+                          MarkerLayer(markers: [
+                            Marker(
+                              point: LatLng(widget.lat, widget.lon),
+                              width: 30,
+                              height: 30,
+                              child: MarkerImageWidget(
+                                  timestamp: widget.timestamp,
+                                  heading: widget.heading),
+                            ),
+                          ]),
+                          PolylineLayer(
+                            polylines: [
+                              Polyline(
+                                points: _polylinePointsTraking,
+                                color: Colors.blue,
+                                strokeWidth: 2,
+                              ),
+                            ],
+                          ),
+                          MarkerLayer(
+                            markers: _markersTraking,
+                          ),
+                        ],
+                      ),
                 MapTool(
                   mapController: mapController,
                   selectedMapProvider: _selectedMapProvider,
@@ -330,6 +350,35 @@ class _ProfileTrackingOneGeosatPageState
                 //   ),
                 // ),
                 Positioned(
+                  top: 16,
+                  left: 16,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_polylinePointsTraking.isNotEmpty)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black38,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              isPlaybackActive ? Icons.stop : Icons.play_arrow,
+                              color:
+                                  isPlaybackActive ? Colors.red : Colors.white,
+                            ),
+                            tooltip: isPlaybackActive
+                                ? 'Stop Playback'
+                                : 'Start Playback',
+                            onPressed: isPlaybackActive
+                                ? _stopPlayback
+                                : _startPlayback,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
@@ -354,7 +403,7 @@ class _ProfileTrackingOneGeosatPageState
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.redAccent,
                                 ),
                                 onPressed: () {
@@ -390,7 +439,7 @@ class _ProfileTrackingOneGeosatPageState
                               SizedBox(width: 5),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.orangeAccent,
                                 ),
                                 onPressed: () {
@@ -425,7 +474,7 @@ class _ProfileTrackingOneGeosatPageState
                               SizedBox(width: 5),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.blueAccent,
                                 ),
                                 onPressed: () {
@@ -460,7 +509,7 @@ class _ProfileTrackingOneGeosatPageState
                               SizedBox(width: 5),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.green,
                                 ),
                                 onPressed: () {
@@ -495,7 +544,7 @@ class _ProfileTrackingOneGeosatPageState
                               SizedBox(width: 5),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(15 * 1.2),
+                                  padding: const EdgeInsets.all(15 * 0.8),
                                   backgroundColor: Colors.pink,
                                 ),
                                 onPressed: () {

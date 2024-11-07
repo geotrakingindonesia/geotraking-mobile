@@ -5,14 +5,14 @@ import 'package:geotraking/core/components/formated_latlong.dart';
 import 'package:geotraking/core/components/info_row.dart';
 import 'package:intl/intl.dart';
 
-class VesselInfoWidget extends StatelessWidget {
+class VesselGeosatInfoWidget extends StatelessWidget {
   final Map<String, dynamic> vesselData;
   final String? selectedTimeZonePreferences;
   final String? selectedSpeedPreferences;
   final String? selectedCoordinatePreferences;
   final FormatedLatlong latlongFormatter = FormatedLatlong();
 
-  VesselInfoWidget(
+  VesselGeosatInfoWidget(
       {Key? key,
       required this.vesselData,
       this.selectedTimeZonePreferences,
@@ -89,7 +89,7 @@ class VesselInfoWidget extends StatelessWidget {
             Divider(),
             buildInfoColumnInRow(
               'Received date ($selectedTimeZonePreferences)',
-              '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(vesselData['timestamp']))}',
+              '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(vesselData['tgl_aktifasi']))}',
               'Broadcast date ($selectedTimeZonePreferences)',
               '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(vesselData['broadcast']))}',
             ),
@@ -101,12 +101,6 @@ class VesselInfoWidget extends StatelessWidget {
               '${DateFormat('dd MMM yyyy').format(DateTime.parse(vesselData['atp_end']))}',
             ),
             Divider(),
-            // buildInfoColumnInRow(
-            //   'Latitude ${selectedCoordinatePreferences}',
-            //   '${latlongFormatter.formatLatitude(double.tryParse(vesselData['lat']))}',
-            //   'Longitude',
-            //   '${latlongFormatter.formatLongitude(double.tryParse(vesselData['lon']))}',
-            // ),
             buildInfoColumnInRow(
               'Latitude',
               selectedCoordinatePreferences == 'Degrees'

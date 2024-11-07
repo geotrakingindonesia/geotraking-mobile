@@ -7,6 +7,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/card_vessel_color.dart';
+import 'package:geotraking/core/components/legend_vessel_information.dart';
 import 'package:geotraking/core/components/loading_map.dart';
 // import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/components/map_config.dart';
@@ -26,7 +27,9 @@ import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/core/services/wpp_service.dart';
 import 'package:geotraking/views/profile/components/modal/airtime/airtime_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/traking/traking_data_modal.dart';
-import 'package:geotraking/views/profile/geosat/components/modal/vessel_data_geosat_modal.dart';
+import 'package:geotraking/views/profile/geosat/components/modal/vessel/vessel_data_geosat_modal.dart';
+import 'package:geotraking/views/profile/geosat/components/modal/vessel/vessel_geosat_info_widget.dart';
+import 'package:info_popup/info_popup.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -59,8 +62,7 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
   List<CircleMarker> _circleMarkers = []; // Circle markers for clusters
   double _currentZoom = 4;
 
-
-    final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   String _searchQuery = '';
   bool _isSidebarVisible = false;
@@ -100,23 +102,47 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
 
   String _selectedMapProvider = 'OpenStreetMap';
 
+  String _selectedTimezonePreferences = 'UTC+7';
+  String _selectedSpeedPreferences = 'Knots';
+  String _selectedCoordinatePreferences = 'Degrees';
+
   @override
   void initState() {
     super.initState();
     _fetchData();
-    _loadLanguageFromSharedPreferences();
+    _loadPreferences();
   }
 
-  _loadLanguageFromSharedPreferences() async {
+  Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    final language = prefs.getString('language');
-    if (language != null) {
-      setState(() {
-        _selectedLanguage = language;
-      });
-    }
+    setState(() {
+      _selectedSpeedPreferences =
+          prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      _selectedCoordinatePreferences =
+          prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedTimezonePreferences =
+          prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+      _selectedLanguage = prefs.getString('language') ?? 'English';
+    });
   }
-  
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _fetchData();
+  //   _loadLanguageFromSharedPreferences();
+  // }
+
+  // _loadLanguageFromSharedPreferences() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final language = prefs.getString('language');
+  //   if (language != null) {
+  //     setState(() {
+  //       _selectedLanguage = language;
+  //     });
+  //   }
+  // }
+
   void _toggleSidebar() {
     setState(() {
       _isSidebarVisible = !_isSidebarVisible;
@@ -126,7 +152,6 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
     });
   }
 
-  
   List<dynamic> get _filteredVesselList {
     if (_searchQuery.isEmpty) {
       return _kapalGeosatList;
@@ -162,8 +187,6 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
       });
     }
   }
-
-
 
   List<LatLng> _polylinePointsTraking = [];
   List<Marker> _markersTraking = [];
@@ -417,15 +440,15 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
               automaticallyImplyLeading: false,
               elevation: 0,
               actions: [
-          IconButton(
-            icon: Icon(
-              _isSidebarVisible ? Icons.cancel : Icons.search,
-              color: Colors.black,
-            ),
-            onPressed: _toggleSidebar,
-          ),
-        ],
-        backgroundColor: Colors.white,
+                IconButton(
+                  icon: Icon(
+                    _isSidebarVisible ? Icons.cancel : Icons.search,
+                    color: Colors.black,
+                  ),
+                  onPressed: _toggleSidebar,
+                ),
+              ],
+              backgroundColor: Colors.white,
             ),
           ),
         ),
@@ -501,67 +524,115 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
                 //   CircleLayer(circles: _circleMarkers),
                 // ],
                 // if (_currentZoom >= 7) ...[
-                  MarkerLayer(
-                    markers: _kapalGeosatList.map((kapalGeosat) {
-                      bool isSelected = _selectedKapal == kapalGeosat;
-                      return Marker(
-                        width: 30,
-                        height: 30,
-                        point: LatLng(double.parse(kapalGeosat['lat']),
-                            double.parse(kapalGeosat['lon'])),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedKapal = kapalGeosat;
-                            });
-                          },
-                          child: Stack(
-                            children: [
-                              MarkerImageWidget(
-                                timestamp: kapalGeosat['tgl_aktifasi'],
-                                heading: kapalGeosat['heading'],
-                              ),
-                              if (isSelected)
-                                Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  top: 0,
-                                  bottom: 0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.red, width: 2),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
+                MarkerLayer(
+                  markers: _kapalGeosatList.map((kapalGeosat) {
+                    bool isSelected = _selectedKapal == kapalGeosat;
+                    return Marker(
+                      width: 30,
+                      height: 30,
+                      point: LatLng(double.parse(kapalGeosat['lat']),
+                          double.parse(kapalGeosat['lon'])),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedKapal = kapalGeosat;
+                          });
+                        },
+                        child: Stack(
+                          children: [
+                            MarkerImageWidget(
+                              timestamp: kapalGeosat['tgl_aktifasi'],
+                              heading: kapalGeosat['heading'],
+                            ),
+                            if (isSelected)
+                              Positioned(
+                                left: 0,
+                                right: 0,
+                                top: 0,
+                                bottom: 0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.red, width: 2),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                 ),
-                            ],
-                          ),
+                              ),
+                            if (isSelected)
+                              InfoPopupWidget(
+                                child: MarkerImageWidget(
+                                  timestamp: kapalGeosat['tgl_aktifasi'],
+                                  heading: kapalGeosat['heading'],
+                                ),
+                                customContent: () => VesselGeosatInfoWidget(
+                                  vesselData: kapalGeosat,
+                                  selectedTimeZonePreferences:
+                                      _selectedTimezonePreferences,
+                                  selectedSpeedPreferences:
+                                      _selectedSpeedPreferences,
+                                  selectedCoordinatePreferences:
+                                      _selectedCoordinatePreferences,
+                                ),
+                              ),
+                          ],
                         ),
-                      );
-                    }).toList(),
-                  ),
+                      ),
+                    );
+                  }).toList(),
+                ),
                 // ],
+                // if (_isShowNamaKapal)
+                //   MarkerLayer(
+                //     markers: _kapalGeosatList.map((kapalGeosat) {
+                //       bool isSelected = _selectedKapal == kapalGeosat;
+                //       return Marker(
+                //         width: 120,
+                //         height: 30,
+                //         point: LatLng(double.parse(kapalGeosat['lat']),
+                //             double.parse(kapalGeosat['lon'])),
+                //         child: Container(
+                //           padding: const EdgeInsets.all(5),
+                //           decoration: BoxDecoration(
+                //             color: Colors.white.withOpacity(0.3),
+                //             borderRadius: BorderRadius.circular(15),
+                //           ),
+                //           child: Center(
+                //             child: Text(
+                //               kapalGeosat['nama_kapal'],
+                //               overflow: TextOverflow.ellipsis,
+                //               style: TextStyle(color: Colors.black),
+                //             ),
+                //           ),
+                //         ),
+                //       );
+                //     }).toList(),
+                //   ),
                 if (_isShowNamaKapal)
                   MarkerLayer(
                     markers: _kapalGeosatList.map((kapalGeosat) {
                       bool isSelected = _selectedKapal == kapalGeosat;
                       return Marker(
                         width: 120,
-                        height: 30,
-                        point: LatLng(double.parse(kapalGeosat['lat']),
-                            double.parse(kapalGeosat['lon'])),
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              kapalGeosat['nama_kapal'],
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.black),
+                        height: 23,
+                        point: LatLng(
+                          double.parse(kapalGeosat['lat']),
+                          double.parse(kapalGeosat['lon']),
+                        ),
+                        child: Transform.translate(
+                          offset: Offset(0, -25),
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                kapalGeosat['nama_kapal'],
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 10),
+                              ),
                             ),
                           ),
                         ),
@@ -681,6 +752,107 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
                 ],
               ),
             ),
+            if (_selectedKapal != null)
+              Positioned(
+                top: 216,
+                left: 16,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.location_searching,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              double keyboardHeight =
+                                  MediaQuery.of(context).viewInsets.bottom;
+                              double paddingBottom =
+                                  keyboardHeight > 0 ? keyboardHeight + 10 : 10;
+
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: paddingBottom),
+                                child: TrakingDataModal(
+                                  mobileId: _selectedKapal!['mobile_id'],
+                                  onTrackVessel: _onTrackVessel,
+                                  onClearHistory: () {
+                                    setState(() {
+                                      _polylinePointsTraking.clear();
+                                      _markersTraking.clear();
+                                    });
+                                  },
+                                ),
+                              );
+                            },
+                            constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width,
+                                maxHeight:
+                                    MediaQuery.of(context).size.height / 2),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.timer,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return AirtimeDataModal(
+                                  future: vesselService.getAirtimeKapal(
+                                      _selectedKapal!['idfull'] ?? ''));
+                            },
+                            constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width,
+                                maxHeight:
+                                    MediaQuery.of(context).size.height / 3),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.close,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _selectedKapal = null;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             SelectedBasarnasInfo(
               selectedBasarnas: _selectedBasarnas,
               onClose: () {
@@ -698,232 +870,236 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
                 });
               },
             ),
-            _isLoading ? LoadingMap() : Container(),
-             if (_isSidebarVisible)
-            Positioned(
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: MediaQuery.of(context).size.width * 0.6,
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Search Vessel..',
-                          labelStyle: TextStyle(color: Colors.black),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
+            _isLoading ? LoadingMap() : LegendVesselInformation(),
+            if (_isSidebarVisible)
+              Positioned(
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Search Vessel..',
+                            labelStyle: TextStyle(color: Colors.black),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40)),
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40)),
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
+                          onChanged: (query) {
+                            setState(() {
+                              _searchQuery = query;
+                              _filteredVesselList;
+                            });
+                          },
                         ),
-                        onChanged: (query) {
-                          setState(() {
-                            _searchQuery = query;
-                            _filteredVesselList;
-                          });
-                        },
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        _searchQuery.isEmpty
-                            ? 'Vessel: ${_kapalGeosatList.length}'
-                            : _filteredVesselList.isEmpty
-                                ? 'Not found.'
-                                : 'Vessel found: ${_filteredVesselList.length}',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _searchQuery.isEmpty
+                              ? 'Vessel: ${_kapalGeosatList.length}'
+                              : _filteredVesselList.isEmpty
+                                  ? 'Not found.'
+                                  : 'Vessel found: ${_filteredVesselList.length}',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        itemCount: _kapalGeosatList.length,
-                        itemBuilder: (context, index) {
-                          final vessel = _kapalGeosatList[index];
-                          final isSelected = _selectedKapal != null &&
-                              vessel['id'] ==
-                                  _selectedKapal!['id'];
+                      Expanded(
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: _kapalGeosatList.length,
+                          itemBuilder: (context, index) {
+                            final vessel = _kapalGeosatList[index];
+                            final isSelected = _selectedKapal != null &&
+                                vessel['id'] == _selectedKapal!['id'];
 
-                          if (_searchQuery.isEmpty ||
-                              vessel['nama_kapal']
-                                  .toLowerCase()
-                                  .contains(_searchQuery.toLowerCase())) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 16),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 12),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? Colors.blue[100]
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedKapal = vessel;
-                                    _animateMoveTo(LatLng(
-                                      double.parse(vessel['lat']),
-                                      double.parse(vessel['lon']),
-                                    ));
-                                  });
-                                  _toggleSidebar();
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: cardVesselColor(
-                                                vessel['tgl_aktifasi']),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(40)),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 4),
-                                          child: Text(
-                                            vessel['id'],
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            vessel['nama_kapal'],
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      timeago.format(
-                                        DateTime.parse(vessel['tgl_aktifasi']),
-                                      ),
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.grey),
+                            if (_searchQuery.isEmpty ||
+                                vessel['nama_kapal']
+                                    .toLowerCase()
+                                    .contains(_searchQuery.toLowerCase())) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 16),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.blue[100]
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 2),
                                     ),
                                   ],
                                 ),
-                              ),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        },
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedKapal = vessel;
+                                      _animateMoveTo(LatLng(
+                                        double.parse(vessel['lat']),
+                                        double.parse(vessel['lon']),
+                                      ));
+                                    });
+                                    _toggleSidebar();
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: cardVesselColor(
+                                                  vessel['tgl_aktifasi']),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(40)),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 4),
+                                            child: Text(
+                                              vessel['id'],
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          SizedBox(width: 8),
+                                          Expanded(
+                                            child: Text(
+                                              vessel['nama_kapal'],
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        timeago.format(
+                                          DateTime.parse(
+                                              vessel['tgl_aktifasi']),
+                                        ),
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
-        bottomNavigationBar: Visibility(
-          visible: _selectedKapal != null,
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.directions_boat),
-                label: 'Vessel',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.location_searching),
-                label: 'Traking',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.timer),
-                label: 'Airtime',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.close),
-                label: 'Close',
-              ),
-            ],
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.black,
-            onTap: (index) async {
-              if (index == 3) {
-                setState(() {
-                  _selectedKapal = null;
-                });
-              } else if (index == 1) {
-                await showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) {
-                    double keyboardHeight =
-                        MediaQuery.of(context).viewInsets.bottom;
-                    double paddingBottom =
-                        keyboardHeight > 0 ? keyboardHeight + 10 : 10;
+        // bottomNavigationBar: Visibility(
+        //   visible: _selectedKapal != null,
+        //   child: BottomNavigationBar(
+        //     type: BottomNavigationBarType.fixed,
+        //     items: const <BottomNavigationBarItem>[
+        //       BottomNavigationBarItem(
+        //         icon: Icon(Icons.directions_boat),
+        //         label: 'Vessel',
+        //       ),
+        //       BottomNavigationBarItem(
+        //         icon: Icon(Icons.location_searching),
+        //         label: 'Traking',
+        //       ),
+        //       BottomNavigationBarItem(
+        //         icon: Icon(Icons.timer),
+        //         label: 'Airtime',
+        //       ),
+        //       BottomNavigationBarItem(
+        //         icon: Icon(Icons.close),
+        //         label: 'Close',
+        //       ),
+        //     ],
+        //     selectedItemColor: Colors.black,
+        //     unselectedItemColor: Colors.black,
+        //     onTap: (index) async {
+        //       if (index == 3) {
+        //         setState(() {
+        //           _selectedKapal = null;
+        //         });
+        //       } else if (index == 1) {
+        //         await showModalBottomSheet(
+        //           context: context,
+        //           isScrollControlled: true,
+        //           builder: (context) {
+        //             double keyboardHeight =
+        //                 MediaQuery.of(context).viewInsets.bottom;
+        //             double paddingBottom =
+        //                 keyboardHeight > 0 ? keyboardHeight + 10 : 10;
 
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: paddingBottom),
-                      child: TrakingDataModal(
-                        mobileId: _selectedKapal!['id'],
-                        onTrackVessel: _onTrackVessel,
-                        onClearHistory: () {
-                          setState(() {
-                            _polylinePointsTraking.clear();
-                            _markersTraking.clear();
-                          });
-                        },
-                      ),
-                    );
-                  },
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width,
-                      maxHeight: MediaQuery.of(context).size.height / 2),
-                );
-              } else {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) {
-                    return index == 0
-                        ? VesselDataGeosatModal(vesselData: _selectedKapal!)
-                        : AirtimeDataModal(
-                            future: vesselService.getAirtimeKapal(
-                                _selectedKapal!['idfull'] ?? ''));
-                  },
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width,
-                      maxHeight: MediaQuery.of(context).size.height / 3),
-                );
-              }
-            },
-          ),
-        ),
+        //             return Padding(
+        //               padding: EdgeInsets.only(bottom: paddingBottom),
+        //               child: TrakingDataModal(
+        //                 mobileId: _selectedKapal!['id'],
+        //                 onTrackVessel: _onTrackVessel,
+        //                 onClearHistory: () {
+        //                   setState(() {
+        //                     _polylinePointsTraking.clear();
+        //                     _markersTraking.clear();
+        //                   });
+        //                 },
+        //               ),
+        //             );
+        //           },
+        //           constraints: BoxConstraints(
+        //               maxWidth: MediaQuery.of(context).size.width,
+        //               maxHeight: MediaQuery.of(context).size.height / 2),
+        //         );
+        //       } else {
+        //         showModalBottomSheet(
+        //           context: context,
+        //           isScrollControlled: true,
+        //           builder: (context) {
+        //             return index == 0
+        //                 ? VesselDataGeosatModal(vesselData: _selectedKapal!)
+        //                 : AirtimeDataModal(
+        //                     future: vesselService.getAirtimeKapal(
+        //                         _selectedKapal!['idfull'] ?? ''));
+        //           },
+        //           constraints: BoxConstraints(
+        //               maxWidth: MediaQuery.of(context).size.width,
+        //               maxHeight: MediaQuery.of(context).size.height / 3),
+        //         );
+        //       }
+        //     },
+        //   ),
+        // ),
       ),
     );
     // return Scaffold(
