@@ -9,13 +9,15 @@ class VesselInfoWidget extends StatelessWidget {
   final Map<String, dynamic> vesselData;
   final String? selectedTimeZonePreferences;
   final String? selectedSpeedPreferences;
+  final String? selectedCoordinatePreferences;
   final FormatedLatlong latlongFormatter = FormatedLatlong();
 
   VesselInfoWidget(
       {Key? key,
       required this.vesselData,
       this.selectedTimeZonePreferences,
-      this.selectedSpeedPreferences})
+      this.selectedSpeedPreferences,
+      this.selectedCoordinatePreferences})
       : super(key: key);
 
   String getSpeedValue(Map<String, dynamic>? data, String? selectedSpeed) {
@@ -99,11 +101,25 @@ class VesselInfoWidget extends StatelessWidget {
               '${DateFormat('dd MMM yyyy').format(DateTime.parse(vesselData['atp_end']))}',
             ),
             Divider(),
+            // buildInfoColumnInRow(
+            //   'Latitude ${selectedCoordinatePreferences}',
+            //   '${latlongFormatter.formatLatitude(double.tryParse(vesselData['lat']))}',
+            //   'Longitude',
+            //   '${latlongFormatter.formatLongitude(double.tryParse(vesselData['lon']))}',
+            // ),
             buildInfoColumnInRow(
               'Latitude',
-              '${latlongFormatter.formatLatitude(double.tryParse(vesselData['lat']))}',
+              selectedCoordinatePreferences == 'Degrees'
+                  ? latlongFormatter
+                      .formatLatitude(double.tryParse(vesselData['lat'] ?? '0'))
+                  : double.tryParse(vesselData['lat'] ?? '0')?.toString() ??
+                      '0',
               'Longitude',
-              '${latlongFormatter.formatLongitude(double.tryParse(vesselData['lon']))}',
+              selectedCoordinatePreferences == 'Degrees'
+                  ? latlongFormatter.formatLongitude(
+                      double.tryParse(vesselData['lon'] ?? '0'))
+                  : double.tryParse(vesselData['lon'] ?? '0')?.toString() ??
+                      '0',
             ),
             Divider(),
             buildInfoColumnInRow(

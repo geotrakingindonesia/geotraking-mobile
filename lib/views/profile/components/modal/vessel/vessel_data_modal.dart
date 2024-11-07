@@ -7,9 +7,13 @@ class VesselDataModal extends StatelessWidget {
   final Map<String, dynamic>? vesselData;
   final String? selectedTimeZonePreferences;
   final String? selectedSpeedPreferences;
+  final String? selectedCoordinatePreferences;
 
   VesselDataModal(
-      {required this.vesselData, this.selectedTimeZonePreferences, this.selectedSpeedPreferences});
+      {required this.vesselData,
+      this.selectedTimeZonePreferences,
+      this.selectedSpeedPreferences,
+      this.selectedCoordinatePreferences});
 
   String _formatLatitude(double? lat) {
     if (lat == null) return '';
@@ -44,7 +48,8 @@ class VesselDataModal extends StatelessWidget {
     return '-';
   }
 
-  String getSpeedValue(Map<String, dynamic>? data, String? selectedSpeedPreferences) {
+  String getSpeedValue(
+      Map<String, dynamic>? data, String? selectedSpeedPreferences) {
     if (data == null) return '-';
     switch (selectedSpeedPreferences) {
       case 'Knots':
@@ -265,7 +270,12 @@ class VesselDataModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black54),
                       ),
                       Text(
-                        _formatLatitude(double.parse(vesselData?['lat'] ?? '')),
+                        selectedCoordinatePreferences == 'Degrees'
+                            ? _formatLatitude(
+                                double.parse(vesselData?['lat'] ?? '0'))
+                            : double.parse(vesselData?['lat'] ?? '0')
+                                .toString(),
+                        // _formatLatitude(double.parse(vesselData?['lat'] ?? '')),
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -280,8 +290,13 @@ class VesselDataModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black54),
                       ),
                       Text(
-                        _formatLongitude(
-                            double.parse(vesselData?['lon'] ?? '')),
+                        selectedCoordinatePreferences == 'Degrees'
+                            ? _formatLongitude(
+                                double.parse(vesselData?['lon'] ?? '0'))
+                            : double.parse(vesselData?['lon'] ?? '0')
+                                .toString(),
+                        // _formatLongitude(
+                        //     double.parse(vesselData?['lon'] ?? '')),
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],

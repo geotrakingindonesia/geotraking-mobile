@@ -31,6 +31,7 @@ class _ProfileKapalListState extends State<ProfileKapalList> {
 
   String _selectedTimezonePreferences = 'UTC+7';
   String _selectedSpeedPreferences = 'Knots';
+  String _selectedCoordinatePreferences = 'Degrees';
 
   @override
   void initState() {
@@ -44,8 +45,8 @@ class _ProfileKapalListState extends State<ProfileKapalList> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _selectedSpeedPreferences = prefs.getString('SetSpeedPreferences') ?? 'Knots';
-      // _selectedCoordinate =
-      //     prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedCoordinatePreferences =
+          prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
       _selectedTimezonePreferences = prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
     });
   }
@@ -344,6 +345,7 @@ class _ProfileKapalListState extends State<ProfileKapalList> {
                             child: ProfileKapalPreviewTile(
                               selectedTimeZonePreferences: _selectedTimezonePreferences,
                               selectedSpeedPreferences: _selectedSpeedPreferences,
+                              selectedCoordinatePreferences: _selectedCoordinatePreferences,
                               isAdmin: '0',
                               mobileId: _pagedData[index]['mobile_id'] ?? '-',
                               idfull: _pagedData[index]['idfull'] ?? '-',

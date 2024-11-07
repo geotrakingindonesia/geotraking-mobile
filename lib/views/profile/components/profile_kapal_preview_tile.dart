@@ -51,6 +51,7 @@ class ProfileKapalPreviewTile extends StatefulWidget {
     this.atpEnd,
     this.selectedTimeZonePreferences,
     this.selectedSpeedPreferences,
+    this.selectedCoordinatePreferences,
   }) : super(key: key);
 
   final String idfull;
@@ -81,6 +82,7 @@ class ProfileKapalPreviewTile extends StatefulWidget {
   // set time zone data kapal
   final String? selectedTimeZonePreferences;
   final String? selectedSpeedPreferences;
+  final String? selectedCoordinatePreferences;
 
   @override
   _ProfileKapalPreviewTileState createState() =>
@@ -753,7 +755,11 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                             ),
                             Text(
                               // _formatLatitude(double.parse(widget.lat!)),
-                              _formatedLatlong.formatLatitude(double.parse(widget.lat!)),
+                              widget.selectedCoordinatePreferences == 'Degrees'
+                                  ? _formatedLatlong
+                                      .formatLatitude(double.parse(widget.lat!))
+                                  : double.parse(widget.lat!).toString(),
+                              // _formatedLatlong.formatLatitude(double.parse(widget.lat!)),
                               style: TextStyle(
                                   color: cardTextColor(widget.timestamp!)),
                             ),
@@ -773,7 +779,12 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                             ),
                             Text(
                               // _formatLongitude(double.parse(widget.lon!)),
-                              _formatedLatlong.formatLongitude(double.parse(widget.lon!)),
+                              // _formatedLatlong
+                              //     .formatLongitude(double.parse(widget.lon!)),
+                              widget.selectedCoordinatePreferences == 'Degrees'
+                                  ? _formatedLatlong
+                                      .formatLongitude(double.parse(widget.lon!))
+                                  : double.parse(widget.lon!).toString(),
                               style: TextStyle(
                                   color: cardTextColor(widget.timestamp!)),
                             ),
@@ -959,7 +970,8 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                                                 const Duration(seconds: 1),
                                             curve: Curves.elasticOut,
                                             radius: 80,
-                                            value: widget.rpm1?.toDouble() ?? 0.0,
+                                            value:
+                                                widget.rpm1?.toDouble() ?? 0.0,
                                             axis: GaugeAxis(
                                               min: 0,
                                               max: 1000,
@@ -1033,7 +1045,8 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                                                 const Duration(seconds: 1),
                                             curve: Curves.elasticOut,
                                             radius: 80,
-                                            value: widget.rpm2?.toDouble() ?? 0.0,
+                                            value:
+                                                widget.rpm2?.toDouble() ?? 0.0,
                                             axis: GaugeAxis(
                                               min: 0,
                                               max: 1000,

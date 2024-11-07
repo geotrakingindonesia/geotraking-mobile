@@ -103,6 +103,7 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
 
   String _selectedTimezonePreferences = 'UTC+7';
   String _selectedSpeedPreferences = 'Knots';
+  String _selectedCoordinatePreferences = 'Degrees';
 
   @override
   void initState() {
@@ -113,18 +114,18 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
     // _loadTimeZonePreferencesFromSharedPreferences();
   }
 
-  
   Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _selectedSpeedPreferences = prefs.getString('SetSpeedPreferences') ?? 'Knots';
-      // _selectedCoordinate =
-      //     prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
-      _selectedTimezonePreferences = prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+      _selectedSpeedPreferences =
+          prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      _selectedCoordinatePreferences =
+          prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedTimezonePreferences =
+          prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
       _selectedLanguage = prefs.getString('language') ?? 'English';
     });
   }
-
 
   // _loadTimeZonePreferencesFromSharedPreferences() async {
   //   final prefs = await SharedPreferences.getInstance();
@@ -515,8 +516,12 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                                 ),
                                 customContent: () => VesselInfoWidget(
                                   vesselData: kapalMember,
-                                  selectedTimeZonePreferences: _selectedTimezonePreferences,
-                                  selectedSpeedPreferences: _selectedSpeedPreferences,
+                                  selectedTimeZonePreferences:
+                                      _selectedTimezonePreferences,
+                                  selectedSpeedPreferences:
+                                      _selectedSpeedPreferences,
+                                  selectedCoordinatePreferences:
+                                      _selectedCoordinatePreferences,
                                 ),
                               ),
                           ],

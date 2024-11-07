@@ -69,6 +69,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
 
   String _selectedTimezonePreferences = 'UTC+7';
   String _selectedSpeedPreferences = 'Knots';
+  String _selectedCoordinatePreferences = 'Degrees';
 
   @override
   void initState() {
@@ -89,8 +90,8 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _selectedSpeedPreferences = prefs.getString('SetSpeedPreferences') ?? 'Knots';
-      // _selectedCoordinate =
-      //     prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedCoordinatePreferences =
+          prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
       _selectedTimezonePreferences = prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
       _selectedLanguage = prefs.getString('language') ?? 'English';
     });
@@ -463,6 +464,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
                                     vesselData: _vesselData,
                                     selectedTimeZonePreferences: _selectedTimezonePreferences,
                                     selectedSpeedPreferences: _selectedSpeedPreferences,
+                                    selectedCoordinatePreferences: _selectedCoordinatePreferences,
                                   ),
                                 if (_showTrackingModal)
                                   TrakingDataModal(
