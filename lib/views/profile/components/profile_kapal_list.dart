@@ -29,28 +29,40 @@ class _ProfileKapalListState extends State<ProfileKapalList> {
   bool _smartOneSolarChecked = false;
   bool _st6100rpmChecked = false;
 
-  String _selectedTimezone = 'UTC+7';
+  String _selectedTimezonePreferences = 'UTC+7';
+  String _selectedSpeedPreferences = 'Knots';
 
   @override
   void initState() {
     super.initState();
     _fetchKapalMember();
-    _loadTimeZonePreferencesFromSharedPreferences();
+    // _loadTimeZonePreferencesFromSharedPreferences();
+    _loadPreferences();
   }
 
-  _loadTimeZonePreferencesFromSharedPreferences() async {
+  Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
-    if (timeZonePreferences != null) {
-      setState(() {
-        _selectedTimezone = timeZonePreferences;
-      });
-    }
+    setState(() {
+      _selectedSpeedPreferences = prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      // _selectedCoordinate =
+      //     prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedTimezonePreferences = prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+    });
   }
+
+  // _loadTimeZonePreferencesFromSharedPreferences() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+  //   if (timeZonePreferences != null) {
+  //     setState(() {
+  //       _selectedTimezonePreferences = timeZonePreferences;
+  //     });
+  //   }
+  // }
 
   Future _fetchKapalMember() async {
     try {
-      // final kapalMemberList = await vesselService.getDataKapal(_selectedTimezone);
+      // final kapalMemberList = await vesselService.getDataKapal(_selectedTimezonePreferences);
       final kapalMemberList = await vesselService.getDataKapal();
       print(kapalMemberList);
       setState(() {
@@ -301,10 +313,37 @@ class _ProfileKapalListState extends State<ProfileKapalList> {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
+                          String getSpeedValue(
+                              Map<String, dynamic> data, String selectedSpeed) {
+                            switch (selectedSpeed) {
+                              // case 'Knots':
+                              //   return data['speed_kn'] ?? '0';
+                              // case 'Km/h':
+                              //   return data['speed_kmh'] ?? '0';
+                              // case 'm/s':
+                              //   return data['speed_ms'] ?? '0';
+                              // case 'mp/h':
+                              //   return data['speed_mph'] ?? '0';
+                              // default:
+                              //   return '0';
+                              case 'Knots':
+                                return (data['speed_kn'] ?? 0).toString();
+                              case 'Km/h':
+                                return (data['speed_kmh'] ?? 0).toString();
+                              case 'm/s':
+                                return (data['speed_ms'] ?? 0).toString();
+                              case 'mp/h':
+                                return (data['speed_mph'] ?? 0).toString();
+                              default:
+                                return '0';
+                            }
+                          }
+
                           return Padding(
                             padding: const EdgeInsets.only(top: 2),
                             child: ProfileKapalPreviewTile(
-                              selectedTimeZone: _selectedTimezone,
+                              selectedTimeZonePreferences: _selectedTimezonePreferences,
+                              selectedSpeedPreferences: _selectedSpeedPreferences,
                               isAdmin: '0',
                               mobileId: _pagedData[index]['mobile_id'] ?? '-',
                               idfull: _pagedData[index]['idfull'] ?? '-',
@@ -319,9 +358,11 @@ class _ProfileKapalListState extends State<ProfileKapalList> {
                               externalVoltage:
                                   _pagedData[index]['externalvoltage'] ?? '-',
                               heading: _pagedData[index]['heading'] ?? '0',
-                              speed: _pagedData[index]['speed'] ?? '0',
-                              speedKmh: _pagedData[index]['speed_kmh'] ?? '0',
-                              speedKn: _pagedData[index]['speed_kn'] ?? '0',
+                              speed: getSpeedValue(
+                                  _pagedData[index], _selectedSpeedPreferences),
+                              // speed: _pagedData[index]['speed'] ?? '0',
+                              // speedKmh: _pagedData[index]['speed_kmh'] ?? '0',
+                              // speedKn: _pagedData[index]['speed_kn'] ?? '0',
                               lat: _pagedData[index]['lat'] ?? '0',
                               lon: _pagedData[index]['lon'] ?? '0',
                               timestamp: _pagedData[index]['timestamp'] ?? '',

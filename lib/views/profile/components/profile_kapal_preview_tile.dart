@@ -41,13 +41,16 @@ class ProfileKapalPreviewTile extends StatefulWidget {
     this.speed,
     this.speedKmh,
     this.speedKn,
+    this.speedMs,
+    this.speedMph,
     this.rpm1,
     this.rpm2,
     this.timestamp,
     this.broadcast,
     this.atpStart,
     this.atpEnd,
-    this.selectedTimeZone,
+    this.selectedTimeZonePreferences,
+    this.selectedSpeedPreferences,
   }) : super(key: key);
 
   final String idfull;
@@ -67,6 +70,8 @@ class ProfileKapalPreviewTile extends StatefulWidget {
   final String? speed;
   final double? speedKmh;
   final double? speedKn;
+  final double? speedMs;
+  final double? speedMph;
   final int? rpm1;
   final int? rpm2;
   final String? timestamp;
@@ -74,7 +79,8 @@ class ProfileKapalPreviewTile extends StatefulWidget {
   final String? atpStart;
   final String? atpEnd;
   // set time zone data kapal
-  final String? selectedTimeZone;
+  final String? selectedTimeZonePreferences;
+  final String? selectedSpeedPreferences;
 
   @override
   _ProfileKapalPreviewTileState createState() =>
@@ -487,7 +493,7 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Received Date (${widget.selectedTimeZone}):',
+                              'Received Date (${widget.selectedTimeZonePreferences}):',
                               style: TextStyle(
                                   color:
                                       cardHeadlineTextColor(widget.timestamp!)),
@@ -507,7 +513,7 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Broadcast Date (${widget.selectedTimeZone}):',
+                              'Broadcast Date (${widget.selectedTimeZonePreferences}):',
                               style: TextStyle(
                                   color:
                                       cardHeadlineTextColor(widget.timestamp!)),
@@ -652,7 +658,8 @@ class _ProfileKapalPreviewTileState extends State<ProfileKapalPreviewTile> {
                                       cardHeadlineTextColor(widget.timestamp!)),
                             ),
                             Text(
-                              '${widget.speedKn ?? '-'} knot/${widget.speedKmh ?? '-'} kmh',
+                              // '${widget.speedKn ?? '-'} knot/${widget.speedKmh ?? '-'} kmh ${widget.selectedSpeedPreferences}',
+                              '${widget.speed ?? '-'} ${widget.selectedSpeedPreferences}',
                               style: TextStyle(
                                   color: cardTextColor(widget.timestamp!)),
                             ),

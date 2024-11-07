@@ -5,9 +5,11 @@ import 'package:intl/intl.dart';
 
 class VesselDataModal extends StatelessWidget {
   final Map<String, dynamic>? vesselData;
-  final String? selectedTimeZone;
+  final String? selectedTimeZonePreferences;
+  final String? selectedSpeedPreferences;
 
-  VesselDataModal({required this.vesselData, this.selectedTimeZone});
+  VesselDataModal(
+      {required this.vesselData, this.selectedTimeZonePreferences, this.selectedSpeedPreferences});
 
   String _formatLatitude(double? lat) {
     if (lat == null) return '';
@@ -40,6 +42,22 @@ class VesselDataModal extends StatelessWidget {
       }
     }
     return '-';
+  }
+
+  String getSpeedValue(Map<String, dynamic>? data, String? selectedSpeedPreferences) {
+    if (data == null) return '-';
+    switch (selectedSpeedPreferences) {
+      case 'Knots':
+        return (data['speed_kn'] ?? 0).toString() + ' Knots';
+      case 'Km/h':
+        return (data['speed_kmh'] ?? 0).toString() + ' Km/h';
+      case 'm/s':
+        return (data['speed_ms'] ?? 0).toString() + ' m/s';
+      case 'mp/h':
+        return (data['speed_mph'] ?? 0).toString() + ' mp/h';
+      default:
+        return '-';
+    }
   }
 
   @override
@@ -167,7 +185,7 @@ class VesselDataModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Received Date (${selectedTimeZone}):',
+                        'Received Date (${selectedTimeZonePreferences}):',
                         style: const TextStyle(color: Colors.black54),
                       ),
                       Text(
@@ -182,7 +200,7 @@ class VesselDataModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Broadcast Date (${selectedTimeZone}):',
+                        'Broadcast Date (${selectedTimeZonePreferences}):',
                         style: const TextStyle(color: Colors.black54),
                       ),
                       Text(
@@ -247,7 +265,7 @@ class VesselDataModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black54),
                       ),
                       Text(
-                        _formatLatitude(double.parse(vesselData?['lat'] ?? '')), 
+                        _formatLatitude(double.parse(vesselData?['lat'] ?? '')),
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],
@@ -337,8 +355,9 @@ class VesselDataModal extends StatelessWidget {
                         style: const TextStyle(color: Colors.black54),
                       ),
                       Text(
+                        getSpeedValue(vesselData, selectedSpeedPreferences),
                         // '${vesselData?['speed'] ?? '-'}',
-                        '${vesselData?['speed_kn'] ?? '-'} knot/${vesselData?['speed_kmh'] ?? '-'} kmh',
+                        // '${vesselData?['speed_kn'] ?? '-'} knot/${vesselData?['speed_kmh'] ?? '-'} kmh ${selectedSpeedPreferences}',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],

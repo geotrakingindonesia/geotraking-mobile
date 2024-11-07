@@ -101,25 +101,40 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
 
   String _selectedMapProvider = 'OpenStreetMap';
 
-  String _selectedTimezone = 'UTC+7';
+  String _selectedTimezonePreferences = 'UTC+7';
+  String _selectedSpeedPreferences = 'Knots';
 
   @override
   void initState() {
     super.initState();
     _fetchData();
-    _loadLanguageFromSharedPreferences();
-    _loadTimeZonePreferencesFromSharedPreferences();
+    _loadPreferences();
+    // _loadLanguageFromSharedPreferences();
+    // _loadTimeZonePreferencesFromSharedPreferences();
   }
 
-  _loadTimeZonePreferencesFromSharedPreferences() async {
+  
+  Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
-    if (timeZonePreferences != null) {
-      setState(() {
-        _selectedTimezone = timeZonePreferences;
-      });
-    }
+    setState(() {
+      _selectedSpeedPreferences = prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      // _selectedCoordinate =
+      //     prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedTimezonePreferences = prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+      _selectedLanguage = prefs.getString('language') ?? 'English';
+    });
   }
+
+
+  // _loadTimeZonePreferencesFromSharedPreferences() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+  //   if (timeZonePreferences != null) {
+  //     setState(() {
+  //       _selectedTimezonePreferences = timeZonePreferences;
+  //     });
+  //   }
+  // }
 
   void _toggleSidebar() {
     setState(() {
@@ -174,15 +189,15 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
     });
   }
 
-  _loadLanguageFromSharedPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    final language = prefs.getString('language');
-    if (language != null) {
-      setState(() {
-        _selectedLanguage = language;
-      });
-    }
-  }
+  // _loadLanguageFromSharedPreferences() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final language = prefs.getString('language');
+  //   if (language != null) {
+  //     setState(() {
+  //       _selectedLanguage = language;
+  //     });
+  //   }
+  // }
 
   // String _formatLatitude(double? lat) {
   //   if (lat == null) return '';
@@ -241,7 +256,7 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
 
       final basarnasData = await _basarnasService.getCachedData();
       final portPelabuhanData = await _portPelabuhanService.getCachedData();
-      // final kapalMemberData = await vesselService.getDataKapal(_selectedTimezone);
+      // final kapalMemberData = await vesselService.getDataKapal(_selectedTimezonePreferences);
       final kapalMemberData = await vesselService.getDataKapal();
 
       _calculateDistancesAndCreatePolylines(
@@ -500,7 +515,8 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                                 ),
                                 customContent: () => VesselInfoWidget(
                                   vesselData: kapalMember,
-                                  selectedTimeZone: _selectedTimezone,
+                                  selectedTimeZonePreferences: _selectedTimezonePreferences,
+                                  selectedSpeedPreferences: _selectedSpeedPreferences,
                                 ),
                               ),
                           ],

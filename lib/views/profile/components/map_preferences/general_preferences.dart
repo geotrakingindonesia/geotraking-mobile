@@ -28,7 +28,8 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _selectedSpeed = prefs.getString('SetSpeedPreferences') ?? 'Knots';
-      _selectedCoordinate = prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedCoordinate =
+          prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
       _selectedTimezone = prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
     });
   }
@@ -44,19 +45,26 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
       description: Text('Your preferences have been saved successfully.',
           style: TextStyle(color: Colors.white)),
       icon: Icon(Icons.check_circle, color: Colors.white),
-      background: Colors.transparent, 
-      position: Alignment.topCenter, 
-      animation: AnimationType.fromTop, 
+      background: Colors.transparent,
+      position: Alignment.topCenter,
+      animation: AnimationType.fromTop,
       showProgressIndicator: false,
       displayCloseButton: false,
       width: MediaQuery.of(context).size.width * 0.9,
-      height: 70, 
+      height: 70,
       borderRadius: BorderRadius.circular(10),
     ).show(context);
 
     print(
         'Preferences saved: Speed=$_selectedSpeed, Coordinate=$_selectedCoordinate, Timezone=$_selectedTimezone');
   }
+
+  final Map<String, String> speedOptions = {
+    'Knots': 'Knots',
+    'Km/h': 'Kilometer per Hour (Km/h)',
+    'm/s': 'Meter per Second (m/s)',
+    'mp/h': 'Mile per Hour (mp/h)'
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -92,17 +100,23 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
                   SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     value: _selectedSpeed,
-                    items: [
-                      'Knots',
-                      'Kilometer per Hour (Km/h)',
-                      'Meter per Second (m/s)',
-                      'Mile per Hour (mp/h)'
-                    ]
-                        .map((speed) => DropdownMenuItem(
-                              value: speed,
-                              child: Text(speed),
-                            ))
-                        .toList(),
+                    items: speedOptions.entries.map((entry) {
+                      return DropdownMenuItem(
+                        value: entry.key,
+                        child: Text(entry.value),
+                      );
+                    }).toList(),
+                    // items: [
+                    //   'Knots',
+                    //   'Kilometer per Hour (Km/h)',
+                    //   'Meter per Second (m/s)',
+                    //   'Mile per Hour (mp/h)'
+                    // ]
+                    //     .map((speed) => DropdownMenuItem(
+                    //           value: speed,
+                    //           child: Text(speed),
+                    //         ))
+                    //     .toList(),
                     onChanged: (value) {
                       setState(() {
                         _selectedSpeed = value!;

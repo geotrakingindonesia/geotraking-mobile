@@ -7,10 +7,32 @@ import 'package:intl/intl.dart';
 
 class VesselInfoWidget extends StatelessWidget {
   final Map<String, dynamic> vesselData;
-  final String? selectedTimeZone;
+  final String? selectedTimeZonePreferences;
+  final String? selectedSpeedPreferences;
   final FormatedLatlong latlongFormatter = FormatedLatlong();
 
-  VesselInfoWidget({Key? key, required this.vesselData, this.selectedTimeZone}) : super(key: key);
+  VesselInfoWidget(
+      {Key? key,
+      required this.vesselData,
+      this.selectedTimeZonePreferences,
+      this.selectedSpeedPreferences})
+      : super(key: key);
+
+  String getSpeedValue(Map<String, dynamic>? data, String? selectedSpeed) {
+    if (data == null) return '-';
+    switch (selectedSpeed) {
+      case 'Knots':
+        return (data['speed_kn'] ?? 0).toString() + ' Knots';
+      case 'Km/h':
+        return (data['speed_kmh'] ?? 0).toString() + ' Km/h';
+      case 'm/s':
+        return (data['speed_ms'] ?? 0).toString() + ' m/s';
+      case 'mp/h':
+        return (data['speed_mph'] ?? 0).toString() + ' mp/h';
+      default:
+        return '-';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +86,9 @@ class VesselInfoWidget extends StatelessWidget {
             ),
             Divider(),
             buildInfoColumnInRow(
-              'Received date ($selectedTimeZone)',
+              'Received date ($selectedTimeZonePreferences)',
               '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(vesselData['timestamp']))}',
-              'Broadcast date ($selectedTimeZone)',
+              'Broadcast date ($selectedTimeZonePreferences)',
               '${DateFormat('dd MMM yyyy hh:mm a').format(DateTime.parse(vesselData['broadcast']))}',
             ),
             Divider(),
@@ -95,7 +117,8 @@ class VesselInfoWidget extends StatelessWidget {
               'Heading',
               '${vesselData['heading']}°',
               'Speed',
-              '${vesselData['speed_kn']} knots',
+              getSpeedValue(vesselData, selectedSpeedPreferences),
+              // '${vesselData['speed_kn']} knots',
             ),
           ],
         ),

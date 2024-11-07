@@ -67,13 +67,14 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
 
   bool isPlaybackActive = false;
 
-  String _selectedTimezone = 'UTC+7';
+  String _selectedTimezonePreferences = 'UTC+7';
+  String _selectedSpeedPreferences = 'Knots';
 
   @override
   void initState() {
     super.initState();
-    _loadLanguageFromSharedPreferences();
-    _loadTimeZonePreferencesFromSharedPreferences();
+    // _loadLanguageFromSharedPreferences();
+    _loadPreferences();
     _showVesselModal = true;
     _fetchAndShowVesselData();
   }
@@ -84,25 +85,36 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
     super.dispose();
   }
 
-  _loadTimeZonePreferencesFromSharedPreferences() async {
+  Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
-    if (timeZonePreferences != null) {
-      setState(() {
-        _selectedTimezone = timeZonePreferences;
-      });
-    }
+    setState(() {
+      _selectedSpeedPreferences = prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      // _selectedCoordinate =
+      //     prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedTimezonePreferences = prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+      _selectedLanguage = prefs.getString('language') ?? 'English';
+    });
   }
 
-  _loadLanguageFromSharedPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    final language = prefs.getString('language');
-    if (language != null) {
-      setState(() {
-        _selectedLanguage = language;
-      });
-    }
-  }
+  // _loadTimeZonePreferencesFromSharedPreferences() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+  //   if (timeZonePreferences != null) {
+  //     setState(() {
+  //       _selectedTimezonePreferences = timeZonePreferences;
+  //     });
+  //   }
+  // }
+
+  // _loadLanguageFromSharedPreferences() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final language = prefs.getString('language');
+  //   if (language != null) {
+  //     setState(() {
+  //       _selectedLanguage = language;
+  //     });
+  //   }
+  // }
 
   void _onTrackVessel(List<LatLng> polylinePoints, List<Marker> markers,
       List<double> headings) {
@@ -127,7 +139,7 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
   }
 
   Future<void> _fetchAndShowVesselData() async {
-    // final vesselDataList = await vesselService.getDataKapal(_selectedTimezone);
+    // final vesselDataList = await vesselService.getDataKapal(_selectedTimezonePreferences);
     final vesselDataList = await vesselService.getDataKapal();
     final vesselData = vesselDataList!
         .firstWhere((data) => data['mobile_id'] == widget.mobileId);
@@ -449,7 +461,8 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
                                 if (_showVesselModal)
                                   VesselDataModal(
                                     vesselData: _vesselData,
-                                    selectedTimeZone: _selectedTimezone,
+                                    selectedTimeZonePreferences: _selectedTimezonePreferences,
+                                    selectedSpeedPreferences: _selectedSpeedPreferences,
                                   ),
                                 if (_showTrackingModal)
                                   TrakingDataModal(

@@ -168,7 +168,7 @@ class VesselService {
 				COALESCE(m.heading, 0) AS heading,
 				COALESCE(m.speed, 0) AS speed, 
         COALESCE(speed * 3.6, 0) AS speed_kmh,
-        COALESCE(speed * 1.9438, 0) AS speed_kn,  
+        COALESCE(speed * 1, 0) AS speed_kn,  
         CASE WHEN m.rpm1 IS NULL THEN 0 ELSE m.rpm1 END AS rpm1,
         CASE WHEN m.rpm2 IS NULL THEN 0 ELSE m.rpm2 END AS rpm2,
         m.powerstatus, 
@@ -385,7 +385,7 @@ class VesselService {
         Longitude AS longitude,
         Speed AS speed,
         (Speed * 3.6) AS speed_kmh,
-        (Speed * 1.9438) AS speed_kn,
+        (Speed * 1) AS speed_kn,
         Direction AS heading
       FROM
         psg_modata
@@ -408,7 +408,7 @@ class VesselService {
         Longitude AS longitude,
         Speed AS speed,
         (Speed * 3.6) AS speed_kmh,
-        (Speed * 1.9438) AS speed_kn,
+        (Speed * 1) AS speed_kn,
         Direction AS heading
       FROM
         psg_modata
@@ -469,7 +469,7 @@ class VesselService {
 				COALESCE(m.heading, 0) AS heading,
 				COALESCE(m.speed, 0) AS speed, 
         COALESCE(speed * 3.6, 0) AS speed_kmh,
-        COALESCE(speed * 1.9438, 0) AS speed_kn,
+        COALESCE(speed * 1, 0) AS speed_kn,
         m.powerstatus, 
 				COALESCE(m.externalvoltage, 0) AS externalvoltage,
         m.atp_start, 
@@ -582,9 +582,9 @@ class VesselService {
   //   DailyAverageSpeed AS (
   //       SELECT
   //           tgl_aktifasi,
-  //           AVG(Speed) * 1.9438 AS average_speed_knots,
-  //           MAX(Speed) * 1.9438 AS high_speed_knots,
-  //           MIN(Speed) * 1.9438 AS low_speed_knots
+  //           AVG(Speed) * 1 AS average_speed_knots,
+  //           MAX(Speed) * 1 AS high_speed_knots,
+  //           MIN(Speed) * 1 AS low_speed_knots
   //       FROM
   //           DailyData
   //       GROUP BY
@@ -679,9 +679,9 @@ class VesselService {
   //   //       fd.longitude AS start_longitude,
   //   //       ld.latitude AS end_latitude,
   //   //       ld.longitude AS end_longitude,
-  //   //       ROUND(das.average_speed * 1.9438, 1) AS average_speed_knots,
-  //   //       ROUND(das.high_speed * 1.9438, 1) AS high_speed_knots,
-  //   //       ROUND(das.low_speed * 1.9438, 1) AS low_speed_knots
+  //   //       ROUND(das.average_speed * 1, 1) AS average_speed_knots,
+  //   //       ROUND(das.high_speed * 1, 1) AS high_speed_knots,
+  //   //       ROUND(das.low_speed * 1, 1) AS low_speed_knots
   //   //   FROM
   //   //       FirstData fd
   //   //   JOIN
@@ -760,7 +760,7 @@ class VesselService {
         msgTimestamp_GMT AS broadcast,
         Latitude AS latitude,
         Longitude AS longitude,
-        (Speed * 1.9438) AS speed_kn,
+        (Speed * 1) AS speed_kn,
         Direction AS heading
       FROM
         psg_modata
