@@ -46,6 +46,7 @@ dependencies:
   flutter_plugin_android_lifecycle: ^2.0.23
 
   info_popup: ^4.3.1 #package utk popup tampil di kapal 
+  elegant_notification: ^2.3.0 #package utk notif ketika berhasil merubah prefences
 
 dev_dependencies:
   flutter_test:

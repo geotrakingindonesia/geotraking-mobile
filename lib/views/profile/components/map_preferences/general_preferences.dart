@@ -1,3 +1,5 @@
+// // ignore_for_file: use_super_parameters, prefer_const_constructors, sort_child_properties_last
+
 // import 'package:flutter/material.dart';
 // import 'package:geotraking/core/components/app_back_button.dart';
 
@@ -9,6 +11,14 @@
 // }
 
 // class GeneralPreferencesState extends State<GeneralPreferences> {
+//   String _selectedSpeed = 'Knots';
+//   String _selectedCoordinate = 'Degrees';
+//   String _selectedTimezone = 'UTC+7';
+
+//   void _savePreferences() {
+//     print(
+//         'Preferences saved: Speed=$_selectedSpeed, Coordinate=$_selectedCoordinate, Timezone=$_selectedTimezone');
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -22,11 +32,195 @@
 //             ),
 //         backgroundColor: Colors.white,
 //       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           children: [
+//             Container(
+//               padding: EdgeInsets.all(16),
+//               margin: EdgeInsets.only(bottom: 16),
+//               decoration: BoxDecoration(
+//                 color: Color.fromARGB(255, 122, 178, 178),
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text('Units Settings',
+//                       style: Theme.of(context).textTheme.titleMedium),
+//                   Divider(
+//                     color: Colors.black,
+//                   ),
+//                   SizedBox(height: 8),
+//                   DropdownButtonFormField<String>(
+//                     value: _selectedSpeed,
+//                     items: [
+//                       'Knots',
+//                       'Kilometer per Hour (Km/h)',
+//                       'Meter per Second (m/s)',
+//                       'Mile per Hour (mp/h)'
+//                     ]
+//                         .map((speed) => DropdownMenuItem(
+//                               value: speed,
+//                               child: Text(speed),
+//                             ))
+//                         .toList(),
+//                     onChanged: (value) {
+//                       setState(() {
+//                         _selectedSpeed = value!;
+//                       });
+//                     },
+//                     decoration: InputDecoration(
+//                       labelText: 'Speed',
+//                       labelStyle: TextStyle(color: Colors.black),
+//                       border: OutlineInputBorder(
+//                         borderSide: BorderSide(color: Colors.black),
+//                       ),
+//                       enabledBorder: OutlineInputBorder(
+//                         borderSide: BorderSide(color: Colors.black),
+//                       ),
+//                       focusedBorder: OutlineInputBorder(
+//                         borderSide: BorderSide(color: Colors.black, width: 2),
+//                       ),
+//                     ),
+//                   ),
+//                   SizedBox(height: 8),
+//                   DropdownButtonFormField<String>(
+//                     value: _selectedCoordinate,
+//                     items: ['Degrees', 'Decimal']
+//                         .map((coordinate) => DropdownMenuItem(
+//                               value: coordinate,
+//                               child: Text(coordinate),
+//                             ))
+//                         .toList(),
+//                     onChanged: (value) {
+//                       setState(() {
+//                         _selectedCoordinate = value!;
+//                       });
+//                     },
+//                     decoration: InputDecoration(
+//                       labelText: 'Coordinate',
+//                       labelStyle: TextStyle(color: Colors.black),
+//                       border: OutlineInputBorder(
+//                         borderSide: BorderSide(color: Colors.black),
+//                       ),
+//                       enabledBorder: OutlineInputBorder(
+//                         borderSide: BorderSide(color: Colors.black),
+//                       ),
+//                       focusedBorder: OutlineInputBorder(
+//                         borderSide: BorderSide(color: Colors.black, width: 2),
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             Container(
+//               padding: EdgeInsets.all(16),
+//               decoration: BoxDecoration(
+//                 color: Color.fromARGB(255, 122, 178, 178),
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'DateTime Settings',
+//                     style: Theme.of(context).textTheme.titleMedium,
+//                   ),
+//                   Divider(
+//                     color: Colors.black,
+//                   ),
+//                   RadioListTile<String>(
+//                     title: const Text('UTC (Europe/London)'),
+//                     value: 'UTC',
+//                     groupValue: _selectedTimezone,
+//                     activeColor: Colors.black,
+//                     onChanged: (value) {
+//                       setState(() {
+//                         _selectedTimezone = value!;
+//                       });
+//                     },
+//                   ),
+//                   RadioListTile<String>(
+//                     title: const Text('UTC+7 (Asia/Jakarta)'),
+//                     value: 'UTC+7',
+//                     groupValue: _selectedTimezone,
+//                     activeColor: Colors.black,
+//                     onChanged: (value) {
+//                       setState(() {
+//                         _selectedTimezone = value!;
+//                       });
+//                     },
+//                   ),
+//                   RadioListTile<String>(
+//                     title: const Text('UTC+8 (Asia/Makassar)'),
+//                     value: 'UTC+8',
+//                     groupValue: _selectedTimezone,
+//                     activeColor: Colors.black,
+//                     onChanged: (value) {
+//                       setState(() {
+//                         _selectedTimezone = value!;
+//                       });
+//                     },
+//                   ),
+//                   RadioListTile<String>(
+//                     title: const Text('UTC+9 (Asia/Jayapura)'),
+//                     value: 'UTC+9',
+//                     groupValue: _selectedTimezone,
+//                     activeColor: Colors.black,
+//                     onChanged: (value) {
+//                       setState(() {
+//                         _selectedTimezone = value!;
+//                       });
+//                     },
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             SizedBox(height: 16),
+//             Row(
+//               children: [
+//                 Expanded(
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.end,
+//                     children: [
+//                       ElevatedButton(
+//                         onPressed: _savePreferences,
+//                         child: Text(
+//                           'Save',
+//                           style: Theme.of(context)
+//                               .textTheme
+//                               .titleSmall
+//                               ?.copyWith(
+//                                   fontWeight: FontWeight.bold,
+//                                   color: Colors.white),
+//                         ),
+//                         style: ElevatedButton.styleFrom(
+//                           backgroundColor: Colors.black,
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(10),
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ],
+//         ),
+//       ),
 //     );
 //   }
 // }
 
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, use_super_parameters, avoid_print
+
+import 'package:elegant_notification/elegant_notification.dart';
+import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 
 class GeneralPreferences extends StatefulWidget {
@@ -37,18 +231,55 @@ class GeneralPreferences extends StatefulWidget {
 }
 
 class GeneralPreferencesState extends State<GeneralPreferences> {
-  // Dropdown selected values
-  String _selectedDistance = 'Kilometers';
   String _selectedSpeed = 'Knots';
   String _selectedCoordinate = 'Degrees';
+  String _selectedTimezone = 'UTC+7';
 
-  // Radio selected value
-  String _selectedTimezone = 'UTC';
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
 
-  void _savePreferences() {
-    // Add your save logic here
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedSpeed = prefs.getString('speed') ?? 'Knots';
+      _selectedCoordinate = prefs.getString('coordinate') ?? 'Degrees';
+      _selectedTimezone = prefs.getString('timezone') ?? 'UTC+7';
+    });
+  }
+
+  Future<void> _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('speed', _selectedSpeed);
+    await prefs.setString('coordinate', _selectedCoordinate);
+    await prefs.setString('timezone', _selectedTimezone);
+
+    // ElegantNotification.success(
+    //   title: Text('Preferences Saved'),
+    //   description: Text('Your preferences have been saved successfully.'),
+    // ).show(context);
+
+    ElegantNotification.success(
+      title: Text('Preferences Saved', style: TextStyle(color: Colors.white)),
+      description: Text('Your preferences have been saved successfully.',
+          style: TextStyle(color: Colors.white)),
+      icon: Icon(Icons.check_circle, color: Colors.white),
+      background: Colors.green, 
+      // background: Color.fromARGB(255, 192, 235, 166), 
+      position: Alignment.topCenter, 
+      animation: AnimationType.fromTop, 
+      progressIndicatorBackground: Colors.white, 
+      showProgressIndicator: false,
+      displayCloseButton: false,
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: 70, 
+      borderRadius: BorderRadius.circular(10),
+    ).show(context);
+
     print(
-        'Preferences saved: Distance=$_selectedDistance, Speed=$_selectedSpeed, Coordinate=$_selectedCoordinate, Timezone=$_selectedTimezone');
+        'Preferences saved: Speed=$_selectedSpeed, Coordinate=$_selectedCoordinate, Timezone=$_selectedTimezone');
   }
 
   @override
@@ -67,46 +298,30 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // First box for Units Test
             Container(
               padding: EdgeInsets.all(16),
               margin: EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Color.fromARGB(255, 122, 178, 178),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Units Settings',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  Text('Units Settings',
+                      style: Theme.of(context).textTheme.titleMedium),
+                  Divider(
+                    color: Colors.black,
                   ),
-                  // SizedBox(height: 8),
-                  // // Distance Select
-                  // DropdownButtonFormField<String>(
-                  //   value: _selectedDistance,
-                  //   items: ['Kilometers', 'Miles']
-                  //       .map((distance) => DropdownMenuItem(
-                  //             value: distance,
-                  //             child: Text(distance),
-                  //           ))
-                  //       .toList(),
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       _selectedDistance = value!;
-                  //     });
-                  //   },
-                  //   decoration: InputDecoration(
-                  //     labelText: 'Distance',
-                  //     border: OutlineInputBorder(),
-                  //   ),
-                  // ),
                   SizedBox(height: 8),
-                  // Speed Select
                   DropdownButtonFormField<String>(
                     value: _selectedSpeed,
-                    items: ['Knots', 'Kilometer per Hour (Km/h)', 'Meter per Second (m/s)', 'Mile per Hour (mp/h)']
+                    items: [
+                      'Knots',
+                      'Kilometer per Hour (Km/h)',
+                      'Meter per Second (m/s)',
+                      'Mile per Hour (mp/h)'
+                    ]
                         .map((speed) => DropdownMenuItem(
                               value: speed,
                               child: Text(speed),
@@ -119,11 +334,19 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
                     },
                     decoration: InputDecoration(
                       labelText: 'Speed',
-                      border: OutlineInputBorder(),
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 2),
+                      ),
                     ),
                   ),
                   SizedBox(height: 8),
-                  // Coordinate Select
                   DropdownButtonFormField<String>(
                     value: _selectedCoordinate,
                     items: ['Degrees', 'Decimal']
@@ -139,17 +362,25 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
                     },
                     decoration: InputDecoration(
                       labelText: 'Coordinate',
-                      border: OutlineInputBorder(),
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 2),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            // Second box for Date Settings
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Color.fromARGB(255, 122, 178, 178),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -159,12 +390,14 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
                     'DateTime Settings',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  SizedBox(height: 8),
-                  // UTC Radio Options
+                  Divider(
+                    color: Colors.black,
+                  ),
                   RadioListTile<String>(
                     title: const Text('UTC (Europe/London)'),
                     value: 'UTC',
                     groupValue: _selectedTimezone,
+                    activeColor: Colors.black,
                     onChanged: (value) {
                       setState(() {
                         _selectedTimezone = value!;
@@ -175,6 +408,7 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
                     title: const Text('UTC+7 (Asia/Jakarta)'),
                     value: 'UTC+7',
                     groupValue: _selectedTimezone,
+                    activeColor: Colors.black,
                     onChanged: (value) {
                       setState(() {
                         _selectedTimezone = value!;
@@ -185,6 +419,7 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
                     title: const Text('UTC+8 (Asia/Makassar)'),
                     value: 'UTC+8',
                     groupValue: _selectedTimezone,
+                    activeColor: Colors.black,
                     onChanged: (value) {
                       setState(() {
                         _selectedTimezone = value!;
@@ -195,6 +430,7 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
                     title: const Text('UTC+9 (Asia/Jayapura)'),
                     value: 'UTC+9',
                     groupValue: _selectedTimezone,
+                    activeColor: Colors.black,
                     onChanged: (value) {
                       setState(() {
                         _selectedTimezone = value!;
@@ -204,7 +440,7 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
                 ],
               ),
             ),
-            SizedBox(height: 16), // Spacing between boxes and button
+            SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
@@ -229,40 +465,11 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
                           ),
                         ),
                       ),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     // onUpdateProfile(_avatar);
-                      //     onUpdateProfile();
-                      //   },
-                      //   style: ElevatedButton.styleFrom(
-                      //     backgroundColor: Colors.black,
-                      //     shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(10),
-                      //     ),
-                      //   ),
-                      //   child: Text(
-                      //     'Update Profile',
-                      //     style: Theme.of(context)
-                      //         .textTheme
-                      //         .titleSmall
-                      //         ?.copyWith(
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.white),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
               ],
             ),
-              // ElevatedButton(
-              //   onPressed: _savePreferences,
-              //   child: Text('Save'),
-              //   style: ElevatedButton.styleFrom(
-              //     padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              //     textStyle: TextStyle(fontSize: 16),
-              //   ),
-              // ),
           ],
         ),
       ),
