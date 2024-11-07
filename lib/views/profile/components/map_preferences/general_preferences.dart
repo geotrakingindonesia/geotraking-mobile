@@ -246,7 +246,7 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
     setState(() {
       _selectedSpeed = prefs.getString('speed') ?? 'Knots';
       _selectedCoordinate = prefs.getString('coordinate') ?? 'Degrees';
-      _selectedTimezone = prefs.getString('timezone') ?? 'UTC+7';
+      _selectedTimezone = prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
     });
   }
 
@@ -256,21 +256,14 @@ class GeneralPreferencesState extends State<GeneralPreferences> {
     await prefs.setString('coordinate', _selectedCoordinate);
     await prefs.setString('timezone', _selectedTimezone);
 
-    // ElegantNotification.success(
-    //   title: Text('Preferences Saved'),
-    //   description: Text('Your preferences have been saved successfully.'),
-    // ).show(context);
-
     ElegantNotification.success(
       title: Text('Preferences Saved', style: TextStyle(color: Colors.white)),
       description: Text('Your preferences have been saved successfully.',
           style: TextStyle(color: Colors.white)),
       icon: Icon(Icons.check_circle, color: Colors.white),
-      background: Colors.green, 
-      // background: Color.fromARGB(255, 192, 235, 166), 
+      background: Colors.transparent, 
       position: Alignment.topCenter, 
       animation: AnimationType.fromTop, 
-      progressIndicatorBackground: Colors.white, 
       showProgressIndicator: false,
       displayCloseButton: false,
       width: MediaQuery.of(context).size.width * 0.9,

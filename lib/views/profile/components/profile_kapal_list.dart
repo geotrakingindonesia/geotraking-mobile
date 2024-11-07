@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/views/profile/components/profile_kapal_preview_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileKapalList extends StatefulWidget {
   const ProfileKapalList({Key? key}) : super(key: key);
@@ -28,15 +29,28 @@ class _ProfileKapalListState extends State<ProfileKapalList> {
   bool _smartOneSolarChecked = false;
   bool _st6100rpmChecked = false;
 
+  String _selectedTimezone = 'UTC+7';
+
   @override
   void initState() {
     super.initState();
     _fetchKapalMember();
+    _loadTimeZonePreferencesFromSharedPreferences();
+  }
+
+  _loadTimeZonePreferencesFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+    if (timeZonePreferences != null) {
+      setState(() {
+        _selectedTimezone = timeZonePreferences;
+      });
+    }
   }
 
   Future _fetchKapalMember() async {
     try {
-      final kapalMemberList = await vesselService.getDataKapal();
+      final kapalMemberList = await vesselService.getDataKapal(_selectedTimezone);
       print(kapalMemberList);
       setState(() {
         _kapalMemberList = kapalMemberList;
