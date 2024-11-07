@@ -3,16 +3,16 @@ import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/views/entrypoint/entrypoint_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SetFormatSpeed extends StatefulWidget {
-  const SetFormatSpeed({Key? key}) : super(key: key);
+class SetTimezone extends StatefulWidget {
+  const SetTimezone({Key? key}) : super(key: key);
 
   @override
-  SetFormatSpeedState createState() => SetFormatSpeedState();
+  SetTimezoneState createState() => SetTimezoneState();
 }
 
-class SetFormatSpeedState extends State<SetFormatSpeed> {
-  String _optionalTool = 'Nautical Miles Per Hour (Knots)';
-  final List<String> _tool = ['Nautical Miles Per Hour (Knots)', 'Kilometer Miles Per Hour (Kmh), Feet Per Hour (Knots)'];
+class SetTimezoneState extends State<SetTimezone> {
+  String _optionalTool = 'UTC (Europe/London)';
+  final List<String> _tool = ['UTC (Europe/London)', 'UTC+7 (Asia/Jakarta)', 'UTC+8 (Asia/Makassar)', 'UTC+9 (Asia/Jayapura)'];
 
   @override
   void initState() {
@@ -22,13 +22,13 @@ class SetFormatSpeedState extends State<SetFormatSpeed> {
 
   Future<void> _saveToolToSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('SetFormatSpeedPreference', _optionalTool);
+    await prefs.setString('SetTimezonePreference', _optionalTool);
   }
 
   Future<void> _loadToolFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _optionalTool = prefs.getString('SetFormatSpeedPreference') ?? 'Hide';
+      _optionalTool = prefs.getString('SetTimezonePreference') ?? 'Hide';
     });
   }
 
@@ -38,7 +38,7 @@ class SetFormatSpeedState extends State<SetFormatSpeed> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Confirmation'),
-          content: Text('Do you agree to change format speed?'),
+          content: Text('Do you agree to change timezone?'),
           actions: [
             TextButton(
               onPressed: () {

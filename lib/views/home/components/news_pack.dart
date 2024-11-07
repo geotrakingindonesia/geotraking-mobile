@@ -4,6 +4,8 @@ import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/views/home/components/news_detail_page.dart';
 import 'package:intl/intl.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -114,25 +116,37 @@ class NewsPackCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                Image.network(
-                  directImageUrl,
+                CachedNetworkImage(
+                  imageUrl: directImageUrl,
                   fit: BoxFit.cover,
                   width: 280,
                   height: 110,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Center(child: Icon(Icons.error)),
-                  loadingBuilder: (context, child, progress) {
-                    if (progress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: progress.expectedTotalBytes != null
-                            ? progress.cumulativeBytesLoaded /
-                                progress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => const Center(
+                    child: Icon(Icons.error),
+                  ),
                 ),
+                // Image.network(
+                //   directImageUrl,
+                //   fit: BoxFit.cover,
+                //   width: 280,
+                //   height: 110,
+                //   errorBuilder: (context, error, stackTrace) =>
+                //       const Center(child: Icon(Icons.error)),
+                //   loadingBuilder: (context, child, progress) {
+                //     if (progress == null) return child;
+                //     return Center(
+                //       child: CircularProgressIndicator(
+                //         value: progress.expectedTotalBytes != null
+                //             ? progress.cumulativeBytesLoaded /
+                //                 progress.expectedTotalBytes!
+                //             : null,
+                //       ),
+                //     );
+                //   },
+                // ),
                 Container(
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(

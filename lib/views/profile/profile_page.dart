@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
@@ -178,13 +179,30 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     margin: EdgeInsets.all(16),
                     padding: EdgeInsets.all(16),
+                    // decoration: BoxDecoration(
+                    //   image: DecorationImage(
+                    //     // image: AssetImage('assets/images/background_user.png'),
+                    //     // image: AssetImage('assets/images/card_user.jpg'),
+                    //     image: CachedNetworkImageProvider(
+                    //       'https://drive.google.com/uc?export=view&id=1OCEuYcaLwVGQA8RjkstJuLJfnvb-w2Ct',
+                    //     ),
+
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    //   borderRadius: BorderRadius.all(Radius.circular(10)),
+                    // ),
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        // image: AssetImage('assets/images/background_user.png'),
-                        image: AssetImage('assets/images/card_user.jpg'),
-                        fit: BoxFit.cover,
-                      ),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft, // Mulai dari kiri
+                        end: Alignment.bottomRight, // Arahkan ke kanan
+                        colors: [
+                          Color.fromARGB(255, 22, 66, 60),
+                          // Color.fromARGB(255, 106, 156, 137),
+                          // Color.fromARGB(255, 196, 218, 210)
+                          Colors.greenAccent
+                        ],
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -192,7 +210,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           radius: 30,
                           backgroundImage:
                               _user!.avatar == null || _user!.avatar!.isEmpty
-                                  ? AssetImage('assets/images/user.png')
+                                  // ? AssetImage('assets/images/user.png')
+                                  ? CachedNetworkImageProvider(
+                                      'https://drive.google.com/uc?export=view&id=1xkE-1cZfmNIwNnXwMxGF1ltw4vKkdhGS',
+                                    )
                                   : FileImage(
                                       File(
                                           '${_directory?.path}/avatar_${_user!.id}.jpg'),
@@ -264,19 +285,20 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           children: [
                             ProfileListTile(
-                              title:
-                                  'Map Preferences',
-                              icon: Icons.map,
+                              title: Localization.preferences(
+                                  widget.selectedLanguage),
+                              // 'Map Preferences',
+                              icon: Icons.room_preferences_rounded,
                               onTap: () => Navigator.pushNamed(
-                                  context, AppRoutes.mapPreferences),
+                                  context, AppRoutes.preferences),
                             ),
                             const Divider(
                               thickness: 0.5,
                               color: Colors.black,
                             ),
                             ProfileListTile(
-                              title:
-                                  Localization.getHelpCenter(widget.selectedLanguage),
+                              title: Localization.getHelpCenter(
+                                  widget.selectedLanguage),
                               icon: Icons.live_help_outlined,
                               onTap: () => Navigator.pushNamed(
                                   context, AppRoutes.supportPage),

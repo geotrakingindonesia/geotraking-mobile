@@ -56,12 +56,30 @@ class _MediaSosialRowState extends State<MediaSosialRow> {
               const Spacer(),
               IconButton(
                 icon: const Icon(
+                  FontAwesomeIcons.facebook,
+                  color: Colors.blue,
+                  size: 18,
+                ),
+                onPressed: () =>
+                    _launchUrl('https://www.facebook.com/geomatikasatelitindonesia/'),
+              ),
+              IconButton(
+                icon: const Icon(
                   FontAwesomeIcons.instagram,
                   color: Colors.pink,
                   size: 18,
                 ),
                 onPressed: () =>
                     _launchUrl('https://www.instagram.com/geosatindonesia/'),
+              ),
+              IconButton(
+                icon: const Icon(
+                  FontAwesomeIcons.tiktok,
+                  color: Colors.black,
+                  size: 18,
+                ),
+                onPressed: () =>
+                    _launchUrl('https://www.tiktok.com/@geosatindonesia'),
               ),
               IconButton(
                 icon: const Icon(

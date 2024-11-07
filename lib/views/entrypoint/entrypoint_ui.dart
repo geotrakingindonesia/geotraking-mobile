@@ -332,7 +332,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/models/member.dart';
 import 'package:geotraking/core/services/auth/authenticate_service.dart';
-import 'package:geotraking/views/animated_traking.dart';
+// import 'package:geotraking/views/animated_traking.dart';
 import 'package:geotraking/views/auth/login_page.dart';
 import 'package:geotraking/views/catalogue/product_page.dart';
 import 'package:geotraking/views/chat/chat_page.dart';
@@ -535,8 +535,8 @@ class _EntryPointUIState extends State<EntryPointUI> {
             [
               HomePage(selectedLanguage: _selectedLanguage),
               ProductPage(),
-              // ChatPage(),
-              AnimatedTraking(),
+              ChatPage(),
+              // AnimatedTraking(),
               if (_isLoggedIn)
                 _user!.isAdmin == 0
                     ? ProfileTrackingPage()

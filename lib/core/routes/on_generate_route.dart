@@ -23,8 +23,15 @@ import 'package:geotraking/views/home/drawer/drawer_page.dart';
 import 'package:geotraking/views/profile/apn/profile_kapal_apn_page.dart';
 import 'package:geotraking/views/profile/apn/profile_tracking_apn_page.dart';
 import 'package:geotraking/views/profile/components/legend_information.dart';
-import 'package:geotraking/views/profile/components/map_preferences.dart';
+// import 'package:geotraking/views/profile/components/map_preferences.dart';
+import 'package:geotraking/views/profile/components/map_preferences/format_latlong.dart';
+import 'package:geotraking/views/profile/components/map_preferences/format_speed.dart';
+import 'package:geotraking/views/profile/components/map_preferences/general_preferences.dart';
+import 'package:geotraking/views/profile/components/map_preferences/map_preferences.dart';
+import 'package:geotraking/views/profile/components/map_preferences/set_geofencing.dart';
+import 'package:geotraking/views/profile/components/map_preferences/set_timezone.dart';
 import 'package:geotraking/views/profile/components/map_preferences/vessel_name_preferences.dart';
+import 'package:geotraking/views/profile/components/preferences_tool.dart';
 import 'package:geotraking/views/profile/components/privacy_policy.dart';
 // import 'package:geotraking/views/profile/components/profile_change_language_page.dart';
 import 'package:geotraking/views/profile/components/profile_change_password_page.dart';
@@ -189,11 +196,29 @@ class RouteGenerator {
       case AppRoutes.privacyPolice:
         return CupertinoPageRoute(builder: (_) => PrivacyPolicy());
 
+      case AppRoutes.preferences:
+        return CupertinoPageRoute(builder: (_) => PreferencesTool());
+
+      case AppRoutes.generalPreferences:
+        return CupertinoPageRoute(builder: (_) => GeneralPreferences());
+
       case AppRoutes.mapPreferences:
         return CupertinoPageRoute(builder: (_) => MapPreferences());
 
       case AppRoutes.showNameOfVessel:
         return CupertinoPageRoute(builder: (_) => VesselName());
+      
+      case AppRoutes.setTimeZone:
+        return CupertinoPageRoute(builder: (_) => SetTimezone());
+      
+      case AppRoutes.setFormatLatlong:
+        return CupertinoPageRoute(builder: (_) => SetFormatLatlong());
+
+      case AppRoutes.setFormatSpeed:
+        return CupertinoPageRoute(builder: (_) => SetFormatSpeed());
+
+      case AppRoutes.setGeofencing:
+        return CupertinoPageRoute(builder: (_) => SetGeofencing());
 
 
 

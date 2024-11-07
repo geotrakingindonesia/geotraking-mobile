@@ -2,6 +2,7 @@
 
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/views/catalogue/components/hubungi_kami_button.dart';
@@ -65,23 +66,33 @@ class ProductDetailPage extends StatelessWidget {
                           //   product.image,
                           //   fit: BoxFit.cover,
                           // ),
-                          child: Image.network(
-                            product.image,
+                          child: CachedNetworkImage(
+                            imageUrl: product.image,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Center(child: Icon(Icons.error)),
-                            loadingBuilder: (context, child, progress) {
-                              if (progress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: progress.expectedTotalBytes != null
-                                      ? progress.cumulativeBytesLoaded /
-                                          progress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) => const Center(
+                              child: Icon(Icons.error),
+                            ),
                           ),
+                          // child: Image.network(
+                          //   product.image,
+                          //   fit: BoxFit.cover,
+                          //   errorBuilder: (context, error, stackTrace) =>
+                          //       const Center(child: Icon(Icons.error)),
+                          //   loadingBuilder: (context, child, progress) {
+                          //     if (progress == null) return child;
+                          //     return Center(
+                          //       child: CircularProgressIndicator(
+                          //         value: progress.expectedTotalBytes != null
+                          //             ? progress.cumulativeBytesLoaded /
+                          //                 progress.expectedTotalBytes!
+                          //             : null,
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
                         ),
                       ),
                     ),

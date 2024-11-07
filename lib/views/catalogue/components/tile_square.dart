@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_import
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 // import 'package:geotraking/core/components/network_image.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
@@ -98,23 +99,33 @@ class TileSquareProduct extends StatelessWidget {
                     //   data.cover,
                     //   fit: BoxFit.cover,
                     // ),
-                    child: Image.network(
-                      data.cover,
+                    child: CachedNetworkImage(
+                      imageUrl: data.cover,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Center(child: Icon(Icons.error)),
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: progress.expectedTotalBytes != null
-                                ? progress.cumulativeBytesLoaded /
-                                    progress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => const Center(
+                        child: Icon(Icons.error),
+                      ),
                     ),
+                    // child: Image.network(
+                    //   data.cover,
+                    //   fit: BoxFit.cover,
+                    //   errorBuilder: (context, error, stackTrace) =>
+                    //       const Center(child: Icon(Icons.error)),
+                    //   loadingBuilder: (context, child, progress) {
+                    //     if (progress == null) return child;
+                    //     return Center(
+                    //       child: CircularProgressIndicator(
+                    //         value: progress.expectedTotalBytes != null
+                    //             ? progress.cumulativeBytesLoaded /
+                    //                 progress.expectedTotalBytes!
+                    //             : null,
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                   ),
                 ),
               ),

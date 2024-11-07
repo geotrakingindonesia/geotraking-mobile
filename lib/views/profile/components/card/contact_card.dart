@@ -63,20 +63,41 @@ class _ContactCardState extends State<ContactCard> {
                 right: 16.0, left: 16, bottom: 16, top: 10),
             child: Container(
               padding: EdgeInsets.all(16),
+              // decoration: BoxDecoration(
+              //   color: Colors.green,
+              //   borderRadius: BorderRadius.circular(8),
+              //   boxShadow: [
+              //     BoxShadow(
+              //         color: Colors.grey.shade400,
+              //         blurRadius: 5,
+              //         spreadRadius: 1),
+              //   ],
+              // ),
               decoration: BoxDecoration(
-                color: Colors.white,
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft, // Mulai dari kiri
+                  end: Alignment.centerRight, // Arahkan ke kanan
+                  colors: [
+                    Color.fromARGB(255, 22, 66, 60),
+                    // Color.fromARGB(255, 106, 156, 137),
+                    // Color.fromARGB(255, 196, 218, 210)
+                    Colors.greenAccent
+                  ], 
+                ),
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.grey.shade400,
-                      blurRadius: 5,
-                      spreadRadius: 1),
+                    color: Colors.grey.shade400,
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                  ),
                 ],
               ),
+
               child: Row(
                 children: [
                   Icon(FontAwesomeIcons.whatsapp,
-                      size: 40, color: Colors.green),
+                      size: 40, color: Colors.white),
                   SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,12 +105,14 @@ class _ContactCardState extends State<ContactCard> {
                       Text(
                         'Geosat',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         '+6281908192559',
-                        style: TextStyle(color: Colors.grey, fontSize: 14),
+                        style: TextStyle(color: Colors.white60, fontSize: 14),
                       ),
                     ],
                   ),
@@ -97,7 +120,7 @@ class _ContactCardState extends State<ContactCard> {
                   IconButton(
                     icon: const Icon(
                       Icons.arrow_forward_ios,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                     onPressed: () => _launchUrl(
                         'https://wa.me/6281908192559?text=Hallo+Geomatika+Satelit+Indonesia'),

@@ -83,8 +83,16 @@ class AppRoutes {
 
 
   static const privacyPolice = '/privacyPolice';
+  // map preferences
+  static const preferences = '/preferences';
+  static const generalPreferences = '/generalPreferences';
   static const mapPreferences = '/mapPreferences';
+
+  
   static const showNameOfVessel = '/showNameOfVessel';
-  // static const consolePage = '/consolePage';
+  static const setTimeZone = '/setTimeZone';
+  static const setFormatLatlong = '/setFormatLatlong';
+  static const setFormatSpeed = '/setFormatSpeed';
+  static const setGeofencing = '/setGeofencing';
 
 }

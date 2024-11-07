@@ -527,5 +527,16 @@ class Localization {
     }
   }
 
+  static String mapPreferences(String language) {
+    switch (language) {
+      case 'English':
+        return 'Map Preferences';
+      case 'Indonesia':
+        return 'Preferensi Peta';
+      default:
+        return 'Map Preferences';
+    }
+  }
+
 
 }

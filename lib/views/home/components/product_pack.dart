@@ -107,10 +107,6 @@
 //   }
 // }
 
-
-
-
-
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/models/catalog_model.dart';
@@ -123,7 +119,8 @@ import 'package:flutter/services.dart' show rootBundle;
 
 class ProductPacks extends StatefulWidget {
   final String selectedLanguage;
-  const ProductPacks({Key? key, required this.selectedLanguage}) : super(key: key);
+  const ProductPacks({Key? key, required this.selectedLanguage})
+      : super(key: key);
 
   @override
   _ProductPacksState createState() => _ProductPacksState();
@@ -140,7 +137,8 @@ class _ProductPacksState extends State<ProductPacks> {
   }
 
   Future<List<Product>> _fetchProducts() async {
-    final jsonString = await rootBundle.loadString('assets/jsons/catalogue.json');
+    final jsonString =
+        await rootBundle.loadString('assets/jsons/catalogue.json');
     final jsonData = jsonDecode(jsonString) as List<dynamic>;
     final products = jsonData.map((jsonProduct) {
       final product = Product.fromJson(jsonProduct);
@@ -152,9 +150,17 @@ class _ProductPacksState extends State<ProductPacks> {
     return products.take(4).toList();
   }
 
+  // String _convertDriveLink(String driveUrl) {
+  //   final fileId = driveUrl.split('/d/')[1].split('/')[0];
+  //   return 'https://drive.google.com/uc?export=view&id=$fileId';
+  // }
+
   String _convertDriveLink(String driveUrl) {
     final fileId = driveUrl.split('/d/')[1].split('/')[0];
-    return 'https://drive.google.com/uc?export=view&id=$fileId';
+    final convertedUrl = 'https://drive.google.com/uc?export=view&id=$fileId';
+    print(
+        'Converted URL: $convertedUrl'); // Tambahkan ini untuk memeriksa URL yang dihasilkan
+    return convertedUrl;
   }
 
   @override
@@ -179,7 +185,8 @@ class _ProductPacksState extends State<ProductPacks> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ProductDetailPage(product: product),
+                                builder: (context) =>
+                                    ProductDetailPage(product: product),
                               ),
                             );
                           },
