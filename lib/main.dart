@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/routes/app_routes.dart';
 import 'package:geotraking/core/routes/on_generate_route.dart';
+import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +23,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'GeoTraking',
+    // return GetMaterialApp(
+      title: 'Geotraking',
       debugShowCheckedModeBanner: false,
       onGenerateRoute: RouteGenerator.onGenerate,
       initialRoute: AppRoutes.entryPoint,

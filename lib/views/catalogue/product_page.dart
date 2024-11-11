@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
@@ -83,6 +84,27 @@ class _ProductPageState extends State<ProductPage> {
     super.dispose();
   }
 
+  Widget _buildCachedImage(String url) {
+    return ClipRRect(
+      borderRadius: AppDefaults.borderRadius,
+      child: CachedNetworkImage(
+        imageUrl: url,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.white, // White background for loading state
+          child: Center(child: CircularProgressIndicator()),
+        ),
+        errorWidget: (context, url, error) => Container(
+          color: Colors.white,
+          child: Icon(Icons.error, color: Colors.red),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,36 +167,45 @@ class _ProductPageState extends State<ProductPage> {
                   child: PageView(
                     controller: _pageController,
                     children: <Widget>[
-                      Container(
-                        child: ClipRRect(
-                          borderRadius: AppDefaults.borderRadius,
-                          child: Image.asset(
-                            'assets/images/banner1.jpg',
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                      _buildCachedImage(
+                        'https://drive.google.com/uc?export=view&id=1K6UvoXjKhJ-ZbQm8HjwVk155MLO_96wY',
                       ),
-                      Container(
-                        child: ClipRRect(
-                          borderRadius: AppDefaults.borderRadius,
-                          child: Image.asset(
-                            'assets/images/banner2.jpg',
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                      _buildCachedImage(
+                        'https://drive.google.com/uc?export=view&id=1AXul2oZglfxWK5klsgoEFZ73GXmCoq3d',
                       ),
-                      Container(
-                        child: ClipRRect(
-                          borderRadius: AppDefaults.borderRadius,
-                          child: Image.asset(
-                            'assets/images/banner3.jpg',
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                      _buildCachedImage(
+                        'https://drive.google.com/uc?export=view&id=1mmtL8farG62HR8x0gWLSQKb4zUuSt3VH',
                       ),
+                      // Container(
+                      //   child: ClipRRect(
+                      //     borderRadius: AppDefaults.borderRadius,
+                      //     child: Image.asset(
+                      //       'assets/images/banner1.jpg',
+                      //       width: double.infinity,
+                      //       fit: BoxFit.cover,
+                      //     ),
+                      //   ),
+                      // ),
+                      // Container(
+                      //   child: ClipRRect(
+                      //     borderRadius: AppDefaults.borderRadius,
+                      //     child: Image.asset(
+                      //       'assets/images/banner2.jpg',
+                      //       width: double.infinity,
+                      //       fit: BoxFit.cover,
+                      //     ),
+                      //   ),
+                      // ),
+                      // Container(
+                      //   child: ClipRRect(
+                      //     borderRadius: AppDefaults.borderRadius,
+                      //     child: Image.asset(
+                      //       'assets/images/banner3.jpg',
+                      //       width: double.infinity,
+                      //       fit: BoxFit.cover,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

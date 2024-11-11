@@ -159,7 +159,7 @@ class _ProductPacksState extends State<ProductPacks> {
     final fileId = driveUrl.split('/d/')[1].split('/')[0];
     final convertedUrl = 'https://drive.google.com/uc?export=view&id=$fileId';
     print(
-        'Converted URL: $convertedUrl'); // Tambahkan ini untuk memeriksa URL yang dihasilkan
+        'Converted URL: $convertedUrl'); 
     return convertedUrl;
   }
 

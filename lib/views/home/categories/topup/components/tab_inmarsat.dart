@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/core/services/topup_service.dart';
@@ -41,6 +42,11 @@ class _TabInmarsatState extends State<TabInmarsat> {
     }
   }
 
+  String _convertDriveLink(String driveUrl) {
+    final fileId = driveUrl.split('/d/')[1].split('/')[0];
+    return 'https://drive.google.com/uc?export=view&id=$fileId';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,16 +70,36 @@ class _TabInmarsatState extends State<TabInmarsat> {
                       ),
                     ],
                   ),
-                  child: Container(
-                    child: ClipRRect(
-                      borderRadius: AppDefaults.borderRadius,
-                      child: Image.asset(
-                        'assets/images/banner_inmarsat.jpeg',
+                  child: ClipRRect(
+                    borderRadius: AppDefaults.borderRadius,
+                    child: CachedNetworkImage(
+                      imageUrl: _convertDriveLink(
+                          "https://drive.google.com/file/d/1Wk0TaWoQvfapTeotYhij4WzssTxWPAbD/view?usp=sharing"),
+                      width: double.infinity,
+                      fit: BoxFit.contain,
+                      placeholder: (context, url) => Container(
                         width: double.infinity,
-                        fit: BoxFit.contain,
+                        height: double.infinity,
+                        color:
+                            Colors.white, // White background for loading state
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.white,
+                        child: Icon(Icons.error, color: Colors.red),
                       ),
                     ),
                   ),
+                  // child: Container(
+                  //   child: ClipRRect(
+                  //     borderRadius: AppDefaults.borderRadius,
+                  //     child: Image.asset(
+                  //       'assets/images/banner_inmarsat.jpeg',
+                  //       width: double.infinity,
+                  //       fit: BoxFit.contain,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
               ),
             ),

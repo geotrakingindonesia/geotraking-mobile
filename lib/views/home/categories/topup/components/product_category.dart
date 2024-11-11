@@ -27,19 +27,54 @@ class _ProductCategoryState extends State<ProductCategory> {
   @override
   void initState() {
     super.initState();
-    futureProducts = _fetchProducts();
+    // futureProducts = _fetchProducts();
+    futureProducts = _loadProducts();
   }
 
-  Future<List<Product>> _fetchProducts() async {
+  // Future<List<Product>> _fetchProducts() async {
+  //   final jsonString =
+  //       await rootBundle.loadString('assets/jsons/catalogue.json');
+  //   final jsonData = jsonDecode(jsonString) as List<dynamic>;
+  //   final products = jsonData
+  //       .map((jsonProduct) => Product.fromJson(jsonProduct))
+  //       .where((product) => product.categori.toLowerCase() == widget.categori)
+  //       .toList();
+  //   products.shuffle(random);
+  //   return products.toList();
+  // }
+
+  // Future<List<Product>> _loadProducts() async {
+  //   final jsonString =
+  //       await rootBundle.loadString('assets/jsons/catalogue.json');
+  //   final jsonData = jsonDecode(jsonString) as List<dynamic>;
+  //   final products = jsonData.map((jsonProduct) {
+  //     final product = Product.fromJson(jsonProduct);
+  //     // Convert Google Drive link to a direct viewable URL
+  //     product.image = _convertDriveLink(product.image);
+  //     return product;
+  //   }).toList();
+  //   return products;
+  // }
+
+  Future<List<Product>> _loadProducts() async {
     final jsonString =
         await rootBundle.loadString('assets/jsons/catalogue.json');
     final jsonData = jsonDecode(jsonString) as List<dynamic>;
     final products = jsonData
-        .map((jsonProduct) => Product.fromJson(jsonProduct))
+        .map((jsonProduct) {
+          final product = Product.fromJson(jsonProduct);
+          // Convert Google Drive link to a direct viewable URL
+          product.image = _convertDriveLink(product.image);
+          return product;
+        })
         .where((product) => product.categori.toLowerCase() == widget.categori)
         .toList();
-    products.shuffle(random);
-    return products.toList();
+    return products;
+  }
+
+  String _convertDriveLink(String driveUrl) {
+    final fileId = driveUrl.split('/d/')[1].split('/')[0];
+    return 'https://drive.google.com/uc?export=view&id=$fileId';
   }
 
   @override

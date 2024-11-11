@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/core/services/topup_service.dart';
@@ -36,6 +37,11 @@ class _TabIridiumState extends State<TabIridium> {
     }
   }
 
+  String _convertDriveLink(String driveUrl) {
+    final fileId = driveUrl.split('/d/')[1].split('/')[0];
+    return 'https://drive.google.com/uc?export=view&id=$fileId';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,16 +65,36 @@ class _TabIridiumState extends State<TabIridium> {
                       ),
                     ],
                   ),
-                  child: Container(
-                    child: ClipRRect(
-                      borderRadius: AppDefaults.borderRadius,
-                      child: Image.asset(
-                        'assets/images/banner_iridium.jpeg',
+                  child: ClipRRect(
+                    borderRadius: AppDefaults.borderRadius,
+                    child: CachedNetworkImage(
+                      imageUrl: _convertDriveLink(
+                          "https://drive.google.com/file/d/1UjQutJC_bGkeXvZOl0Nu2zrZ298BSzMq/view?usp=sharing"),
+                      width: double.infinity,
+                      fit: BoxFit.contain,
+                      placeholder: (context, url) => Container(
                         width: double.infinity,
-                        fit: BoxFit.contain,
+                        height: double.infinity,
+                        color:
+                            Colors.white, // White background for loading state
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.white,
+                        child: Icon(Icons.error, color: Colors.red),
                       ),
                     ),
                   ),
+                  // child: Container(
+                  //   child: ClipRRect(
+                  //     borderRadius: AppDefaults.borderRadius,
+                  //     child: Image.asset(
+                  //       'assets/images/banner_iridium.jpeg',
+                  //       width: double.infinity,
+                  //       fit: BoxFit.contain,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
               ),
             ),
@@ -120,8 +146,8 @@ class _TabIridiumState extends State<TabIridium> {
         if (topUpData.length > 3)
           TextButton(
             onPressed: () {
-                _showAllTopUpItems(
-                    context, _topUpDataPulsaIridium!, 'Pulsa Prepaid Plan');
+              _showAllTopUpItems(
+                  context, _topUpDataPulsaIridium!, 'Pulsa Prepaid Plan', _convertDriveLink("https://drive.google.com/file/d/1UjQutJC_bGkeXvZOl0Nu2zrZ298BSzMq/view?usp=sharing"));
             },
             child: const Text(
               'Lihat Semua',
@@ -136,13 +162,14 @@ class _TabIridiumState extends State<TabIridium> {
   }
 
   void _showAllTopUpItems(BuildContext context,
-      List<Map<String, dynamic>> topUpData, String title) {
+      List<Map<String, dynamic>> topUpData, String title, String imageUrl) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => TabSeeAll(
           topUpData: topUpData,
           title: title,
+          imageUrl: imageUrl,
         ),
       ),
     );

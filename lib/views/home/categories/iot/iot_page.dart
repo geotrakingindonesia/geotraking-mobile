@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 // import 'package:geotraking/core/components/banner_rekening.dart';
 import 'package:geotraking/core/components/custom_tab_label.dart';
+import 'package:geotraking/views/home/categories/iot/components/tab_aiscube.dart';
 import 'package:geotraking/views/home/categories/iot/components/tab_fuel.dart';
 import 'package:geotraking/views/home/categories/iot/components/tab_rpm.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class IotPage extends StatefulWidget {
   const IotPage({super.key});
@@ -15,6 +18,15 @@ class IotPage extends StatefulWidget {
 }
 
 class _IotPageState extends State<IotPage> {
+  void _openWhatsApp() async {
+    final whatsappUrl =
+        "https://wa.me/yourPhoneNumber"; 
+    if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
+      await launchUrl(Uri.parse(whatsappUrl));
+    } else {
+      throw 'Could not launch $whatsappUrl';
+    }
+  }
   // String _selectedRpm = 'Option 0';
   // String _selectedInstallation = 'Option 0';
   // String _selectedFuel = 'Option 0';
@@ -68,15 +80,18 @@ class _IotPageState extends State<IotPage> {
           ),
         ),
         body: Container(
-          // color: AppColors.cardColor,
-          // color: Colors.red,
           child: const TabBarView(
             children: [
               TabRpm(),
               TabFuel(),
-              TabFuel(),
+              TabAiscube(),
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _openWhatsApp,
+          backgroundColor: Colors.green,
+          child: Icon(FontAwesomeIcons.whatsapp, color: Colors.white,),
         ),
       ),
     );

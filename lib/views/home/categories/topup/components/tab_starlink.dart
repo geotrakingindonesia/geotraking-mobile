@@ -128,6 +128,7 @@
 //   }
 // }
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/core/services/topup_service.dart';
@@ -167,6 +168,11 @@ class _TabStarlinkState extends State<TabStarlink> {
         print('load err');
       });
     }
+  }
+
+  String _convertDriveLink(String driveUrl) {
+    final fileId = driveUrl.split('/d/')[1].split('/')[0];
+    return 'https://drive.google.com/uc?export=view&id=$fileId';
   }
 
   @override
@@ -223,10 +229,21 @@ class _TabStarlinkState extends State<TabStarlink> {
           ),
           child: ClipRRect(
             borderRadius: AppDefaults.borderRadius,
-            child: Image.asset(
-              'assets/images/banner_starlink.jpeg',
+            child: CachedNetworkImage(
+              imageUrl: _convertDriveLink(
+                  "https://drive.google.com/file/d/1WImAlPGGwINk9OwaS8Njz4WbnrN6aj_L/view?usp=sharing"),
               width: double.infinity,
               fit: BoxFit.contain,
+              placeholder: (context, url) => Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.white,
+                child: Center(child: CircularProgressIndicator()),
+              ),
+              errorWidget: (context, url, error) => Container(
+                color: Colors.white,
+                child: Icon(Icons.error, color: Colors.red),
+              ),
             ),
           ),
         ),
@@ -258,11 +275,19 @@ class _TabStarlinkState extends State<TabStarlink> {
             onPressed: () {
               if (topUpData.isNotEmpty && topUpData[0]['jenis_satelit'] == 1) {
                 _showAllTopUpItems(
-                    context, _topUpDataStarlinkMaritime!, 'Starlink Maritime');
+                    context,
+                    _topUpDataStarlinkMaritime!,
+                    'Starlink Maritime',
+                    _convertDriveLink(
+                        "https://drive.google.com/file/d/1wE7kOfnBcExp8SDFUsFrN2rmbvKe9t1M/view?usp=sharing"));
               } else if (topUpData.isNotEmpty &&
                   topUpData[0]['jenis_satelit'] == 2) {
                 _showAllTopUpItems(
-                    context, _topUpDataStarlinkLand!, 'Starlink Land');
+                    context,
+                    _topUpDataStarlinkLand!,
+                    'Starlink Land',
+                    _convertDriveLink(
+                        "https://drive.google.com/file/d/1vjobXAk-J0vfkmnkLU84RoqjNxu9otfi/view?usp=sharing"));
               }
             },
             child: const Text(
@@ -278,13 +303,14 @@ class _TabStarlinkState extends State<TabStarlink> {
   }
 
   void _showAllTopUpItems(BuildContext context,
-      List<Map<String, dynamic>> topUpData, String title) {
+      List<Map<String, dynamic>> topUpData, String title, String imageUrl) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => TabSeeAll(
           topUpData: topUpData,
           title: title,
+          imageUrl: imageUrl,
         ),
       ),
     );
