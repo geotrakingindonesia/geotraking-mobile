@@ -48,6 +48,9 @@ dependencies:
   info_popup: ^4.3.1 #package utk popup tampil di kapal 
   elegant_notification: ^2.3.0 #package utk notif ketika berhasil merubah prefences
   get: ^4.6.6 #package getX untuk state management ui
+  # googleapis: ^13.2.0 #package utk ai chatbot
+  # googleapis_auth: ^1.6.0 #package utk ai chatbot
+  google_generative_ai: ^0.4.6
 
 dev_dependencies:
   flutter_test:

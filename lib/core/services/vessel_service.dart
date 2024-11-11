@@ -404,8 +404,128 @@ class VesselService {
   }
 
   // fungsi get list data history traking kapal(vessel)
+  // Future<List<Map<String, dynamic>>?> getHistoryTrakingKapal(
+  //     String mobileId, int limit, DateTime? fromDate) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+
+  //   var settings = Connection.getSettings();
+  //   var conn = await MySqlConnection.connect(settings);
+
+  //   String query = '';
+  //   List<dynamic> params = [mobileId];
+
+  //   if (fromDate != null) {
+  //     query = '''
+  //     SELECT
+  //       varTimestamp AS timestamp,
+  //       msgTimestamp_GMT AS broadcast,
+  //       Latitude AS latitude,
+  //       Longitude AS longitude,
+  //       Speed AS speed,
+  //       (Speed * 3.6) AS speed_kmh,
+  //       (Speed * 1) AS speed_kn,
+  //       (Speed * 0.51444) AS speed_ms,
+  //       (Speed * 1.15078) AS speed_mph,
+  //       Direction AS heading
+  //     FROM
+  //       psg_modata
+  //     WHERE
+  //       serviceID =?
+  //       AND varTimestamp IS NOT NULL
+  //       AND Speed IS NOT NULL
+  //       AND Direction IS NOT NULL
+  //       AND varTimestamp >= ?
+  //     ORDER BY
+  //       VAR_MOID DESC
+  //     ''';
+  //     params.add(fromDate.toIso8601String());
+  //   } else {
+  //     query = '''
+  //     SELECT
+  //       varTimestamp AS timestamp,
+  //       msgTimestamp_GMT AS broadcast,
+  //       Latitude AS latitude,
+  //       Longitude AS longitude,
+  //       Speed AS speed,
+  //       (Speed * 3.6) AS speed_kmh,
+  //       (Speed * 1) AS speed_kn,
+  //       (Speed * 0.51444) AS speed_ms,
+  //       (Speed * 1.15078) AS speed_mph,
+  //       Direction AS heading
+  //     FROM
+  //       psg_modata
+  //     WHERE
+  //       serviceID =?
+  //       AND varTimestamp IS NOT NULL
+  //       AND Speed IS NOT NULL
+  //       AND Direction IS NOT NULL
+  //     ORDER BY
+  //       VAR_MOID DESC
+  //     LIMIT ?
+  //     ''';
+  //     params.add(limit);
+  //   }
+
+  //   var results = await conn.query(query, params);
+
+  //   List<Map<String, dynamic>> dataHistoryTrakingKapal = [];
+
+  //   if (results.isNotEmpty) {
+  //     for (var row in results) {
+  //       DateTime originalTimestamp = DateTime.parse(row['timestamp']);
+  //       DateTime originalBroadcast = DateTime.parse(row['broadcast']);
+  //       DateTime adjustedTimestamp;
+  //       DateTime adjustedBroadcast;
+
+  //       switch (timeZonePreferences) {
+  //         case 'UTC':
+  //           adjustedTimestamp = originalTimestamp.subtract(Duration(hours: 7));
+  //           adjustedBroadcast = originalBroadcast.subtract(Duration(hours: 7));
+  //           break;
+  //         case 'UTC+7':
+  //           adjustedTimestamp = originalTimestamp;
+  //           adjustedBroadcast = originalBroadcast;
+  //           break;
+  //         case 'UTC+8':
+  //           adjustedTimestamp = originalTimestamp.add(Duration(hours: 1));
+  //           adjustedBroadcast = originalBroadcast.add(Duration(hours: 1));
+  //           break;
+  //         case 'UTC+9':
+  //           adjustedTimestamp = originalTimestamp.add(Duration(hours: 2));
+  //           adjustedBroadcast = originalBroadcast.add(Duration(hours: 2));
+  //           break;
+  //         default:
+  //           adjustedTimestamp = originalTimestamp;
+  //           adjustedBroadcast = originalBroadcast;
+  //       }
+
+  //       dataHistoryTrakingKapal.add({
+  //         // 'timestamp': row['timestamp'] ?? '',
+  //         // 'broadcast': row['broadcast'] ?? '',
+  //         'timestamp': adjustedTimestamp.toIso8601String(),
+  //         'broadcast': adjustedBroadcast.toIso8601String(),
+  //         'latitude': row['latitude'] ?? '',
+  //         'longitude': row['longitude'] ?? '',
+  //         'speed': row['speed'] ?? '',
+  //         'speed_kmh': row['speed_kmh'] ?? '',
+  //         'speed_kn': row['speed_kn'] ?? '',
+  //         'speed_ms': row['speed_ms'] ?? '',
+  //         'speed_mph': row['speed_mph'] ?? '',
+  //         'heading': row['heading'] ?? '',
+  //       });
+  //     }
+  //   }
+
+  //   await conn.close();
+
+  //   return dataHistoryTrakingKapal;
+  // }
   Future<List<Map<String, dynamic>>?> getHistoryTrakingKapal(
       String mobileId, int limit, DateTime? fromDate) async {
+    final prefs = await SharedPreferences.getInstance();
+    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+
     var settings = Connection.getSettings();
     var conn = await MySqlConnection.connect(settings);
 
@@ -414,49 +534,53 @@ class VesselService {
 
     if (fromDate != null) {
       query = '''
-      SELECT
-        varTimestamp AS timestamp,
-        msgTimestamp_GMT AS broadcast,
-        Latitude AS latitude,
-        Longitude AS longitude,
-        Speed AS speed,
-        (Speed * 3.6) AS speed_kmh,
-        (Speed * 1) AS speed_kn,
-        Direction AS heading
-      FROM
-        psg_modata
-      WHERE
-        serviceID =?
-        AND varTimestamp IS NOT NULL
-        AND Speed IS NOT NULL
-        AND Direction IS NOT NULL
-        AND varTimestamp >= ?
-      ORDER BY
-        VAR_MOID DESC
-      ''';
-      params.add(fromDate.toIso8601String());
+    SELECT
+      varTimestamp AS timestamp,
+      msgTimestamp_GMT AS broadcast,
+      Latitude AS latitude,
+      Longitude AS longitude,
+      Speed AS speed,
+      (Speed * 3.6) AS speed_kmh,
+      (Speed * 1) AS speed_kn,
+      (Speed * 0.51444) AS speed_ms,
+      (Speed * 1.15078) AS speed_mph,
+      Direction AS heading
+    FROM
+      psg_modata
+    WHERE
+      serviceID =?
+      AND varTimestamp IS NOT NULL
+      AND Speed IS NOT NULL
+      AND Direction IS NOT NULL
+      AND varTimestamp >= ?
+    ORDER BY
+      VAR_MOID DESC
+    ''';
+      params.add(fromDate.toIso8601String()); // Ensure it's passed as a string
     } else {
       query = '''
-      SELECT
-        varTimestamp AS timestamp,
-        msgTimestamp_GMT AS broadcast,
-        Latitude AS latitude,
-        Longitude AS longitude,
-        Speed AS speed,
-        (Speed * 3.6) AS speed_kmh,
-        (Speed * 1) AS speed_kn,
-        Direction AS heading
-      FROM
-        psg_modata
-      WHERE
-        serviceID =?
-        AND varTimestamp IS NOT NULL
-        AND Speed IS NOT NULL
-        AND Direction IS NOT NULL
-      ORDER BY
-        VAR_MOID DESC
-      LIMIT ?
-      ''';
+    SELECT
+      varTimestamp AS timestamp,
+      msgTimestamp_GMT AS broadcast,
+      Latitude AS latitude,
+      Longitude AS longitude,
+      Speed AS speed,
+      (Speed * 3.6) AS speed_kmh,
+      (Speed * 1) AS speed_kn,
+      (Speed * 0.51444) AS speed_ms,
+      (Speed * 1.15078) AS speed_mph,
+      Direction AS heading
+    FROM
+      psg_modata
+    WHERE
+      serviceID =?
+      AND varTimestamp IS NOT NULL
+      AND Speed IS NOT NULL
+      AND Direction IS NOT NULL
+    ORDER BY
+      VAR_MOID DESC
+    LIMIT ?
+    ''';
       params.add(limit);
     }
 
@@ -466,14 +590,43 @@ class VesselService {
 
     if (results.isNotEmpty) {
       for (var row in results) {
+        DateTime originalTimestamp = row['timestamp'];
+        DateTime originalBroadcast = row['broadcast'];
+        DateTime adjustedTimestamp;
+        DateTime adjustedBroadcast;
+
+        switch (timeZonePreferences) {
+          case 'UTC':
+            adjustedTimestamp = originalTimestamp.subtract(Duration(hours: 7));
+            adjustedBroadcast = originalBroadcast.subtract(Duration(hours: 7));
+            break;
+          case 'UTC+7':
+            adjustedTimestamp = originalTimestamp;
+            adjustedBroadcast = originalBroadcast;
+            break;
+          case 'UTC+8':
+            adjustedTimestamp = originalTimestamp.add(Duration(hours: 1));
+            adjustedBroadcast = originalBroadcast.add(Duration(hours: 1));
+            break;
+          case 'UTC+9':
+            adjustedTimestamp = originalTimestamp.add(Duration(hours: 2));
+            adjustedBroadcast = originalBroadcast.add(Duration(hours: 2));
+            break;
+          default:
+            adjustedTimestamp = originalTimestamp;
+            adjustedBroadcast = originalBroadcast;
+        }
+
         dataHistoryTrakingKapal.add({
-          'timestamp': row['timestamp'] ?? '',
-          'broadcast': row['broadcast'] ?? '',
+          'timestamp': adjustedTimestamp.toIso8601String(),
+          'broadcast': adjustedBroadcast.toIso8601String(),
           'latitude': row['latitude'] ?? '',
           'longitude': row['longitude'] ?? '',
           'speed': row['speed'] ?? '',
           'speed_kmh': row['speed_kmh'] ?? '',
           'speed_kn': row['speed_kn'] ?? '',
+          'speed_ms': row['speed_ms'] ?? '',
+          'speed_mph': row['speed_mph'] ?? '',
           'heading': row['heading'] ?? '',
         });
       }
@@ -764,6 +917,9 @@ class VesselService {
   // fungsi hitung jarak tempuh untuk setiap jarak traking kapal
   Future<List<Map<String, dynamic>>?> calcMileageTrakingVessel(
       String mobileId, DateTime? startDate, DateTime? endDate) async {
+    final prefs = await SharedPreferences.getInstance();
+    final timeZonePreferences = prefs.getString('SetTimezonePreferences');
+
     var settings = Connection.getSettings();
     var conn = await MySqlConnection.connect(settings);
 
@@ -796,7 +952,11 @@ class VesselService {
         msgTimestamp_GMT AS broadcast,
         Latitude AS latitude,
         Longitude AS longitude,
+        Speed AS speed,
+        (Speed * 3.6) AS speed_kmh,
         (Speed * 1) AS speed_kn,
+        (Speed * 0.51444) AS speed_ms,
+        (Speed * 1.15078) AS speed_mph,
         Direction AS heading
       FROM
         psg_modata
@@ -822,12 +982,47 @@ class VesselService {
 
     if (results.isNotEmpty) {
       for (var row in results) {
+        DateTime originalTimestamp = row['received'];
+        DateTime originalBroadcast = row['broadcast'];
+        DateTime adjustedTimestamp;
+        DateTime adjustedBroadcast;
+
+        switch (timeZonePreferences) {
+          case 'UTC':
+            adjustedTimestamp = originalTimestamp.subtract(Duration(hours: 7));
+            adjustedBroadcast = originalBroadcast.subtract(Duration(hours: 7));
+            break;
+          case 'UTC+7':
+            adjustedTimestamp = originalTimestamp;
+            adjustedBroadcast = originalBroadcast;
+            break;
+          case 'UTC+8':
+            adjustedTimestamp = originalTimestamp.add(Duration(hours: 1));
+            adjustedBroadcast = originalBroadcast.add(Duration(hours: 1));
+            break;
+          case 'UTC+9':
+            adjustedTimestamp = originalTimestamp.add(Duration(hours: 2));
+            adjustedBroadcast = originalBroadcast.add(Duration(hours: 2));
+            break;
+          default:
+            adjustedTimestamp = originalTimestamp;
+            adjustedBroadcast = originalBroadcast;
+        }
+
         calcMileageTraking.add({
-          'received': row['received'] ?? '',
-          'broadcast': row['broadcast'] ?? '',
+          // 'received': row['received'] ?? '',
+          // 'broadcast': row['broadcast'] ?? '',
+          // 'received': adjustedTimestamp.toIso8601String(),
+          // 'broadcast': adjustedBroadcast.toIso8601String(),
+          'received': adjustedTimestamp,
+          'broadcast': adjustedBroadcast,
           'latitude': row['latitude'] ?? '',
           'longitude': row['longitude'] ?? '',
+          'speed': row['speed'] ?? '',
           'speed_kn': row['speed_kn'] ?? '',
+          'speed_kmh': row['speed_kmh'] ?? '',
+          'speed_ms': row['speed_ms'] ?? '',
+          'speed_mph': row['speed_mph'] ?? '',
           'heading': row['heading'] ?? '',
         });
       }

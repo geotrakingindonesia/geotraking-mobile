@@ -1279,6 +1279,8 @@
 //   }
 // }
 
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -1295,8 +1297,9 @@ import 'dart:math';
 
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MileageDetailPage extends StatelessWidget {
+class MileageDetailPage extends StatefulWidget {
   final List<Map<String, dynamic>>? data;
   final DateTime? startDate;
   final DateTime? endDate;
@@ -1311,6 +1314,27 @@ class MileageDetailPage extends StatelessWidget {
       this.vesselName,
       this.mobileId})
       : super(key: key);
+
+  @override
+  _MileageDetailPageState createState() => _MileageDetailPageState();
+}
+
+class _MileageDetailPageState extends State<MileageDetailPage> {
+  String _selectedTimezonePreferences = 'UTC+7';
+  
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedTimezonePreferences =
+          prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+    });
+  }
 
   // Fungsi untuk menghitung jarak antara dua titik dalam nautical miles
   double calculateDistanceNmi(
@@ -1656,8 +1680,8 @@ class MileageDetailPage extends StatelessWidget {
     double totalSpeed = 0;
     int count = 0;
 
-    if (data != null && data!.isNotEmpty) {
-      for (var item in data!) {
+    if (widget.data != null && widget.data!.isNotEmpty) {
+      for (var item in widget.data!) {
         double speedKn = double.parse(item['speed_kn'].toString());
 
         // Hanya menghitung speed_kn yang lebih dari 0.1
@@ -2656,7 +2680,7 @@ class MileageDetailPage extends StatelessWidget {
     // Map<String, int> totalTime = _calculateTotalTime();
     // double averageSpeed = _calculateAverageSpeed();
 
-    List<Map<String, String>> processedData = processVesselData(data!);
+    List<Map<String, String>> processedData = processVesselData(widget.data!);
     String totalDuration = calculateTotalDurationPerDay(processedData);
 
     double averageDailySpeed = calculateAverageSpeedPerDay(processedData);
@@ -2687,7 +2711,7 @@ class MileageDetailPage extends StatelessWidget {
                 pw.Row(
                   children: [
                     pw.Text(
-                      '${startDate != null && endDate != null ? "${DateFormat('dd MMM yyyy').format(startDate!)} - ${DateFormat('dd MMM yyyy').format(endDate!)}" : "No date selected"}',
+                      '${widget.startDate != null && widget.endDate != null ? "${DateFormat('dd MMM yyyy').format(widget.startDate!)} - ${DateFormat('dd MMM yyyy').format(widget.endDate!)}" : "No date selected"}',
                       style: pw.TextStyle(fontSize: 18),
                     ),
                   ],
@@ -2696,7 +2720,7 @@ class MileageDetailPage extends StatelessWidget {
                 pw.Row(
                   children: [
                     pw.Text('Nama Kapal: ', style: pw.TextStyle(fontSize: 14)),
-                    pw.Text(vesselName ?? '',
+                    pw.Text(widget.vesselName ?? '',
                         style: pw.TextStyle(fontSize: 14)),
                   ],
                 ),
@@ -2712,7 +2736,7 @@ class MileageDetailPage extends StatelessWidget {
                 pw.Row(
                   children: [
                     pw.Text('Perjalanan: ', style: pw.TextStyle(fontSize: 14)),
-                    pw.Text('${calculateUniqueDays(data!)} hari',
+                    pw.Text('${calculateUniqueDays(widget.data!)} hari',
                         style: pw.TextStyle(fontSize: 14)),
                   ],
                 ),
@@ -2851,7 +2875,7 @@ class MileageDetailPage extends StatelessWidget {
 
     final directory = await getExternalStorageDirectory();
     final file =
-        File('${directory!.path}/laporan_jarak_tempuh_${vesselName}.pdf');
+        File('${directory!.path}/laporan_jarak_tempuh_${widget.vesselName}.pdf');
 
     await file.writeAsBytes(await pdf.save());
 
@@ -2860,9 +2884,9 @@ class MileageDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double totalDistance = calculateTotalDistance(data!);
+    double totalDistance = calculateTotalDistance(widget.data!);
     double averageSpeed = _calculateAverageSpeed();
-    List<Map<String, String>> processedData = processVesselData(data!);
+    List<Map<String, String>> processedData = processVesselData(widget.data!);
     String totalDuration = calculateTotalDurationPerDay(processedData);
 
     double averageDailySpeed = calculateAverageSpeedPerDay(processedData);
@@ -2907,7 +2931,7 @@ class MileageDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      body: data != null && data!.isNotEmpty
+      body: widget.data != null && widget.data!.isNotEmpty
           ? Padding(
               padding: const EdgeInsets.all(15),
               child: Column(
@@ -2938,13 +2962,13 @@ class MileageDetailPage extends StatelessWidget {
                               Icon(
                                 Icons.calendar_today,
                                 color: Colors.white,
-                                size: 24,
+                                size: 22,
                               ),
                               SizedBox(width: 8),
                               Text(
-                                '${startDate != null && endDate != null ? "${DateFormat('dd MMM yyyy').format(startDate!)} - ${DateFormat('dd MMM yyyy').format(endDate!)}" : "No date selected"}',
+                                '${widget.startDate != null && widget.endDate != null ? "${DateFormat('dd MMM yyyy').format(widget.startDate!)} - ${DateFormat('dd MMM yyyy').format(widget.endDate!)} (${_selectedTimezonePreferences})" : "No date selected"}',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 15,
                                   color: Colors.white,
                                 ),
                               ),
@@ -2966,7 +2990,7 @@ class MileageDetailPage extends StatelessWidget {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             MileageLocationPage(
-                                          data: data,
+                                          data: widget.data,
                                         ),
                                       ),
                                     );
@@ -2991,7 +3015,7 @@ class MileageDetailPage extends StatelessWidget {
                               SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  '${vesselName}',
+                                  '${widget.vesselName}',
                                   style: TextStyle(color: Colors.white70),
                                 ),
                               ),
@@ -3026,7 +3050,7 @@ class MileageDetailPage extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      ': ${calculateUniqueDays(data!)} hari',
+                                      ': ${calculateUniqueDays(widget.data!)} hari',
                                       // ': ${data!.length} hari',
                                       style: TextStyle(color: Colors.white70),
                                     ),

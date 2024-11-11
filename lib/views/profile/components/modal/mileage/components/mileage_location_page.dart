@@ -10,6 +10,7 @@ import 'package:geotraking/core/components/map_tool.dart';
 import 'package:info_popup/info_popup.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MileageLocationPage extends StatefulWidget {
   final List<Map<String, dynamic>>? data;
@@ -24,7 +25,11 @@ class _MileageLocationPageState extends State<MileageLocationPage> {
   final MapController mapController = MapController();
   String _selectedMapProvider = 'OpenStreetMap';
   final formatterLatlong = FormatedLatlong();
-  
+
+  String _selectedTimezonePreferences = 'UTC+7';
+  String _selectedSpeedPreferences = 'Knots';
+  String _selectedCoordinatePreferences = 'Degrees';
+
   List<LatLng> get points =>
       widget.data?.map((location) {
         double lat = location['latitude'] is String
@@ -36,6 +41,39 @@ class _MileageLocationPageState extends State<MileageLocationPage> {
         return LatLng(lat, lng);
       }).toList() ??
       [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedSpeedPreferences =
+          prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      _selectedCoordinatePreferences =
+          prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedTimezonePreferences =
+          prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+    });
+  }
+
+  String _getSpeed(Map<String, dynamic> data) {
+    switch (_selectedSpeedPreferences) {
+      case 'Knots':
+        return (data['speed_kn'] ?? 0).toString();
+      case 'Km/h':
+        return (data['speed_kmh'] ?? 0).toString();
+      case 'm/s':
+        return (data['speed_ms'] ?? 0).toString();
+      case 'mp/h':
+        return (data['speed_mph'] ?? 0).toString();
+      default:
+        return '0';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +135,8 @@ class _MileageLocationPageState extends State<MileageLocationPage> {
                         received = location['received'] ?? 'N/A';
                       }
 
+                      String speed = _getSpeed(location);
+
                       return Marker(
                         point: LatLng(lat, lng),
                         width: 13,
@@ -111,8 +151,7 @@ class _MileageLocationPageState extends State<MileageLocationPage> {
                           ),
                           customContent: () => Container(
                             padding: EdgeInsets.all(8),
-                            width:
-                                290, 
+                            width: 290,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
@@ -120,19 +159,35 @@ class _MileageLocationPageState extends State<MileageLocationPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                buildInfoRow('Received Date', ': ${received}'),
+                                buildInfoRow(
+                                    'Received date (${_selectedTimezonePreferences})',
+                                    ': ${received}'),
                                 Divider(),
-                                buildInfoRow('Latitude',
-                                    ': ${formatterLatlong.formatLatitude(lat)}'),
+                                buildInfoRow(
+                                  'Latitude',
+                                  _selectedCoordinatePreferences == 'Degrees'
+                                      ? ': ${formatterLatlong.formatLatitude(lat)}'
+                                      : ': ${lat.toString()}',
+                                ),
+                                // ': ${formatterLatlong.formatLatitude(lat)}'),
                                 Divider(),
-                                buildInfoRow('Longitude',
-                                    ': ${formatterLatlong.formatLongitude(lng)}'),
+                                buildInfoRow(
+                                  'Longitude',
+                                  _selectedCoordinatePreferences == 'Degrees'
+                                      ? ': ${formatterLatlong.formatLongitude(lng)}'
+                                      : ': ${lng.toString()}',
+                                ),
+                                // ': ${formatterLatlong.formatLongitude(lng)}'),
                                 Divider(),
-                                buildInfoRow('Heading',
-                                    ': ${heading.toStringAsFixed(2)}°'),
+                                buildInfoRow('Heading', ': ${heading}°'),
                                 Divider(),
-                                buildInfoRow('Speed',
-                                    ': ${speedKn.toStringAsFixed(2)} Knots'),
+                                buildInfoRow(
+                                  'Speed',
+                                  //   ': ${_getSpeed(data)} ${_selectedSpeedPreferences}',
+                                  // ),
+                                  ': $speed ${_selectedSpeedPreferences}',
+                                ),
+                                // ': ${speedKn.toStringAsFixed(2)} Knots'),
                               ],
                             ),
                           ),

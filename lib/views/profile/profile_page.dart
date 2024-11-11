@@ -179,27 +179,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     margin: EdgeInsets.all(16),
                     padding: EdgeInsets.all(16),
-                    // decoration: BoxDecoration(
-                    //   image: DecorationImage(
-                    //     // image: AssetImage('assets/images/background_user.png'),
-                    //     // image: AssetImage('assets/images/card_user.jpg'),
-                    //     image: CachedNetworkImageProvider(
-                    //       'https://drive.google.com/uc?export=view&id=1OCEuYcaLwVGQA8RjkstJuLJfnvb-w2Ct',
-                    //     ),
-
-                    //     fit: BoxFit.cover,
-                    //   ),
-                    //   borderRadius: BorderRadius.all(Radius.circular(10)),
-                    // ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       gradient: LinearGradient(
-                        begin: Alignment.topLeft, // Mulai dari kiri
-                        end: Alignment.bottomRight, // Arahkan ke kanan
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                         colors: [
                           Color.fromARGB(255, 22, 66, 60),
-                          // Color.fromARGB(255, 106, 156, 137),
-                          // Color.fromARGB(255, 196, 218, 210)
                           Colors.greenAccent
                         ],
                       ),
@@ -399,6 +385,311 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
+
+      // body: CustomScrollView(
+      //   slivers: [
+      //     SliverAppBar(
+      //       pinned: false,
+      //       floating: true,
+      //       snap: false,
+      //       title: RichText(
+      //         text: TextSpan(
+      //           children: [
+      //             TextSpan(
+      //               text: 'Geo',
+      //               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+      //                     color: Colors.black,
+      //                     fontWeight: FontWeight.bold,
+      //                   ),
+      //             ),
+      //             TextSpan(
+      //               text: 'Profile',
+      //               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+      //                     color: Color.fromARGB(255, 13, 124, 102),
+      //                     fontWeight: FontWeight.bold,
+      //                   ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       // flexibleSpace: FlexibleSpaceBar(
+      //       //   title: RichText(
+      //       //     text: TextSpan(
+      //       //       children: [
+      //       //         TextSpan(
+      //       //           text: 'Geo',
+      //       //           style:
+      //       //               Theme.of(context).textTheme.headlineMedium?.copyWith(
+      //       //                     color: Colors.black,
+      //       //                     fontWeight: FontWeight.bold,
+      //       //                   ),
+      //       //         ),
+      //       //         TextSpan(
+      //       //           text: 'Profile',
+      //       //           style:
+      //       //               Theme.of(context).textTheme.headlineMedium?.copyWith(
+      //       //                     color: Color.fromARGB(255, 13, 124, 102),
+      //       //                     fontWeight: FontWeight.bold,
+      //       //                   ),
+      //       //         ),
+      //       //       ],
+      //       //     ),
+      //       //   ),
+      //       // ),
+      //       automaticallyImplyLeading: false,
+      //       backgroundColor: Colors.white,
+      //       // elevation: 0,
+      //       // expandedHeight: 60.0,
+      //     ),
+      //     SliverList(
+      //       delegate: SliverChildListDelegate(
+      //         [
+      //           if (!_isLoggedIn)
+      //             Center(
+      //               child: FutureBuilder(
+      //                 future: Future.delayed(const Duration(seconds: 3)),
+      //                 builder: (context, snapshot) {
+      //                   return Row(
+      //                     mainAxisAlignment: MainAxisAlignment.center,
+      //                     children: [
+      //                       Text(
+      //                         'Getting Data',
+      //                         style: Theme.of(context)
+      //                             .textTheme
+      //                             .bodyLarge
+      //                             ?.copyWith(color: Colors.black),
+      //                       ),
+      //                       SizedBox(width: 8),
+      //                       SizedBox(
+      //                         width: 18,
+      //                         height: 18,
+      //                         child: CircularProgressIndicator(
+      //                           color: Colors.black,
+      //                           strokeWidth: 2,
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   );
+      //                 },
+      //               ),
+      //             )
+      //           else
+      //             Column(
+      //               children: [
+      //                 Container(
+      //                   margin: EdgeInsets.all(16),
+      //                   padding: EdgeInsets.all(16),
+      //                   decoration: BoxDecoration(
+      //                     borderRadius: BorderRadius.all(Radius.circular(10)),
+      //                     gradient: LinearGradient(
+      //                       begin: Alignment.topLeft,
+      //                       end: Alignment.bottomRight,
+      //                       colors: [
+      //                         Color.fromARGB(255, 22, 66, 60),
+      //                         Colors.greenAccent
+      //                       ],
+      //                     ),
+      //                   ),
+      //                   child: Row(
+      //                     children: [
+      //                       CircleAvatar(
+      //                         radius: 30,
+      //                         backgroundImage: _user!.avatar == null ||
+      //                                 _user!.avatar!.isEmpty
+      //                             // ? AssetImage('assets/images/user.png')
+      //                             ? CachedNetworkImageProvider(
+      //                                 'https://drive.google.com/uc?export=view&id=1xkE-1cZfmNIwNnXwMxGF1ltw4vKkdhGS',
+      //                               )
+      //                             : FileImage(
+      //                                 File(
+      //                                     '${_directory?.path}/avatar_${_user!.id}.jpg'),
+      //                               ),
+      //                       ),
+      //                       SizedBox(width: 16),
+      //                       Column(
+      //                         crossAxisAlignment: CrossAxisAlignment.start,
+      //                         children: [
+      //                           Text(
+      //                             _user!.name.length > 20
+      //                                 ? _user!.name.substring(0, 20) + '...'
+      //                                 : _user!.name,
+      //                             style: TextStyle(
+      //                                 color: Colors.white,
+      //                                 fontSize: 18,
+      //                                 fontWeight: FontWeight.bold),
+      //                           ),
+      //                           SizedBox(height: 4),
+      //                           Text(
+      //                             _user!.noHp,
+      //                             style: TextStyle(
+      //                                 color: Colors.white, fontSize: 14),
+      //                           ),
+      //                         ],
+      //                       ),
+      //                       Spacer(),
+      //                       IconButton(
+      //                         icon: const Icon(
+      //                           Icons.arrow_forward_ios,
+      //                           color: Colors.white,
+      //                         ),
+      //                         onPressed: () {
+      //                           Navigator.pushNamed(
+      //                               context, AppRoutes.editMyProfile);
+      //                         },
+      //                       ),
+      //                     ],
+      //                   ),
+      //                 ),
+      //                 ProfileInfoCard(),
+      //                 SizedBox(
+      //                   child: Container(
+      //                     height: 6,
+      //                     color: Colors.grey.shade200,
+      //                   ),
+      //                 ),
+      //                 Container(
+      //                   padding: const EdgeInsets.all(6),
+      //                   child: _user!.isAdmin == 1
+      //                       ? ProfileAdminMenuOptions(
+      //                           selectedLanguage: widget.selectedLanguage)
+      //                       : _user!.isAdmin == 2
+      //                           ? ProfileAPNMenuOptions()
+      //                           : ProfileMemberMenuOptions(
+      //                               selectedLanguage: widget.selectedLanguage),
+      //                 ),
+      //                 SizedBox(
+      //                   child: Container(
+      //                     height: 6,
+      //                     color: Colors.grey.shade200,
+      //                   ),
+      //                 ),
+      //                 Container(
+      //                   padding: const EdgeInsets.all(6),
+      //                   child: SizedBox(
+      //                     child: Padding(
+      //                       padding: const EdgeInsets.all(10),
+      //                       child: Column(
+      //                         children: [
+      //                           ProfileListTile(
+      //                             title: Localization.preferences(
+      //                                 widget.selectedLanguage),
+      //                             // 'Map Preferences',
+      //                             icon: Icons.room_preferences_rounded,
+      //                             onTap: () => Navigator.pushNamed(
+      //                                 context, AppRoutes.preferences),
+      //                           ),
+      //                           const Divider(
+      //                             thickness: 0.5,
+      //                             color: Colors.black,
+      //                           ),
+      //                           ProfileListTile(
+      //                             title: Localization.getHelpCenter(
+      //                                 widget.selectedLanguage),
+      //                             icon: Icons.live_help_outlined,
+      //                             onTap: () => Navigator.pushNamed(
+      //                                 context, AppRoutes.supportPage),
+      //                           ),
+      //                           const Divider(
+      //                             thickness: 0.5,
+      //                             color: Colors.black,
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //                 SizedBox(
+      //                   child: Container(
+      //                     height: 6,
+      //                     color: Colors.grey.shade200,
+      //                   ),
+      //                 ),
+      //                 Container(
+      //                   padding: const EdgeInsets.all(6),
+      //                   child: SizedBox(
+      //                     child: Padding(
+      //                       padding: const EdgeInsets.all(10),
+      //                       child: Column(
+      //                         children: [
+      //                           ProfileListTile(
+      //                             title: Localization.privacyPolice(
+      //                                 widget.selectedLanguage),
+      //                             icon: Icons.privacy_tip_outlined,
+      //                             onTap: () => Navigator.pushNamed(
+      //                                 context, AppRoutes.privacyPolice),
+      //                           ),
+      //                           const Divider(
+      //                             thickness: 0.5,
+      //                             color: Colors.black,
+      //                           ),
+      //                           MediaSosialRow(),
+      //                           const Divider(
+      //                             thickness: 0.5,
+      //                             color: Colors.black,
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //                 SizedBox(
+      //                   child: Container(
+      //                     height: 6,
+      //                     color: Colors.grey.shade200,
+      //                   ),
+      //                 ),
+      //                 ContactCard(),
+      //                 SizedBox(
+      //                   child: Container(
+      //                     height: 6,
+      //                     color: Colors.grey.shade200,
+      //                   ),
+      //                 ),
+      //                 Container(
+      //                   padding: const EdgeInsets.all(6),
+      //                   child: Ink(
+      //                     height: 55,
+      //                     child: InkWell(
+      //                       onTap: _logout,
+      //                       borderRadius: AppDefaults.borderRadius,
+      //                       child: Padding(
+      //                         padding: const EdgeInsets.all(8.0),
+      //                         child: Row(
+      //                           children: [
+      //                             Container(
+      //                                 padding: const EdgeInsets.all(8),
+      //                                 decoration: BoxDecoration(
+      //                                   color: Colors.white,
+      //                                   borderRadius: AppDefaults.borderRadius,
+      //                                 ),
+      //                                 child: Text(
+      //                                   'Version 1.0.5',
+      //                                   style: TextStyle(color: Colors.black54),
+      //                                 )),
+      //                             Spacer(),
+      //                             Text(
+      //                               Localization.logout(
+      //                                   widget.selectedLanguage),
+      //                               // 'Logout',
+      //                               style: Theme.of(context)
+      //                                   .textTheme
+      //                                   .bodyLarge
+      //                                   ?.copyWith(color: Colors.red),
+      //                             ),
+      //                           ],
+      //                         ),
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //                 SizedBox(height: 110),
+      //               ],
+      //             ),
+      //         ],
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

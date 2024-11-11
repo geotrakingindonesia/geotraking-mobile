@@ -289,8 +289,10 @@
 
 // import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/models/member.dart';
 import 'package:geotraking/core/services/auth/authenticate_service.dart';
+import 'package:geotraking/views/chat/components/ai_chat.dart';
 // import 'package:geotraking/core/services/vessel/vessel_service.dart';
 // import 'package:geotraking/views/chat/components/request_vessel.dart';
 import 'package:geotraking/views/chat/components/tab_detail.dart';
@@ -363,30 +365,6 @@ class _ChatPageState extends State<ChatPage> {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
             elevation: 0,
-            // actions: [
-            //   if (_isLoggedIn)
-            //     Padding(
-            //       padding: const EdgeInsets.only(right: 15),
-            //       child: Container(
-            //         decoration: BoxDecoration(
-            //           color: Color.fromARGB(255, 127, 183, 126),
-            //           shape: BoxShape.circle,
-            //         ),
-            //         child: IconButton(
-            //           icon: Icon(Icons.add, color: Colors.white),
-            //           onPressed: () {
-            //             Navigator.push(
-            //               context,
-            //               MaterialPageRoute(
-            //                 builder: (context) => RequestVessel(),
-            //               ),
-            //             );
-            //           },
-            //           tooltip: 'Ajukan chat kapal',
-            //         ),
-            //       ),
-            //     ),
-            // ],
           ),
         ),
       ),
@@ -457,6 +435,22 @@ class _ChatPageState extends State<ChatPage> {
           ],
         ),
       ),
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(bottom: 76.0),
+      //   child: FloatingActionButton(
+      //     onPressed: () {
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => AIChatPage()),
+      //       );
+      //     },
+      //     backgroundColor: Colors.green,
+      //     child: Icon(
+      //       FontAwesomeIcons.message,
+      //       color: Colors.white,
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

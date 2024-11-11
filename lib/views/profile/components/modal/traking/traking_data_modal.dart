@@ -10,6 +10,8 @@ import 'package:info_popup/info_popup.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:intl/intl.dart';
+
 class TrakingDataModal extends StatefulWidget {
   String? mobileId;
   final Function(List<LatLng>, List<Marker>, List<double>) onTrackVessel;
@@ -47,32 +49,40 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
   bool _showHistoryData = false;
   List<dynamic> _historyData = [];
 
+  String _selectedTimezonePreferences = 'UTC+7';
+  String _selectedSpeedPreferences = 'Knots';
+  String _selectedCoordinatePreferences = 'Degrees';
+
   @override
   void initState() {
     super.initState();
-    _loadDataFromSharedPreferences();
+    _loadPreferences();
   }
 
   @override
   void didUpdateWidget(TrakingDataModal oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.mobileId == oldWidget.mobileId) {
-      _loadDataFromSharedPreferences();
+      _loadPreferences();
     } else {
       setState(() {});
     }
   }
 
-  _loadDataFromSharedPreferences() async {
+  Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedSpeedPreferences =
+          prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      _selectedCoordinatePreferences =
+          prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
+      _selectedTimezonePreferences =
+          prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+    });
+
     final radioValue = prefs.getInt('radioValue');
     final textFieldValue = prefs.getString('textFieldValue');
     final mobileId = prefs.getString('mobileId');
-
-    print('radio ${radioValue}');
-    print('text ${textFieldValue}');
-    print('mobile Id ${mobileId}');
-    print('mobile Id widget ${widget.mobileId}');
 
     if (widget.mobileId != mobileId) {
       setState(() {
@@ -97,6 +107,56 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
       });
     }
   }
+
+  String _getSpeed(Map<String, dynamic> data) {
+    switch (_selectedSpeedPreferences) {
+      case 'Knots':
+        return (data['speed_kn'] ?? 0).toString();
+      case 'Km/h':
+        return (data['speed_kmh'] ?? 0).toString();
+      case 'm/s':
+        return (data['speed_ms'] ?? 0).toString();
+      case 'mp/h':
+        return (data['speed_mph'] ?? 0).toString();
+      default:
+        return '0';
+    }
+  }
+
+  // _loadDataFromSharedPreferences() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final radioValue = prefs.getInt('radioValue');
+  //   final textFieldValue = prefs.getString('textFieldValue');
+  //   final mobileId = prefs.getString('mobileId');
+
+  //   print('radio ${radioValue}');
+  //   print('text ${textFieldValue}');
+  //   print('mobile Id ${mobileId}');
+  //   print('mobile Id widget ${widget.mobileId}');
+
+  //   if (widget.mobileId != mobileId) {
+  //     setState(() {
+  //       _radioValue = null;
+  //       _textFieldValue = '';
+  //       _textController.text = '';
+  //     });
+  //   } else {
+  //     setState(() {
+  //       if (radioValue != null) {
+  //         _radioValue = radioValue;
+  //       }
+
+  //       if (textFieldValue != null) {
+  //         _textFieldValue = textFieldValue;
+  //         _textController.text = textFieldValue;
+  //       }
+
+  //       if (mobileId != null) {
+  //         widget.mobileId = mobileId;
+  //       }
+  //     });
+  //   }
+  // }
 
   Future<void> _saveDataToSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
@@ -351,13 +411,61 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                           children: [
                                             Expanded(
                                               child: Text(
+                                                'Received date (${_selectedTimezonePreferences})',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                data['timestamp'] != null
+                                                    ? ': ${DateFormat('dd MMM y (HH:mm:ss)').format(DateTime.parse(data['timestamp']!))}'
+                                                    : ': -',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // Divider(),
+                                        // Row(
+                                        //   mainAxisAlignment:
+                                        //       MainAxisAlignment.spaceBetween,
+                                        //   children: [
+                                        //     Expanded(
+                                        //       child: Text(
+                                        //         'Broadcast date (${_selectedTimezonePreferences})',
+                                        //         style: TextStyle(fontSize: 12),
+                                        //       ),
+                                        //     ),
+                                        //     Expanded(
+                                        //       child: Text(
+                                        //         data['broadcast'] != null
+                                        //             ? '${DateFormat('dd MMM y (HH:mm:ss)').format(DateTime.parse(data['broadcast']!))}'
+                                        //             : '-',
+                                        //         style: TextStyle(fontSize: 12),
+                                        //       ),
+                                        //     ),
+                                        //   ],
+                                        // ),
+                                        Divider(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
                                                 'Latitude',
                                                 style: TextStyle(fontSize: 12),
                                               ),
                                             ),
                                             Expanded(
                                               child: Text(
-                                                ': ${formatterLatlong.formatLatitude(latitude)}',
+                                                _selectedCoordinatePreferences ==
+                                                        'Degrees'
+                                                    ? ': ${formatterLatlong
+                                                        .formatLatitude(
+                                                            latitude)}'
+                                                    : ': ${latitude.toString()}',
+                                                // ': ${formatterLatlong.formatLatitude(latitude)}',
                                                 style: TextStyle(fontSize: 12),
                                               ),
                                             ),
@@ -376,7 +484,13 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                ': ${formatterLatlong.formatLongitude(longitude)}',
+                                                _selectedCoordinatePreferences ==
+                                                        'Degrees'
+                                                    ? ': ${formatterLatlong
+                                                        .formatLongitude(
+                                                            longitude)}'
+                                                    : ': ${longitude.toString()}',
+                                                // ': ${formatterLatlong.formatLongitude(longitude)}',
                                                 style: TextStyle(fontSize: 12),
                                               ),
                                             ),
@@ -395,7 +509,28 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                ': ${double.parse(data['heading']).toStringAsFixed(2)}°',
+                                                ': ${double.parse(data['heading'])}°',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                'Speed',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                ': ${_getSpeed(data)} ${_selectedSpeedPreferences}', // Call the helper function to get the speed value
+
+                                                // ': ${double.parse(data['speed'])}',
                                                 style: TextStyle(fontSize: 12),
                                               ),
                                             ),

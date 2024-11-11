@@ -738,7 +738,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                   ),
                   TextSpan(
-                    text: 'Traking',
+                    text: 'Home',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           color: Color.fromARGB(255, 13, 124, 102),
                           fontWeight: FontWeight.bold,
