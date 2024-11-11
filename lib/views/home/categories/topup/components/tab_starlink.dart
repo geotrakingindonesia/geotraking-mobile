@@ -236,7 +236,7 @@ class _TabStarlinkState extends State<TabStarlink> {
               fit: BoxFit.contain,
               placeholder: (context, url) => Container(
                 width: double.infinity,
-                height: double.infinity,
+                // height: double.infinity,
                 color: Colors.white,
                 child: Center(child: CircularProgressIndicator()),
               ),

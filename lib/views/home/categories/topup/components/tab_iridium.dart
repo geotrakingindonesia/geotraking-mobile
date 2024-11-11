@@ -74,7 +74,7 @@ class _TabIridiumState extends State<TabIridium> {
                       fit: BoxFit.contain,
                       placeholder: (context, url) => Container(
                         width: double.infinity,
-                        height: double.infinity,
+                        // height: double.infinity,
                         color:
                             Colors.white, // White background for loading state
                         child: Center(child: CircularProgressIndicator()),

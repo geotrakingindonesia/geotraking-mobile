@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:geotraking/views/profile/support/components/tutorial_tile_pdf.dart';
@@ -7,6 +8,11 @@ class TabAiscube extends StatefulWidget {
 
   @override
   _TabAiscubeState createState() => _TabAiscubeState();
+}
+
+String _convertDriveLink(String driveUrl) {
+  final fileId = driveUrl.split('/d/')[1].split('/')[0];
+  return 'https://drive.google.com/uc?export=view&id=$fileId';
 }
 
 class _TabAiscubeState extends State<TabAiscube> {
@@ -33,16 +39,35 @@ class _TabAiscubeState extends State<TabAiscube> {
                       ),
                     ],
                   ),
-                  child: Container(
-                    child: ClipRRect(
-                      borderRadius: AppDefaults.borderRadius,
-                      child: Image.asset(
-                        'assets/images/banner_fuel.jpeg',
+                  child: ClipRRect(
+                    borderRadius: AppDefaults.borderRadius,
+                    child: CachedNetworkImage(
+                      imageUrl: _convertDriveLink(
+                          "https://drive.google.com/file/d/1rkT2KfZCAvLZynktuLueuFQJJiczTqC3/view?usp=sharing"),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
                         width: double.infinity,
-                        fit: BoxFit.contain,
+                        // height: double.infinity,
+                        color: Colors.white,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.white,
+                        child: Icon(Icons.error, color: Colors.red),
                       ),
                     ),
                   ),
+                  // child: Container(
+                  //   child: ClipRRect(
+                  //     borderRadius: AppDefaults.borderRadius,
+                  //     child: Image.asset(
+                  //       'assets/images/banner_fuel.jpeg',
+                  //       width: double.infinity,
+                  //       fit: BoxFit.contain,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
               ),
             ),
