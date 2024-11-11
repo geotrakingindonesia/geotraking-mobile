@@ -1075,6 +1075,58 @@ class VesselService {
   //   return count;
   // }
 
+  // Future<int> countDataKapal() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   int cachedCount = prefs.getInt('kapal_count') ?? -1;
+  //   String? lastUpdateStr = prefs.getString('last_update_kapal_count');
+  //   DateTime? lastUpdate =
+  //       lastUpdateStr != null ? DateTime.parse(lastUpdateStr) : null;
+  //   DateTime currentDate = DateTime.now();
+
+  //   // Check if we should update the count (i.e., more than a month since the last update)
+  //   if (cachedCount != -1 &&
+  //       lastUpdate != null &&
+  //       currentDate.difference(lastUpdate).inDays < 30) {
+  //     return cachedCount;
+  //   }
+
+  //   // Fetch current user info
+  //   MemberUser? currentUser = await _authService.getCurrentUser();
+  //   int memberId = currentUser?.id ?? 0;
+  //   int adminLevel = currentUser?.isAdmin ?? 0;
+  //   print('Current User ID: $memberId, Admin Level: $adminLevel');
+
+  //   // Fetch data from the database
+  //   var settings = Connection.getSettings();
+  //   var conn = await MySqlConnection.connect(settings);
+  //   int count = 0;
+
+  //   if (adminLevel == 0) {
+  //     var result = await conn.query('''
+  //     SELECT COUNT(*) AS count
+  //     FROM ai_kapal_member
+  //     WHERE member_id = ?
+  //   ''', [memberId]);
+  //     count = result.first['count'] as int;
+  //   } else if (adminLevel == 1) {
+  //     var result = await conn.query('''
+  //     SELECT COUNT(*) AS count
+  //     FROM ai_mobile
+  //     WHERE type_id IN (1, 2, 4, 5, 15)
+  //   ''');
+  //     count = result.first['count'] as int;
+  //   }
+
+  //   await conn.close();
+
+  //   // Update cache with new count and timestamp
+  //   await prefs.setInt('kapal_count', count);
+  //   await prefs.setString(
+  //       'last_update_kapal_count', currentDate.toIso8601String());
+
+  //   return count;
+  // }
+
   Future<int> countDataKapal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int cachedCount = prefs.getInt('kapal_count') ?? -1;
@@ -1082,13 +1134,6 @@ class VesselService {
     DateTime? lastUpdate =
         lastUpdateStr != null ? DateTime.parse(lastUpdateStr) : null;
     DateTime currentDate = DateTime.now();
-
-    // Check if we should update the count (i.e., more than a month since the last update)
-    if (cachedCount != -1 &&
-        lastUpdate != null &&
-        currentDate.difference(lastUpdate).inDays < 30) {
-      return cachedCount;
-    }
 
     // Fetch current user info
     MemberUser? currentUser = await _authService.getCurrentUser();
@@ -1119,12 +1164,18 @@ class VesselService {
 
     await conn.close();
 
-    // Update cache with new count and timestamp
-    await prefs.setInt('kapal_count', count);
-    await prefs.setString(
-        'last_update_kapal_count', currentDate.toIso8601String());
-
-    return count;
+    // Check if cached count matches the new count
+    if (cachedCount == count) {
+      print('Data is the same as the cached data.');
+      return cachedCount; // Return cached data if it is the same
+    } else {
+      // If data is different, update SharedPreferences and return the new count
+      print('Data has changed, updating cache.');
+      await prefs.setInt('kapal_count', count);
+      await prefs.setString(
+          'last_update_kapal_count', currentDate.toIso8601String());
+      return count; // Return the new count
+    }
   }
 
 // calc airtime yg active
