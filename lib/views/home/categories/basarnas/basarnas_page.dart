@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_final_fields, prefer_const_constructors, library_private_types_in_public_api, use_build_context_synchronously, unnecessary_string_interpolations, unused_local_variable, avoid_print, deprecated_member_use
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -49,6 +50,11 @@ class _BasarnasPageState extends State<BasarnasPage> {
     });
   }
 
+  String _convertDriveLink(String driveUrl) {
+    final fileId = driveUrl.split('/d/')[1].split('/')[0];
+    return 'https://drive.google.com/uc?export=view&id=$fileId';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +87,27 @@ class _BasarnasPageState extends State<BasarnasPage> {
               ),
               MarkerLayer(
                 markers: _basarnasList.map((basarnas) {
+                  final imageUrl = _convertDriveLink(
+                      'https://drive.google.com/file/d/1TbmoL0s39A-ruykrTydqF1X6vmF1p57B/view?usp=sharing');
+
                   return Marker(
+                    // child: GestureDetector(
+                    //   onTap: () {
+                    //     setState(() {
+                    //       _selectedBasarnas = basarnas;
+                    //     });
+                    //   },
+                    //   child: CachedNetworkImage(
+                    //     imageUrl: imageUrl,
+                    //     placeholder: (context, url) =>
+                    //         CircularProgressIndicator(),
+                    //     errorWidget: (context, url, error) =>
+                    //         Icon(Icons.error, color: Colors.red),
+                    //     width: 30.0,
+                    //     height: 30.0,
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    // ),
                     child: IconButton(
                       icon: FaIcon(
                         FontAwesomeIcons.lifeRing,

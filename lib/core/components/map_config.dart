@@ -10,6 +10,9 @@ class MapConfig {
         return 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
       case 'Hot OSM':
         return 'https://b.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
+      case 'Esri NatGeoWorldMap':
+        // return 'https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg';
+        return 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}';
       case 'OSM Piano':
         return 'https://{s}.piano.tiles.quaidorsay.fr/fr/{z}/{x}/{y}.png';
       default:
@@ -23,6 +26,7 @@ class MapConfig {
       'CyclOSM',
       'Hot OSM',
       'OpenTopo Map',
+      'Esri NatGeoWorldMap',
       'OSM Piano',
     ];
   }

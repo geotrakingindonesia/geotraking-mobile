@@ -103,6 +103,7 @@ class _LoginPageFormState extends State<LoginPageForm> {
               const SizedBox(height: 8),
               TextFormField(
                 focusNode: widget.passwordFocusNode,
+                keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 obscureText: !isPasswordShown,
                 validator: (value) => Validators.required(value),
