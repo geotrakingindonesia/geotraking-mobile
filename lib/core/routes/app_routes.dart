@@ -95,4 +95,6 @@ class AppRoutes {
   static const setFormatSpeed = '/setFormatSpeed';
   static const setGeofencing = '/setGeofencing';
 
+  static const vmsMonitoringKkpSetting = '/vmsMonitoringKkpSetting';
+
 }

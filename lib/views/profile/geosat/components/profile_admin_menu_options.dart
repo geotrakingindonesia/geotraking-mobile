@@ -145,6 +145,16 @@ class ProfileAdminMenuOptions extends StatelessWidget {
             ),
 
             ProfileListTile(
+              title: 'VMS Monitoring (KKP)',
+              icon: Icons.terminal,
+              onTap: () => Navigator.pushNamed(
+                  context, AppRoutes.vmsMonitoringKkpSetting),
+            ),
+            const Divider(
+              thickness: 0.5,
+              color: Colors.black,
+            ),
+            ProfileListTile(
               title: Localization.getSetting(selectedLanguage),
               icon: Icons.settings,
               onTap: () =>

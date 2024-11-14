@@ -90,6 +90,13 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
                         onTap: () => Navigator.pushNamed(
                             context, AppRoutes.createNotificationPage),
                       ),
+                      // Divider(),
+                      // ProfileListTile(
+                      //   title: 'VMS Monitoring (KKP)',
+                      //   icon: Icons.terminal,
+                      //   onTap: () => Navigator.pushNamed(
+                      //       context, AppRoutes.createNotificationPage),
+                      // ),
                       Divider(),
                     ],
                   ],

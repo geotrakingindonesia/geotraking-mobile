@@ -51,6 +51,7 @@ dependencies:
   # googleapis: ^13.2.0 #package utk ai chatbot
   # googleapis_auth: ^1.6.0 #package utk ai chatbot
   google_generative_ai: ^0.4.6
+  web_socket_channel: ^3.0.1
 
 dev_dependencies:
   flutter_test:
