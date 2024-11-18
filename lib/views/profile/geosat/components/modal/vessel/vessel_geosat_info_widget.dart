@@ -10,15 +10,18 @@ class VesselGeosatInfoWidget extends StatelessWidget {
   final String? selectedTimeZonePreferences;
   final String? selectedSpeedPreferences;
   final String? selectedCoordinatePreferences;
+  final String? nameOfWpp;
+
   final FormatedLatlong latlongFormatter = FormatedLatlong();
 
-  VesselGeosatInfoWidget(
-      {Key? key,
-      required this.vesselData,
-      this.selectedTimeZonePreferences,
-      this.selectedSpeedPreferences,
-      this.selectedCoordinatePreferences})
-      : super(key: key);
+  VesselGeosatInfoWidget({
+    Key? key,
+    required this.vesselData,
+    this.selectedTimeZonePreferences,
+    this.selectedSpeedPreferences,
+    this.selectedCoordinatePreferences,
+    this.nameOfWpp,
+  }) : super(key: key);
 
   String getSpeedValue(Map<String, dynamic>? data, String? selectedSpeed) {
     if (data == null) return '-';
@@ -129,6 +132,31 @@ class VesselGeosatInfoWidget extends StatelessWidget {
               'Speed',
               getSpeedValue(vesselData, selectedSpeedPreferences),
               // '${vesselData['speed_kn']} knots',
+            ),
+            Divider(),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Zone Wpp:',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                      nameOfWpp != null
+                          ? Text(
+                              'Your vessel is in the ${nameOfWpp} zone',
+                              style: TextStyle(fontSize: 12),
+                            )
+                          : Text(
+                              'Your vessel is outside the WPP zone',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),

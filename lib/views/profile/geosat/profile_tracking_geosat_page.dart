@@ -405,6 +405,36 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
   //   return circles;
   // }
 
+  List<LatLng> closePolygon(List<LatLng> points) {
+    if (points.isNotEmpty && points.first != points.last) {
+      points.add(points.first);
+    }
+    return points;
+  }
+
+  bool isPointInPolygon(LatLng point, List<LatLng> polygon) {
+    polygon = closePolygon(polygon);
+    int intersectCount = 0;
+
+    for (int i = 0; i < polygon.length - 1; i++) {
+      LatLng vertex1 = polygon[i];
+      LatLng vertex2 = polygon[i + 1];
+
+      if ((vertex1.latitude > point.latitude) !=
+          (vertex2.latitude > point.latitude)) {
+        double atX = (vertex2.longitude - vertex1.longitude) *
+                (point.latitude - vertex1.latitude) /
+                (vertex2.latitude - vertex1.latitude) +
+            vertex1.longitude;
+        if (point.longitude < atX) {
+          intersectCount++;
+        }
+      }
+    }
+
+    return (intersectCount % 2 == 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     // _circleMarkers = _calculateClusters();
@@ -527,6 +557,23 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
                 MarkerLayer(
                   markers: _kapalGeosatList.map((kapalGeosat) {
                     bool isSelected = _selectedKapal == kapalGeosat;
+
+                    LatLng kapalPosition = LatLng(
+                      double.parse(kapalGeosat['lat']),
+                      double.parse(kapalGeosat['lon']),
+                    );
+
+                    String? nameOfWpp;
+
+                    for (var polygon in _polygons) {
+                      if (isPointInPolygon(kapalPosition, polygon.points)) {
+                        nameOfWpp = polygon.label;
+                        print(
+                            "Kapal ${kapalGeosat['nama_kapal']} berada dalam WPP: ${polygon.label}");
+                        break;
+                      }
+                    }
+
                     return Marker(
                       width: 30,
                       height: 30,
@@ -572,6 +619,7 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
                                       _selectedSpeedPreferences,
                                   selectedCoordinatePreferences:
                                       _selectedCoordinatePreferences,
+                                  nameOfWpp: nameOfWpp,
                                 ),
                               ),
                           ],
