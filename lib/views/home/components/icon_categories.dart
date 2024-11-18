@@ -54,6 +54,29 @@ class IconsCategories extends StatelessWidget {
     //     ),
     //   ),
     // );
+    // return InkWell(
+    //   onTap: onTap,
+    //   child: Column(
+    //     mainAxisSize: MainAxisSize.min,
+    //     children: [
+    //       Container(
+    //         width: 60,
+    //         height: 60,
+    //         decoration: BoxDecoration(
+    //           color: Colors.blue[50],
+    //           shape: BoxShape.circle,
+    //         ),
+    //         child: Icon(
+    //           icon,
+    //           color: Color.fromARGB(255, 113, 201, 206),
+    //           size: 25,
+    //         ),
+    //       ),
+    //       SizedBox(height: 8),
+    //       Text(label, style: TextStyle(fontSize: 14, color: Colors.black87)),
+    //     ],
+    //   ),
+    // );
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -63,12 +86,21 @@ class IconsCategories extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.blue[50], 
-              shape: BoxShape.circle,
+              // color: Colors.white,
+              color: Color.fromARGB(255, 127, 183, 126),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 4, 
+                  offset: Offset(2, 2), 
+                ),
+              ],
             ),
             child: Icon(
               icon,
-              color: Color.fromARGB(255, 113, 201, 206),
+              // color: Color.fromARGB(255, 127, 183, 126),
+              color: Colors.white,
               size: 25,
             ),
           ),

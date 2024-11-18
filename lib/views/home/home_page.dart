@@ -755,63 +755,143 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(right: 15),
                 child: Row(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Navigator.pushNamed(context, AppRoutes.drawerPage);
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.blue[50],
+                    //     shape: const CircleBorder(),
+                    //     padding: const EdgeInsets.all(10),
+                    //   ),
+                    //   child: SvgPicture.asset(
+                    //     'assets/icons/menu_bar.svg',
+                    //     color: Colors.black87,
+                    //     width: 25,
+                    //     height: 25,
+                    //   ),
+                    // ),
+                    InkWell(
+                      onTap: () {
                         Navigator.pushNamed(context, AppRoutes.drawerPage);
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[50],
-                        shape: const CircleBorder(),
-                        padding: const EdgeInsets.all(10),
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/icons/menu_bar.svg',
-                        color: Colors.black87,
-                        width: 25,
-                        height: 25,
-                      ),
-                    ),
-                    Stack(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, AppRoutes.notificationPage);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue[50],
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(10),
-                          ),
-                          child: const Icon(
-                            Icons.notifications,
-                            color: Colors.black87,
-                          ),
+                      child: Container(
+                        height: 37,
+                        width: 37,
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 127, 183, 126),
+                          borderRadius: BorderRadius.circular(7),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 4,
+                              offset: Offset(2, 2),
+                            ),
+                          ],
                         ),
-                        // if (_unreadNotifications > 0)
-                        //   Positioned(
-                        //     top: 6,
-                        //     right: 15,
-                        //     child: Container(
-                        //       width: 14,
-                        //       height: 14,
-                        //       decoration: BoxDecoration(
-                        //         shape: BoxShape.circle,
-                        //         color: Colors.orange,
-                        //       ),
-                        //       child: Center(
-                        //         child: Text(
-                        //           _unreadNotifications.toString(),
-                        //           style: TextStyle(
-                        //             fontSize: 12,
-                        //             color: Colors.white,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                      ],
+                        child: SvgPicture.asset(
+                          'assets/icons/menu_bar.svg',
+                          color: Colors.white,
+                          width: 25,
+                          height: 25,
+                        ),
+                      ),
                     ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Navigator.pushNamed(context, AppRoutes.drawerPage);
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.blue[50],
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(15),
+                    //     ),
+                    //     // padding: const EdgeInsets.all(5),
+                    //   ),
+                    //   child: SvgPicture.asset(
+                    //     'assets/icons/menu_bar.svg',
+                    //     color: Colors.black87,
+                    //     width: 25,
+                    //     height: 25,
+                    //   ),
+                    // ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.notificationPage);
+                      },
+                      child: Container(
+                        height: 37,
+                        width: 37,
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 127, 183, 126),
+                          borderRadius: BorderRadius.circular(7),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 4,
+                              offset: Offset(2, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                            Icons.notifications,
+                            color: Colors.white,
+                          ),
+                      ),
+                    ),
+                    // Stack(
+                    //   children: [
+                    //     ElevatedButton(
+                    //       onPressed: () {
+                    //         Navigator.pushNamed(
+                    //             context, AppRoutes.notificationPage);
+                    //       },
+                    //       // style: ElevatedButton.styleFrom(
+                    //       //   backgroundColor: Colors.blue[50],
+                    //       //   shape: const CircleBorder(),
+                    //       //   padding: const EdgeInsets.all(10),
+                    //       // ),
+                    //       style: ElevatedButton.styleFrom(
+                    //         backgroundColor: Colors.blue[50],
+                    //         shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(15),
+                    //         ),
+                    //         // padding: const EdgeInsets.all(10),
+                    //       ),
+                    //       child: const Icon(
+                    //         Icons.notifications,
+                    //         color: Colors.black87,
+                    //       ),
+                    //     ),
+                    //     // if (_unreadNotifications > 0)
+                    //     //   Positioned(
+                    //     //     top: 6,
+                    //     //     right: 15,
+                    //     //     child: Container(
+                    //     //       width: 14,
+                    //     //       height: 14,
+                    //     //       decoration: BoxDecoration(
+                    //     //         shape: BoxShape.circle,
+                    //     //         color: Colors.orange,
+                    //     //       ),
+                    //     //       child: Center(
+                    //     //         child: Text(
+                    //     //           _unreadNotifications.toString(),
+                    //     //           style: TextStyle(
+                    //     //             fontSize: 12,
+                    //     //             color: Colors.white,
+                    //     //           ),
+                    //     //         ),
+                    //     //       ),
+                    //     //     ),
+                    //     //   ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
