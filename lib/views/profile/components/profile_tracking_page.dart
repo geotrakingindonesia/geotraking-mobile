@@ -360,6 +360,38 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
     }
   }
 
+  List<LatLng> closePolygon(List<LatLng> points) {
+    if (points.isNotEmpty && points.first != points.last) {
+      points.add(points.first); // Menutup poligon
+    }
+    return points;
+  }
+
+  bool isPointInPolygon(LatLng point, List<LatLng> polygon) {
+    polygon = closePolygon(polygon); // Tutup poligon
+    int intersectCount = 0;
+
+    for (int i = 0; i < polygon.length - 1; i++) {
+      LatLng vertex1 = polygon[i];
+      LatLng vertex2 = polygon[i + 1];
+
+      // Periksa apakah titik berada di antara vertex1 dan vertex2
+      if ((vertex1.latitude > point.latitude) !=
+          (vertex2.latitude > point.latitude)) {
+        double atX = (vertex2.longitude - vertex1.longitude) *
+                (point.latitude - vertex1.latitude) /
+                (vertex2.latitude - vertex1.latitude) +
+            vertex1.longitude;
+        if (point.longitude < atX) {
+          intersectCount++;
+        }
+      }
+    }
+
+    // Jika jumlah intersect ganjil, titik berada di dalam poligon
+    return (intersectCount % 2 == 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -482,6 +514,24 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                   markers: _kapalMemberList.map((kapalMember) {
                     bool isSelected = _selectedKapalMember == kapalMember;
 
+                    LatLng kapalPosition = LatLng(
+                      double.parse(kapalMember['lat']),
+                      double.parse(kapalMember['lon']),
+                    );
+
+                    bool isInWpp = false;
+                    String? nameOfWpp;
+
+                    for (var polygon in _polygons) {
+                      if (isPointInPolygon(kapalPosition, polygon.points)) {
+                        isInWpp = true;
+                        nameOfWpp = polygon.label; 
+                        print(
+                            "Kapal ${kapalMember['nama_kapal']} berada dalam WPP: ${polygon.label}");
+                        break;
+                      }
+                    }
+
                     return Marker(
                       width: 30,
                       height: 30,
@@ -523,14 +573,59 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                                       _selectedSpeedPreferences,
                                   selectedCoordinatePreferences:
                                       _selectedCoordinatePreferences,
+                                      nameOfWpp: nameOfWpp,
                                 ),
                               ),
+                            // if (isInWpp) // Tampilkan teks "In WPP" hanya jika kapal berada di WPP
+                            //   Positioned(
+                            //     top: 10,
+                            //     left: 10,
+                            //     child: Container(
+                            //       padding: EdgeInsets.all(5),
+                            //       color: Colors.green.withOpacity(0.7),
+                            //       child: Text(
+                            //         'In WPP',
+                            //         style: TextStyle(
+                            //           color: Colors.white,
+                            //           fontSize: 10,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
                           ],
                         ),
                       ),
                     );
                   }).toList(),
                 ),
+                // if (isInWpp)
+                //   MarkerLayer(
+                //     markers: _kapalMemberList.map((kapalMember) {
+                //       bool isSelected = _selectedKapalMember == kapalMember;
+                //       return Marker(
+                //         width: 60,
+                //         height: 23,
+                //         point: LatLng(
+                //           double.parse(kapalMember['lat']),
+                //           double.parse(kapalMember['lon']),
+                //         ),
+                //         child: Transform.translate(
+                //           offset: Offset(0, 25),
+                //           child: Container(
+                //             padding: EdgeInsets.all(5),
+                //             color: Colors.green.withOpacity(0.7),
+                //             child: Text(
+                //               'In WPP',
+                //               style: TextStyle(
+                //                 color: Colors.white,
+                //                 fontSize: 10,
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       );
+                //     }).toList(),
+                //   ),
                 if (_isShowNamaKapal)
                   MarkerLayer(
                     markers: _kapalMemberList.map((kapalMember) {

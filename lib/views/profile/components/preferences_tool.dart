@@ -37,13 +37,15 @@ class _PreferencesToolState extends State<PreferencesTool> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldWithBoxBackground,
+      // backgroundColor: AppColors.scaffoldWithBoxBackground,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Preferences'),
         leading: const AppBackButton(),
         titleTextStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: Colors.black,
             ),
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Column(

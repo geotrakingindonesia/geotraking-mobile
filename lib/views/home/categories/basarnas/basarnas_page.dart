@@ -2,6 +2,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/loading_map.dart';
@@ -50,11 +51,6 @@ class _BasarnasPageState extends State<BasarnasPage> {
     });
   }
 
-  String _convertDriveLink(String driveUrl) {
-    final fileId = driveUrl.split('/d/')[1].split('/')[0];
-    return 'https://drive.google.com/uc?export=view&id=$fileId';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,9 +83,6 @@ class _BasarnasPageState extends State<BasarnasPage> {
               ),
               MarkerLayer(
                 markers: _basarnasList.map((basarnas) {
-                  final imageUrl = _convertDriveLink(
-                      'https://drive.google.com/file/d/1TbmoL0s39A-ruykrTydqF1X6vmF1p57B/view?usp=sharing');
-
                   return Marker(
                     // child: GestureDetector(
                     //   onTap: () {
@@ -109,6 +102,12 @@ class _BasarnasPageState extends State<BasarnasPage> {
                     //   ),
                     // ),
                     child: IconButton(
+                      // icon: SvgPicture.asset(
+                      //   'assets/icons/lifebuoy.svg',
+                      //   color: Colors.black54,
+                      //   width: 35,
+                      //   height: 35,
+                      // ),
                       icon: FaIcon(
                         FontAwesomeIcons.lifeRing,
                         color: Colors.black54,
