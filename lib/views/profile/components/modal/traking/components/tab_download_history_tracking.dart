@@ -439,8 +439,10 @@
 // }
 
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/services/vessel_service.dart';
@@ -453,8 +455,10 @@ class TabDownloadHistoryTraking extends StatefulWidget {
   final String mobileId;
   final List<dynamic> historyData;
 
-  TabDownloadHistoryTraking(
-      {required this.mobileId, required this.historyData});
+  TabDownloadHistoryTraking({
+    required this.mobileId,
+    required this.historyData,
+  });
 
   @override
   _TabDownloadHistoryTrakingState createState() =>
@@ -478,41 +482,66 @@ String _formatLongitude(double lon) {
 }
 
 class _TabDownloadHistoryTrakingState extends State<TabDownloadHistoryTraking> {
-  Future<void> _createPdf() async {
+  Future<void> _createPdf(String vesselName) async {
     final pdf = pw.Document();
 
+    final ByteData bytes =
+        await rootBundle.load('assets/images/logo-geosat.png');
+    final Uint8List imageData = bytes.buffer.asUint8List();
+
     pdf.addPage(
-      pw.Page(
+      pw.MultiPage(
         build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Text('Histori Traking', style: pw.TextStyle(fontSize: 24)),
-              pw.SizedBox(height: 20),
-              pw.Table.fromTextArray(
-                headers: [
-                  'Received',
-                  'Broadcast',
-                  'Latitude',
-                  'Longitude',
-                  'Heading',
-                  'Speed'
-                ],
-                data: widget.historyData.map((data) {
-                  return [
-                    DateFormat('dd MMMM yyyy (HH:mm:ss)')
-                        .format(DateTime.parse('${data['timestamp']}')),
-                    DateFormat('dd MMMM yyyy (HH:mm:ss)')
-                        .format(DateTime.parse('${data['broadcast']}')),
-                    _formatLatitude(double.parse(data['latitude'])),
-                    _formatLongitude(double.parse(data['longitude'])),
-                    '${data['heading']}°',
-                    '${data['speed_kn']} Knot/${data['speed_kmh']} Kmh',
-                  ];
-                }).toList(),
-              ),
-            ],
-          );
+          return [
+            pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Histori Traking',
+                        style: pw.TextStyle(
+                            fontSize: 22, fontWeight: pw.FontWeight.bold)),
+                    pw.Image(
+                      pw.MemoryImage(imageData),
+                      width: 100,
+                      height: 50,
+                    ),
+                  ],
+                ),
+                pw.SizedBox(height: 20),
+                pw.Row(
+                  children: [
+                    pw.Text('Nama Kapal: ', style: pw.TextStyle(fontSize: 14)),
+                    pw.Text(vesselName, style: pw.TextStyle(fontSize: 14)),
+                  ],
+                ),
+              ],
+            ),
+            pw.SizedBox(height: 25),
+            pw.Table.fromTextArray(
+              headers: [
+                'Received',
+                'Broadcast',
+                'Latitude',
+                'Longitude',
+                'Heading',
+                'Speed'
+              ],
+              data: widget.historyData.map((data) {
+                return [
+                  DateFormat('dd MMMM yyyy (HH:mm:ss)')
+                      .format(DateTime.parse('${data['timestamp']}')),
+                  DateFormat('dd MMMM yyyy (HH:mm:ss)')
+                      .format(DateTime.parse('${data['broadcast']}')),
+                  _formatLatitude(double.parse(data['latitude'])),
+                  _formatLongitude(double.parse(data['longitude'])),
+                  '${data['heading']}°',
+                  '${data['speed_kn']} Knot/${data['speed_kmh']} Kmh',
+                ];
+              }).toList(),
+            ),
+          ];
         },
       ),
     );
@@ -562,291 +591,45 @@ class _TabDownloadHistoryTrakingState extends State<TabDownloadHistoryTraking> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ElevatedButton.icon(
-                  onPressed: _createPdf,
-                  icon: Icon(
-                    Icons.save,
-                    size: 24,
-                    color: Colors.white60,
-                  ),
-                  label: Text(
-                    'Pdf',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white60,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black54,
-                  ),
+                FutureBuilder<Map<String, dynamic>?>(
+                  future: VesselService().searchDataKapal(widget.mobileId),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ElevatedButton.icon(
+                        onPressed: () async {
+                          if (snapshot.data != null) {
+                            await _createPdf('${snapshot.data!['nama_kapal']}');
+                          }
+                        },
+                        icon: Icon(
+                          Icons.save,
+                          size: 24,
+                          color: Colors.white60,
+                        ),
+                        label: Text(
+                          'Pdf',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white60,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black54,
+                        ),
+                      );
+                    } else {
+                      return Text('Loading...');
+                    }
+                  },
                 ),
               ],
             ),
           ),
         ],
       ),
-      // body: SingleChildScrollView(
-      //   child: Column(
-
-      //     children: [
-      //       Padding(
-      //         padding: const EdgeInsets.all(5),
-      //         child: FutureBuilder<Map<String, dynamic>?>(
-      //           future: VesselService().searchDataKapal(widget.mobileId),
-      //           builder: (context, snapshot) {
-      //             if (snapshot.hasData) {
-      //               return Container(
-      //                 padding: const EdgeInsets.all(5),
-      //                 margin: const EdgeInsets.all(5),
-      //                 decoration: BoxDecoration(
-      //                   color: const Color.fromARGB(255, 127, 183, 126),
-      //                   borderRadius: BorderRadius.circular(8),
-      //                   boxShadow: [
-      //                     BoxShadow(
-      //                       color: Colors.grey.withOpacity(0.3),
-      //                       spreadRadius: 2,
-      //                       blurRadius: 5,
-      //                       offset: const Offset(0, 2),
-      //                     ),
-      //                   ],
-      //                 ),
-      //                 child: Padding(
-      //                   padding: const EdgeInsets.all(10),
-      //                   child: Column(
-      //                     crossAxisAlignment: CrossAxisAlignment.start,
-      //                     children: [
-      //                       Row(
-      //                         crossAxisAlignment: CrossAxisAlignment.center,
-      //                         children: [
-      //                           Expanded(
-      //                             child: Text(
-      //                               'Histori Traking (${snapshot.data!['idfull']})',
-      //                               style: const TextStyle(
-      //                                 fontSize: 18,
-      //                                 color: Colors.white,
-      //                               ),
-      //                             ),
-      //                           ),
-      //                         ],
-      //                       ),
-      //                       const Divider(
-      //                         thickness: 0.5,
-      //                         color: Colors.white60,
-      //                       ),
-      //                       Row(
-      //                         crossAxisAlignment: CrossAxisAlignment.center,
-      //                         children: [
-      //                           const Icon(
-      //                             FontAwesomeIcons.ship,
-      //                             color: Colors.white70,
-      //                             size: 14,
-      //                           ),
-      //                           const SizedBox(width: 8),
-      //                           Expanded(
-      //                             child: Text(
-      //                               '${snapshot.data!['nama_kapal']}',
-      //                               style:
-      //                                   const TextStyle(color: Colors.white70),
-      //                             ),
-      //                           ),
-      //                         ],
-      //                       ),
-      //                       const SizedBox(height: 5),
-      //                       Column(
-      //                         children: [
-      //                           Row(
-      //                             children: [
-      //                               const Expanded(
-      //                                 child: Text(
-      //                                   'SN',
-      //                                   style: TextStyle(color: Colors.white70),
-      //                                 ),
-      //                               ),
-      //                               Expanded(
-      //                                 child: Text(
-      //                                   ': ${snapshot.data!['sn']}',
-      //                                   style: const TextStyle(
-      //                                       color: Colors.white70),
-      //                                 ),
-      //                               ),
-      //                             ],
-      //                           ),
-      //                           Row(
-      //                             children: [
-      //                               const Expanded(
-      //                                 child: Text(
-      //                                   'IMEI',
-      //                                   style: TextStyle(color: Colors.white70),
-      //                                 ),
-      //                               ),
-      //                               Expanded(
-      //                                 child: Text(
-      //                                   ': ${snapshot.data!['imei']}',
-      //                                   style: const TextStyle(
-      //                                       color: Colors.white70),
-      //                                 ),
-      //                               ),
-      //                             ],
-      //                           ),
-      //                           Row(
-      //                             children: [
-      //                               const Expanded(
-      //                                 child: Text(
-      //                                   'Tipe',
-      //                                   style: TextStyle(color: Colors.white70),
-      //                                 ),
-      //                               ),
-      //                               Expanded(
-      //                                 child: Text(
-      //                                   ': ${snapshot.data!['type']}',
-      //                                   style: const TextStyle(
-      //                                       color: Colors.white70),
-      //                                 ),
-      //                               ),
-      //                             ],
-      //                           ),
-      //                           Row(
-      //                             children: [
-      //                               const Expanded(
-      //                                 child: Text(
-      //                                   'Kategori',
-      //                                   style: TextStyle(color: Colors.white70),
-      //                                 ),
-      //                               ),
-      //                               Expanded(
-      //                                 child: Text(
-      //                                   ': ${snapshot.data!['kategori']}',
-      //                                   style: const TextStyle(
-      //                                       color: Colors.white70),
-      //                                 ),
-      //                               ),
-      //                             ],
-      //                           ),
-      //                         ],
-      //                       ),
-      //                     ],
-      //                   ),
-      //                 ),
-      //               );
-      //             } else {
-      //               return Text('Loading...');
-      //             }
-      //           },
-      //         ),
-      //       ),
-      //       Container(
-      //         margin: const EdgeInsets.all(8),
-      //         decoration: BoxDecoration(
-      //           color: Colors.white,
-      //           borderRadius: BorderRadius.circular(8),
-      //           boxShadow: [
-      //             BoxShadow(
-      //               color: Colors.grey.withOpacity(0.3),
-      //               spreadRadius: 2,
-      //               blurRadius: 5,
-      //               offset: Offset(0, 2),
-      //             ),
-      //           ],
-      //         ),
-      //         child: FutureBuilder<Map<String, int>>(
-      //           future: _calculateSpeedKnCounts(widget.historyData),
-      //           builder: (context, snapshot) {
-      //             if (snapshot.connectionState == ConnectionState.waiting) {
-      //               return Center(child: CircularProgressIndicator());
-      //             } else if (snapshot.hasError) {
-      //               return Text('Error: ${snapshot.error}');
-      //             } else {
-      //               final data = snapshot.data!;
-      //               final speedKnZero = data['zero']!;
-      //               final speedKnNonZero = data['nonZero']!;
-      //               return PieChart(
-      //                 PieChartData(
-      //                   sections: [
-      //                     PieChartSectionData(
-      //                       color: Colors.red,
-      //                       value: speedKnZero.toDouble(),
-      //                       title: '0 Speed\n($speedKnZero)',
-      //                       titleStyle: const TextStyle(
-      //                           fontSize: 14, fontWeight: FontWeight.bold),
-      //                     ),
-      //                     PieChartSectionData(
-      //                       color: Colors.green,
-      //                       value: speedKnNonZero.toDouble(),
-      //                       title: '>0 Speed\n($speedKnNonZero)',
-      //                       titleStyle: const TextStyle(
-      //                           fontSize: 14, fontWeight: FontWeight.bold),
-      //                     ),
-      //                   ],
-      //                   centerSpaceRadius: 40,
-      //                   sectionsSpace: 2,
-      //                 ),
-      //               );
-      //             }
-      //           },
-      //         ),
-      //       ),
-      //       Padding(
-      //         padding: const EdgeInsets.all(10),
-      //         child: Table(
-      //           border: TableBorder.all(
-      //               color: Colors.grey, width: 0.5), // Border halus
-      //           columnWidths: const {
-      //             0: FlexColumnWidth(2),
-      //             1: FlexColumnWidth(2),
-      //             2: FlexColumnWidth(1.5),
-      //             3: FlexColumnWidth(1.5),
-      //             4: FlexColumnWidth(1),
-      //             5: FlexColumnWidth(2),
-      //           },
-      //           children: [
-      //             // Header row
-      //             TableRow(
-      //               decoration: BoxDecoration(
-      //                 color: Colors.blueGrey.shade50, // Warna latar header
-      //               ),
-      //               children: [
-      //                 _buildTableHeaderCell('Received'),
-      //                 _buildTableHeaderCell('Broadcast'),
-      //                 _buildTableHeaderCell('Latitude'),
-      //                 _buildTableHeaderCell('Longitude'),
-      //                 _buildTableHeaderCell('Heading'),
-      //                 _buildTableHeaderCell('Speed'),
-      //               ],
-      //             ),
-      //             // Data rows
-      //             ...widget.historyData.asMap().entries.map((entry) {
-      //               final index = entry.key;
-      //               final data = entry.value;
-      //               return TableRow(
-      //                 decoration: BoxDecoration(
-      //                   color: index.isEven
-      //                       ? Colors.white
-      //                       : Colors.blueGrey.shade50, // Alternating row colors
-      //                 ),
-      //                 children: [
-      //                   _buildTableDataCell(DateFormat('dd MMM yyyy (HH:mm:ss)')
-      //                       .format(DateTime.parse('${data['timestamp']}'))),
-      //                   _buildTableDataCell(DateFormat('dd MMM yyyy (HH:mm:ss)')
-      //                       .format(DateTime.parse('${data['broadcast']}'))),
-      //                   _buildTableDataCell(
-      //                       _formatLatitude(double.parse(data['latitude']))),
-      //                   _buildTableDataCell(
-      //                       _formatLongitude(double.parse(data['longitude']))),
-      //                   _buildTableDataCell('${data['heading']}°'),
-      //                   _buildTableDataCell(
-      //                       '${data['speed_kn']} Knot/${data['speed_kmh']} Kmh'),
-      //                 ],
-      //               );
-      //             }).toList(),
-      //           ],
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Tambahkan untuk menghindari konflik
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsets.all(5),
@@ -1019,14 +802,12 @@ class _TabDownloadHistoryTrakingState extends State<TabDownloadHistoryTraking> {
                     final speedKnZero = data['zero']!;
                     final speedKnNonZero = data['nonZero']!;
                     return SizedBox(
-                      height: 150, // Batasi tinggi total
+                      height: 150,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // Pie Chart di sebelah kiri
                           Expanded(
                             child: Center(
-                              // Agar PieChart tetap di tengah vertikal
                               child: PieChart(
                                 PieChartData(
                                   sections: [
@@ -1047,11 +828,9 @@ class _TabDownloadHistoryTrakingState extends State<TabDownloadHistoryTraking> {
                               ),
                             ),
                           ),
-                          // Teks di sebelah kanan
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10), // Spasi antara PieChart dan teks
+                              padding: const EdgeInsets.only(left: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -1086,7 +865,7 @@ class _TabDownloadHistoryTrakingState extends State<TabDownloadHistoryTraking> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: SizedBox(
-                width: double.infinity, // Membatasi tabel
+                width: double.infinity,
                 child: Table(
                   border: TableBorder.all(
                     color: Colors.grey,
@@ -1151,7 +930,6 @@ class _TabDownloadHistoryTrakingState extends State<TabDownloadHistoryTraking> {
   }
 }
 
-// Membuat header cell dengan gaya khusus
 Widget _buildTableHeaderCell(String text) {
   return Padding(
     padding: const EdgeInsets.all(8),
@@ -1166,7 +944,6 @@ Widget _buildTableHeaderCell(String text) {
   );
 }
 
-// Membuat data cell dengan gaya seragam
 Widget _buildTableDataCell(String text) {
   return Padding(
     padding: const EdgeInsets.all(8),
