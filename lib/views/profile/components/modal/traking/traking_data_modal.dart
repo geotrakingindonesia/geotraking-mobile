@@ -309,15 +309,39 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue.shade400),
                       child: _loading
+                          // ? Row(
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: [
+                          //       Text(
+                          //         'Getting Data',
+                          //         style: Theme.of(context)
+                          //             .textTheme
+                          //             .bodyMedium
+                          //             ?.copyWith(color: Colors.white),
+                          //       ),
+                          //       SizedBox(width: 8),
+                          //       SizedBox(
+                          //         width: 16,
+                          //         height: 16,
+                          //         child: CircularProgressIndicator(
+                          //           color: Colors.white,
+                          //           strokeWidth: 2,
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   )
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Getting Data',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(color: Colors.white),
+                                Expanded(
+                                  child: Text(
+                                    'Getting Data',
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: Colors.white),
+                                  ),
                                 ),
                                 SizedBox(width: 8),
                                 SizedBox(
@@ -461,9 +485,7 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                               child: Text(
                                                 _selectedCoordinatePreferences ==
                                                         'Degrees'
-                                                    ? ': ${formatterLatlong
-                                                        .formatLatitude(
-                                                            latitude)}'
+                                                    ? ': ${formatterLatlong.formatLatitude(latitude)}'
                                                     : ': ${latitude.toString()}',
                                                 // ': ${formatterLatlong.formatLatitude(latitude)}',
                                                 style: TextStyle(fontSize: 12),
@@ -486,9 +508,7 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                               child: Text(
                                                 _selectedCoordinatePreferences ==
                                                         'Degrees'
-                                                    ? ': ${formatterLatlong
-                                                        .formatLongitude(
-                                                            longitude)}'
+                                                    ? ': ${formatterLatlong.formatLongitude(longitude)}'
                                                     : ': ${longitude.toString()}',
                                                 // ': ${formatterLatlong.formatLongitude(longitude)}',
                                                 style: TextStyle(fontSize: 12),

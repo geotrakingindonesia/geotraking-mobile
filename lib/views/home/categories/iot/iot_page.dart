@@ -38,7 +38,7 @@ class _IotPageState extends State<IotPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         // backgroundColor: Colors.red,
         appBar: AppBar(
@@ -73,6 +73,7 @@ class _IotPageState extends State<IotPage> {
                     CustomTabLabel(label: 'RPM'),
                     CustomTabLabel(label: 'Fuel Monitoring'),
                     CustomTabLabel(label: 'AIS Cube'),
+                    CustomTabLabel(label: 'Cctv'),
                   ],
                 ),
               ),
@@ -85,6 +86,7 @@ class _IotPageState extends State<IotPage> {
               TabRpm(),
               TabFuel(),
               TabAiscube(),
+              TabFuel(),
             ],
           ),
         ),
