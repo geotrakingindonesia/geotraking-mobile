@@ -133,56 +133,64 @@ class _CategoriesState extends State<Categories> {
         children: [
           IconsCategories(
             label: 'Airtime',
-            icon: FontAwesomeIcons.moneyBillTransfer,
+            // icon: FontAwesomeIcons.moneyBillTransfer,
+            icon: 'assets/icons/card.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.airtimePage);
             },
           ),
           IconsCategories(
             label: 'TopUp',
-            icon: Icons.smartphone_rounded,
+            // icon: Icons.smartphone_rounded,
+            icon: 'assets/icons/money.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.topUpPage);
             },
           ),
           IconsCategories(
             label: 'IoT',
-            icon: Icons.calculate,
+            // icon: Icons.calculate,
+            icon: 'assets/icons/iot.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.iotPage);
             },
           ),
           IconsCategories(
             label: 'Salmon',
-            icon: FontAwesomeIcons.locationCrosshairs,
+            // icon: FontAwesomeIcons.locationCrosshairs,
+            icon: 'assets/icons/gps.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.salmonPage);
             },
           ),
           IconsCategories(
             label: 'WppRI',
-            icon: FontAwesomeIcons.mapLocationDot,
+            // icon: FontAwesomeIcons.mapLocationDot,
+            icon: 'assets/icons/map.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.wppPage);
             },
           ),
           IconsCategories(
             label: 'BasarnasRI',
-            icon: FontAwesomeIcons.lifeRing,
+            // icon: FontAwesomeIcons.lifeRing,
+            icon: 'assets/icons/lifebuoy.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.basarnasPage);
             },
           ),
           IconsCategories(
             label: 'PortRI',
-            icon: FontAwesomeIcons.towerObservation,
+            // icon: FontAwesomeIcons.towerObservation,
+            icon: 'assets/icons/harbor.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.portRiPage);
             },
           ),
           IconsCategories(
             label: 'BBM',
-            icon: FontAwesomeIcons.oilWell,
+            // icon: FontAwesomeIcons.oilWell,
+            icon: 'assets/icons/fuel.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.calcBbmPage);
             },

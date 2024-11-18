@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 // import '../../../core/constants/constants.dart';
 
@@ -13,7 +14,8 @@ class IconsCategories extends StatelessWidget {
   }) : super(key: key);
 
   final String label;
-  final IconData icon;
+  final String icon;
+  // final IconData icon;
   final void Function() onTap;
 
   @override
@@ -85,6 +87,7 @@ class IconsCategories extends StatelessWidget {
           Container(
             width: 60,
             height: 60,
+            padding: const EdgeInsets.all(13),
             decoration: BoxDecoration(
               // color: Colors.white,
               color: Color.fromARGB(255, 127, 183, 126),
@@ -92,17 +95,23 @@ class IconsCategories extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4, 
-                  offset: Offset(2, 2), 
+                  blurRadius: 4,
+                  offset: Offset(2, 2),
                 ),
               ],
             ),
-            child: Icon(
+            child: SvgPicture.asset(
               icon,
-              // color: Color.fromARGB(255, 127, 183, 126),
               color: Colors.white,
-              size: 25,
+              width: 25,
+              height: 25,
             ),
+            // child: Icon(
+            //   icon,
+            //   // color: Color.fromARGB(255, 127, 183, 126),
+            //   color: Colors.white,
+            //   size: 25,
+            // ),
           ),
           SizedBox(height: 8),
           Text(label, style: TextStyle(fontSize: 14, color: Colors.black87)),
