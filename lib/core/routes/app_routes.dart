@@ -96,5 +96,7 @@ class AppRoutes {
   static const setGeofencing = '/setGeofencing';
 
   static const vmsMonitoringKkpSetting = '/vmsMonitoringKkpSetting';
+  static const vmsWebsiteSetting = '/vmsWebsiteSetting';
+  static const vmsDatabaseSetting = '/vmsDatabaseSetting';
 
 }

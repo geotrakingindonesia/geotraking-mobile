@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/routes/app_routes.dart';
 import 'package:geotraking/core/routes/on_generate_route.dart';
@@ -14,7 +15,16 @@ void main() async {
 
   await SharedPreferences.getInstance();
   
-  runApp(const MainApp());
+  // runApp(const MainApp());
+  runApp(
+    DevicePreview(
+      enabled: true,
+      tools: const [
+        ...DevicePreview.defaultTools,
+      ],
+      builder: (context) => const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {

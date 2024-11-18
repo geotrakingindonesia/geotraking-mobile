@@ -1321,7 +1321,7 @@ class MileageDetailPage extends StatefulWidget {
 
 class _MileageDetailPageState extends State<MileageDetailPage> {
   String _selectedTimezonePreferences = 'UTC+7';
-  
+
   @override
   void initState() {
     super.initState();
@@ -2874,8 +2874,8 @@ class _MileageDetailPageState extends State<MileageDetailPage> {
     );
 
     final directory = await getExternalStorageDirectory();
-    final file =
-        File('${directory!.path}/laporan_jarak_tempuh_${widget.vesselName}.pdf');
+    final file = File(
+        '${directory!.path}/laporan_jarak_tempuh_${widget.vesselName}.pdf');
 
     await file.writeAsBytes(await pdf.save());
 
@@ -2936,18 +2936,179 @@ class _MileageDetailPageState extends State<MileageDetailPage> {
               padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
+                  // Container(
+                  //   padding: const EdgeInsets.all(5),
+                  //   margin: const EdgeInsets.all(5),
+                  //   decoration: BoxDecoration(
+                  //     color: Color.fromARGB(255, 127, 183, 126),
+                  //     borderRadius: BorderRadius.circular(8),
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         color: Colors.grey.withOpacity(0.3),
+                  //         spreadRadius: 2,
+                  //         blurRadius: 5,
+                  //         offset: Offset(0, 2),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(10),
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Row(
+                  //           crossAxisAlignment: CrossAxisAlignment.center,
+                  //           children: [
+                  //             Icon(
+                  //               Icons.calendar_today,
+                  //               color: Colors.white,
+                  //               size: 22,
+                  //             ),
+                  //             SizedBox(width: 8),
+                  //             Text(
+                  //               '${widget.startDate != null && widget.endDate != null ? "${DateFormat('dd MMM yyyy').format(widget.startDate!)} - ${DateFormat('dd MMM yyyy').format(widget.endDate!)} (${_selectedTimezonePreferences})" : "No date selected"}',
+                  //               style: TextStyle(
+                  //                 fontSize: 15,
+                  //                 color: Colors.white,
+                  //               ),
+                  //             ),
+                  //             Spacer(),
+                  //             Container(
+                  //               decoration: BoxDecoration(
+                  //                 color: Colors.black54,
+                  //                 shape: BoxShape.circle,
+                  //               ),
+                  //               child: IconButton(
+                  //                 icon: Icon(
+                  //                   Icons.location_on,
+                  //                   color: Colors.white60,
+                  //                   size: 24,
+                  //                 ),
+                  //                 onPressed: () {
+                  //                   Navigator.push(
+                  //                     context,
+                  //                     MaterialPageRoute(
+                  //                       builder: (context) =>
+                  //                           MileageLocationPage(
+                  //                         data: widget.data,
+                  //                       ),
+                  //                     ),
+                  //                   );
+                  //                 },
+                  //                 tooltip: 'Go to Location',
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         Divider(
+                  //           thickness: 0.5,
+                  //           color: Colors.white60,
+                  //         ),
+                  //         Row(
+                  //           crossAxisAlignment: CrossAxisAlignment.center,
+                  //           children: [
+                  //             Icon(
+                  //               FontAwesomeIcons.ship,
+                  //               color: Colors.white70,
+                  //               size: 14,
+                  //             ),
+                  //             SizedBox(width: 8),
+                  //             Expanded(
+                  //               child: Text(
+                  //                 '${widget.vesselName}',
+                  //                 style: TextStyle(color: Colors.white70),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         SizedBox(height: 5),
+                  //         Column(
+                  //           children: [
+                  //             Row(
+                  //               children: [
+                  //                 Expanded(
+                  //                   child: Text(
+                  //                     'Jarak Tempuh',
+                  //                     style: TextStyle(color: Colors.white70),
+                  //                   ),
+                  //                 ),
+                  //                 Expanded(
+                  //                   child: Text(
+                  //                     ': ${totalDailyDistance.toStringAsFixed(2)} nmi',
+                  //                     style: TextStyle(color: Colors.white70),
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //             Row(
+                  //               children: [
+                  //                 Expanded(
+                  //                   child: Text(
+                  //                     'Perjalanan',
+                  //                     style: TextStyle(color: Colors.white70),
+                  //                   ),
+                  //                 ),
+                  //                 Expanded(
+                  //                   child: Text(
+                  //                     ': ${calculateUniqueDays(widget.data!)} hari',
+                  //                     // ': ${data!.length} hari',
+                  //                     style: TextStyle(color: Colors.white70),
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //             Row(
+                  //               children: [
+                  //                 Expanded(
+                  //                   child: Text(
+                  //                     'Periode Traking',
+                  //                     style: TextStyle(color: Colors.white70),
+                  //                   ),
+                  //                 ),
+                  //                 Expanded(
+                  //                   child: Text(
+                  //                     ': $totalDuration',
+                  //                     // ': ${totalTime['days']} hari ${totalTime['hours']} jam ${totalTime['minutes']} menit',
+                  //                     style: TextStyle(color: Colors.white70),
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //             Row(
+                  //               children: [
+                  //                 Expanded(
+                  //                   child: Text(
+                  //                     'Average Speed',
+                  //                     style: TextStyle(color: Colors.white70),
+                  //                   ),
+                  //                 ),
+                  //                 Expanded(
+                  //                   child: Text(
+                  //                     // ': ${averageSpeed.toStringAsFixed(2)} knots',
+                  //                     ': ${averageDailySpeed.toStringAsFixed(2)} knots',
+                  //                     style: TextStyle(color: Colors.white70),
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   Container(
                     padding: const EdgeInsets.all(5),
                     margin: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 127, 183, 126),
+                      color: const Color.fromARGB(255, 127, 183, 126),
                       borderRadius: BorderRadius.circular(8),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.3),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(0, 2),
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -2959,27 +3120,28 @@ class _MileageDetailPageState extends State<MileageDetailPage> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.calendar_today,
                                 color: Colors.white,
                                 size: 22,
                               ),
-                              SizedBox(width: 8),
-                              Text(
-                                '${widget.startDate != null && widget.endDate != null ? "${DateFormat('dd MMM yyyy').format(widget.startDate!)} - ${DateFormat('dd MMM yyyy').format(widget.endDate!)} (${_selectedTimezonePreferences})" : "No date selected"}',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white,
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  '${widget.startDate != null && widget.endDate != null ? "${DateFormat('dd MMM yyyy').format(widget.startDate!)} - ${DateFormat('dd MMM yyyy').format(widget.endDate!)} ($_selectedTimezonePreferences)" : "No date selected"}',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                              Spacer(),
                               Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: Colors.black54,
                                   shape: BoxShape.circle,
                                 ),
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.location_on,
                                     color: Colors.white60,
                                     size: 24,
@@ -3000,33 +3162,33 @@ class _MileageDetailPageState extends State<MileageDetailPage> {
                               ),
                             ],
                           ),
-                          Divider(
+                          const Divider(
                             thickness: 0.5,
                             color: Colors.white60,
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Icon(
+                              const Icon(
                                 FontAwesomeIcons.ship,
                                 color: Colors.white70,
                                 size: 14,
                               ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   '${widget.vesselName}',
-                                  style: TextStyle(color: Colors.white70),
+                                  style: const TextStyle(color: Colors.white70),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Column(
                             children: [
                               Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: Text(
                                       'Jarak Tempuh',
                                       style: TextStyle(color: Colors.white70),
@@ -3035,14 +3197,15 @@ class _MileageDetailPageState extends State<MileageDetailPage> {
                                   Expanded(
                                     child: Text(
                                       ': ${totalDailyDistance.toStringAsFixed(2)} nmi',
-                                      style: TextStyle(color: Colors.white70),
+                                      style: const TextStyle(
+                                          color: Colors.white70),
                                     ),
                                   ),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: Text(
                                       'Perjalanan',
                                       style: TextStyle(color: Colors.white70),
@@ -3051,15 +3214,15 @@ class _MileageDetailPageState extends State<MileageDetailPage> {
                                   Expanded(
                                     child: Text(
                                       ': ${calculateUniqueDays(widget.data!)} hari',
-                                      // ': ${data!.length} hari',
-                                      style: TextStyle(color: Colors.white70),
+                                      style: const TextStyle(
+                                          color: Colors.white70),
                                     ),
                                   ),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: Text(
                                       'Periode Traking',
                                       style: TextStyle(color: Colors.white70),
@@ -3068,15 +3231,15 @@ class _MileageDetailPageState extends State<MileageDetailPage> {
                                   Expanded(
                                     child: Text(
                                       ': $totalDuration',
-                                      // ': ${totalTime['days']} hari ${totalTime['hours']} jam ${totalTime['minutes']} menit',
-                                      style: TextStyle(color: Colors.white70),
+                                      style: const TextStyle(
+                                          color: Colors.white70),
                                     ),
                                   ),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: Text(
                                       'Average Speed',
                                       style: TextStyle(color: Colors.white70),
@@ -3084,9 +3247,9 @@ class _MileageDetailPageState extends State<MileageDetailPage> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      // ': ${averageSpeed.toStringAsFixed(2)} knots',
                                       ': ${averageDailySpeed.toStringAsFixed(2)} knots',
-                                      style: TextStyle(color: Colors.white70),
+                                      style: const TextStyle(
+                                          color: Colors.white70),
                                     ),
                                   ),
                                 ],
@@ -3097,6 +3260,7 @@ class _MileageDetailPageState extends State<MileageDetailPage> {
                       ),
                     ),
                   ),
+
                   Expanded(
                     child: ListView.builder(
                       itemCount: processedData.length,

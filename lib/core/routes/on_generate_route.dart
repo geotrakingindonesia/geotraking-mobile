@@ -40,7 +40,9 @@ import 'package:geotraking/views/profile/components/profile_kapal_page.dart';
 // import 'package:geotraking/views/profile/components/profile_point_page.dart';
 import 'package:geotraking/views/profile/components/profile_setting_page.dart';
 import 'package:geotraking/views/profile/components/profile_tracking_page.dart';
-import 'package:geotraking/views/profile/components/setting/vms_monitoring_kkp_setting.dart';
+import 'package:geotraking/views/profile/components/vms/components/vms_database_page.dart';
+import 'package:geotraking/views/profile/components/vms/components/vms_website_page.dart';
+import 'package:geotraking/views/profile/components/vms/vms_monitoring_kkp_setting.dart';
 // import 'package:geotraking/views/profile/console/console_page.dart';
 import 'package:geotraking/views/profile/geosat/profile_kapal_geosat_page.dart';
 import 'package:geotraking/views/profile/geosat/profile_tracking_geosat_page.dart';
@@ -225,6 +227,12 @@ class RouteGenerator {
       
       case AppRoutes.vmsMonitoringKkpSetting:
         return CupertinoPageRoute(builder: (_) => VmsMonitoringKkpSetting());
+      
+      case AppRoutes.vmsWebsiteSetting:
+        return CupertinoPageRoute(builder: (_) => VmsWebsitePage());
+      
+      case AppRoutes.vmsDatabaseSetting:
+        return CupertinoPageRoute(builder: (_) => VmsDatabasePage());
 
 
 
