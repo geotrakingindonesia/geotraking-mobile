@@ -23,7 +23,8 @@ class _TabDetailState extends State<TabDetail> {
       backgroundColor: AppColors.cardColor,
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: Text('${widget.vesselName}'),
+        // title: Text('${widget.vesselName}'),
+        title: Text('Chat ${widget.vesselName}'),
         titleTextStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: Colors.black,
             ),
@@ -51,7 +52,7 @@ class _TabDetailState extends State<TabDetail> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "${widget.vesselName}",
+                                "${widget.vesselName ?? 'N/A'}",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge

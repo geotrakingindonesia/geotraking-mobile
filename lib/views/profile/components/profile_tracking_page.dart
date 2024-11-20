@@ -97,8 +97,6 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
   String _selectedSpeedPreferences = 'Knots';
   String _selectedCoordinatePreferences = 'Degrees';
 
-  bool _isPopupVisible = false;
-
   @override
   void initState() {
     super.initState();
@@ -531,10 +529,10 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                                 onControllerCreated: (controller) {
                                   print('Info Popup Controller Created');
                                 },
-                                // onAreaPressed:
-                                //     (InfoPopupController controller) {
-                                //   print('Area Pressed');
-                                // },
+                                onAreaPressed:
+                                    (InfoPopupController controller) {
+                                  print('Area Pressed');
+                                },
                                 infoPopupDismissed: () {
                                   print('Info Popup Dismissed');
                                 },

@@ -621,6 +621,24 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
                                       _selectedCoordinatePreferences,
                                   nameOfWpp: nameOfWpp,
                                 ),
+                                dismissTriggerBehavior:
+                                    PopupDismissTriggerBehavior.onTapArea,
+                                areaBackgroundColor: Colors.transparent,
+                                indicatorOffset: Offset.zero,
+                                contentOffset: Offset.zero,
+                                onControllerCreated: (controller) {
+                                  print('Info Popup Controller Created');
+                                },
+                                onAreaPressed:
+                                    (InfoPopupController controller) {
+                                  print('Area Pressed');
+                                },
+                                infoPopupDismissed: () {
+                                  print('Info Popup Dismissed');
+                                },
+                                onLayoutMounted: (Size size) {
+                                  print('Info Popup Layout Mounted');
+                                },
                               ),
                           ],
                         ),
