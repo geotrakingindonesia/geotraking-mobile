@@ -9,6 +9,7 @@ import 'package:geotraking/views/home/categories/airtime/search_page.dart';
 import 'package:geotraking/views/home/categories/basarnas/basarnas_page.dart';
 import 'package:geotraking/views/home/categories/bbm/calc_bbm_page.dart';
 import 'package:geotraking/views/home/categories/iot/iot_page.dart';
+import 'package:geotraking/views/home/categories/iridium/iridium_messaging_page.dart';
 import 'package:geotraking/views/home/categories/topup/topup_page.dart';
 import 'package:geotraking/views/home/drawer/change_language_page.dart';
 import 'package:geotraking/views/home/notification/create_notification_page.dart';
@@ -233,6 +234,11 @@ class RouteGenerator {
       
       case AppRoutes.vmsDatabaseSetting:
         return CupertinoPageRoute(builder: (_) => VmsDatabasePage());
+
+
+
+      case AppRoutes.iridiumMessagingWebviewPage:
+        return CupertinoPageRoute(builder: (_) => IridiumMessagingPage());
 
 
 

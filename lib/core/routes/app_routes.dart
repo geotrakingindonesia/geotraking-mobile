@@ -99,4 +99,7 @@ class AppRoutes {
   static const vmsWebsiteSetting = '/vmsWebsiteSetting';
   static const vmsDatabaseSetting = '/vmsDatabaseSetting';
 
+  static const iridiumMessagingWebviewPage = '/iridiumMessagingWebviewPage';
+
+
 }

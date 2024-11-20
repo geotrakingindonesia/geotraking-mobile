@@ -27,6 +27,171 @@ class _CategoriesState extends State<Categories> {
     _scrollController = ScrollController();
   }
 
+  // void _showBottomSheetForOthers(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+  //     ),
+  //     builder: (context) {
+  //       return Padding(
+  //         padding: EdgeInsets.all(16.0),
+  //         child: Wrap(
+  //           spacing: 10,
+  //           runSpacing: 10,
+  //           children: [
+  //             IconsCategories(
+  //               label: 'PortRI',
+  //               icon: 'assets/icons/harbor.svg',
+  //               onTap: () {
+  //                 Navigator.pushNamed(context, AppRoutes.portRiPage);
+  //               },
+  //             ),
+  //             IconsCategories(
+  //               label: 'BBM',
+  //               icon: 'assets/icons/fuel.svg',
+  //               onTap: () {
+  //                 Navigator.pushNamed(context, AppRoutes.calcBbmPage);
+  //               },
+  //             ),
+  //             IconsCategories(
+  //               label: 'Other 1',
+  //               icon: 'assets/icons/other1.svg',
+  //               onTap: () {
+  //                 // Handle navigation or action for "Other 1"
+  //               },
+  //             ),
+  //             IconsCategories(
+  //               label: 'Other 2',
+  //               icon: 'assets/icons/other2.svg',
+  //               onTap: () {
+  //                 // Handle navigation or action for "Other 2"
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  void _showBottomSheetForOthers(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+      ),
+      isScrollControlled:
+          true, // Memungkinkan kontrol penuh untuk ketinggian modal
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.5, // Setengah layar tinggi awal
+          minChildSize: 0.3, // Ukuran minimum saat draggable
+          maxChildSize: 0.8, // Ukuran maksimum
+          expand: false,
+          builder: (context, scrollController) {
+            return Container(
+              padding: EdgeInsets.all(6.0),
+              child: SingleChildScrollView(
+                controller:
+                    scrollController, // ScrollController untuk Draggable
+                child: Padding(
+                  // padding: EdgeInsets.all(16.0),
+                  padding:
+                      EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0, top: 16.0),
+                  child: Wrap(
+                    spacing: 5,
+                    runSpacing: 10,
+                    children: [
+                      IconsCategories(
+                        label: 'Airtime',
+                        // icon: FontAwesomeIcons.moneyBillTransfer,
+                        icon: 'assets/icons/card.svg',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.airtimePage);
+                        },
+                      ),
+                      IconsCategories(
+                        label: 'TopUp',
+                        // icon: Icons.smartphone_rounded,
+                        icon: 'assets/icons/money.svg',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.topUpPage);
+                        },
+                      ),
+                      IconsCategories(
+                        label: 'IoT',
+                        // icon: Icons.calculate,
+                        icon: 'assets/icons/iot.svg',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.iotPage);
+                        },
+                      ),
+                      IconsCategories(
+                        label: 'Salmon',
+                        // icon: FontAwesomeIcons.locationCrosshairs,
+                        icon: 'assets/icons/gps.svg',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.salmonPage);
+                        },
+                      ),
+                      IconsCategories(
+                        label: 'Iridium',
+                        icon: 'assets/icons/chat.svg',
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, AppRoutes.iridiumMessagingWebviewPage);
+                        },
+                      ),
+                      IconsCategories(
+                        label: 'WppRI',
+                        // icon: FontAwesomeIcons.mapLocationDot,
+                        icon: 'assets/icons/map.svg',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.wppPage);
+                        },
+                      ),
+                      IconsCategories(
+                        label: 'BasarnasRI',
+                        // icon: FontAwesomeIcons.lifeRing,
+                        icon: 'assets/icons/lifebuoy.svg',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.basarnasPage);
+                        },
+                      ),
+                      IconsCategories(
+                        label: 'PortRI',
+                        // icon: FontAwesomeIcons.towerObservation,
+                        icon: 'assets/icons/harbor.svg',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.portRiPage);
+                        },
+                      ),
+                      IconsCategories(
+                        label: 'BBM',
+                        // icon: FontAwesomeIcons.oilWell,
+                        icon: 'assets/icons/fuel.svg',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.calcBbmPage);
+                        },
+                      ),
+                    ].map((widget) {
+                      return Container(
+                        width:
+                            (MediaQuery.of(context).size.width - 32 - 30) / 4,
+                        child: widget,
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // return Column(
@@ -164,6 +329,14 @@ class _CategoriesState extends State<Categories> {
             },
           ),
           IconsCategories(
+            label: 'Iridium',
+            icon: 'assets/icons/chat.svg',
+            onTap: () {
+              Navigator.pushNamed(
+                  context, AppRoutes.iridiumMessagingWebviewPage);
+            },
+          ),
+          IconsCategories(
             label: 'WppRI',
             // icon: FontAwesomeIcons.mapLocationDot,
             icon: 'assets/icons/map.svg',
@@ -179,20 +352,29 @@ class _CategoriesState extends State<Categories> {
               Navigator.pushNamed(context, AppRoutes.basarnasPage);
             },
           ),
+          // IconsCategories(
+          //   label: 'PortRI',
+          //   // icon: FontAwesomeIcons.towerObservation,
+          //   icon: 'assets/icons/harbor.svg',
+          //   onTap: () {
+          //     Navigator.pushNamed(context, AppRoutes.portRiPage);
+          //   },
+          // ),
+          // IconsCategories(
+          //   label: 'BBM',
+          //   // icon: FontAwesomeIcons.oilWell,
+          //   icon: 'assets/icons/fuel.svg',
+          //   onTap: () {
+          //     Navigator.pushNamed(context, AppRoutes.calcBbmPage);
+          //   },
+          // ),
           IconsCategories(
-            label: 'PortRI',
-            // icon: FontAwesomeIcons.towerObservation,
-            icon: 'assets/icons/harbor.svg',
+            label: 'Others',
+            icon: 'assets/icons/others.svg',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.portRiPage);
-            },
-          ),
-          IconsCategories(
-            label: 'BBM',
-            // icon: FontAwesomeIcons.oilWell,
-            icon: 'assets/icons/fuel.svg',
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.calcBbmPage);
+              _showBottomSheetForOthers(context); // Tampilkan BottomSheet
+
+              // Navigator.pushNamed(context, AppRoutes.calcBbmPage);
             },
           ),
         ].map((widget) {
