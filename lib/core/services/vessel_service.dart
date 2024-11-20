@@ -1087,8 +1087,10 @@ class VesselService {
 
     String formattedStartDate =
         DateFormat('yyyy-MM-dd HH:mm:ss').format(startDateTime);
+        // DateFormat('yyyy-MM-dd').format(startDateTime);
     String formattedEndDate =
         DateFormat('yyyy-MM-dd HH:mm:ss').format(endDateTime);
+        // DateFormat('yyyy-MM-dd').format(endDateTime);
 
     String query = '''
       SELECT

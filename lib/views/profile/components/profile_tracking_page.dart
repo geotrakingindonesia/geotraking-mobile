@@ -97,6 +97,8 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
   String _selectedSpeedPreferences = 'Knots';
   String _selectedCoordinatePreferences = 'Degrees';
 
+  bool _isPopupVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -312,13 +314,13 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
 
   List<LatLng> closePolygon(List<LatLng> points) {
     if (points.isNotEmpty && points.first != points.last) {
-      points.add(points.first); 
+      points.add(points.first);
     }
     return points;
   }
 
   bool isPointInPolygon(LatLng point, List<LatLng> polygon) {
-    polygon = closePolygon(polygon); 
+    polygon = closePolygon(polygon);
     int intersectCount = 0;
 
     for (int i = 0; i < polygon.length - 1; i++) {
@@ -389,7 +391,7 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
         body: Stack(
           children: [
             FlutterMap(
-              options: const MapOptions(
+              options: MapOptions(
                 initialCenter: LatLng(-4.4511412299261, 111.082877130109),
                 initialZoom: 4,
                 interactionOptions: InteractionOptions(
@@ -471,7 +473,7 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
 
                     for (var polygon in _polygons) {
                       if (isPointInPolygon(kapalPosition, polygon.points)) {
-                        nameOfWpp = polygon.label; 
+                        nameOfWpp = polygon.label;
                         print(
                             "Kapal ${kapalMember['nama_kapal']} berada dalam WPP: ${polygon.label}");
                         break;
@@ -519,8 +521,26 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                                       _selectedSpeedPreferences,
                                   selectedCoordinatePreferences:
                                       _selectedCoordinatePreferences,
-                                      nameOfWpp: nameOfWpp,
+                                  nameOfWpp: nameOfWpp,
                                 ),
+                                dismissTriggerBehavior:
+                                    PopupDismissTriggerBehavior.onTapArea,
+                                areaBackgroundColor: Colors.transparent,
+                                indicatorOffset: Offset.zero,
+                                contentOffset: Offset.zero,
+                                onControllerCreated: (controller) {
+                                  print('Info Popup Controller Created');
+                                },
+                                // onAreaPressed:
+                                //     (InfoPopupController controller) {
+                                //   print('Area Pressed');
+                                // },
+                                infoPopupDismissed: () {
+                                  print('Info Popup Dismissed');
+                                },
+                                onLayoutMounted: (Size size) {
+                                  print('Info Popup Layout Mounted');
+                                },
                               ),
                           ],
                         ),

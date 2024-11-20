@@ -292,6 +292,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/models/member.dart';
 import 'package:geotraking/core/services/auth/authenticate_service.dart';
+import 'package:geotraking/core/services/chat_service.dart';
 import 'package:geotraking/views/chat/components/ai_chat.dart';
 // import 'package:geotraking/core/services/vessel/vessel_service.dart';
 // import 'package:geotraking/views/chat/components/request_vessel.dart';
@@ -309,10 +310,15 @@ class _ChatPageState extends State<ChatPage> {
   MemberUser? _user;
   bool _isLoggedIn = false;
 
+  final ChatService chatService = ChatService();
+
+  List<Map<String, dynamic>>? _vesselList;
+
   @override
   void initState() {
     super.initState();
     _checkLoggedIn();
+    _fetchVessel();
   }
 
   _checkLoggedIn() async {
@@ -327,6 +333,18 @@ class _ChatPageState extends State<ChatPage> {
           _isLoggedIn = true;
         }
       });
+    }
+  }
+
+  Future _fetchVessel() async {
+    try {
+      final vesselList = await chatService.index();
+      print(vesselList);
+      setState(() {
+        _vesselList = vesselList;
+      });
+    } catch (e) {
+      print('Error fetching kapal: $e');
     }
   }
 
@@ -376,7 +394,7 @@ class _ChatPageState extends State<ChatPage> {
               margin: EdgeInsets.all(6),
               padding: EdgeInsets.all(15),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 243, 182, 100),
+                color: Color.fromARGB(255, 127, 183, 126),
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
@@ -392,7 +410,7 @@ class _ChatPageState extends State<ChatPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TabDetail(),
+                      builder: (context) => TabDetail(vesselName: '',),
                     ),
                   );
                 },
@@ -403,11 +421,11 @@ class _ChatPageState extends State<ChatPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Demo Kapal-1',
+                          'Daftarkan Kapal Anda',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                         SizedBox(height: 4),
@@ -415,7 +433,7 @@ class _ChatPageState extends State<ChatPage> {
                           'Monday, 30 Sep 2024 (11:29 AM)',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.black87,
+                            color: Colors.white70,
                           ),
                         ),
                       ],
@@ -424,7 +442,7 @@ class _ChatPageState extends State<ChatPage> {
                       '1',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.black,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -432,6 +450,106 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
             ),
+            _vesselList != null
+                ? ListView.builder(
+                    itemCount: _vesselList!.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: EdgeInsets.all(6),
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 243, 182, 100),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TabDetail(vesselName: '${_vesselList![index]['nama_kapal']}',),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${_vesselList![index]['nama_kapal']}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'Monday, 30 Sep 2024 (11:29 AM)',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                '1',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : Center(
+                    child: FutureBuilder(
+                      future: Future.delayed(const Duration(seconds: 3)),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return Container();
+                        } else {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Getting Data',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(color: Colors.black),
+                              ),
+                              SizedBox(width: 8),
+                              SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
