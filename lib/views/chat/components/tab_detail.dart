@@ -46,22 +46,22 @@ class _TabDetailState extends State<TabDetail> {
                     ),
                     child: Column(
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "${widget.vesselName ?? 'N/A'}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(color: Colors.black),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
+                        // Align(
+                        //   alignment: Alignment.centerLeft,
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Text(
+                        //         "${widget.vesselName ?? 'N/A'}",
+                        //         style: Theme.of(context)
+                        //             .textTheme
+                        //             .bodyLarge
+                        //             ?.copyWith(color: Colors.black),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 10),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(

@@ -268,7 +268,7 @@ class VesselService {
       // Check if data is cached and if it's been fetched within the last 30 minutes
       if (cachedData != null && lastFetchTime != null) {
         final currentTime = DateTime.now().millisecondsSinceEpoch;
-        if (currentTime - lastFetchTime < 30 * 60 * 1000) {
+        if (currentTime - lastFetchTime < 10 * 60 * 1000) {
           // Debug print to indicate data is being used from cache
           print("Debug: Loading data from SharedPreferences cache.");
           return List<Map<String, dynamic>>.from(jsonDecode(cachedData));
