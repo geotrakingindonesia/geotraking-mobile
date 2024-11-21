@@ -1,5 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously, library_private_types_in_public_api, sized_box_for_whitespace, prefer_const_constructors, unused_local_variable, avoid_print
 
+import 'package:elegant_notification/elegant_notification.dart';
+import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
@@ -67,14 +69,6 @@ class _SearchAirtimePageState extends State<SearchAirtimePage> {
                     ),
                     filled: true,
                     fillColor: Colors.blue.shade100,
-                    // border: OutlineInputBorder(
-                    //   borderRadius: BorderRadius.circular(8.0),
-                    //   borderSide: BorderSide.none,
-                    // ),
-                    // focusedBorder: OutlineInputBorder(
-                    //   borderRadius: BorderRadius.circular(8.0),
-                    //   borderSide: const BorderSide(color: Colors.black),
-                    // ),
                   ),
                   onSubmitted: (value) {
                     _search();
@@ -132,6 +126,23 @@ class _SearchAirtimePageState extends State<SearchAirtimePage> {
           setState(() {
             _searchResult = null;
           });
+
+          ElegantNotification.info(
+            title: Text('Data not found.',
+                style: TextStyle(color: Colors.white)),
+            description: Text('May be because the ID is wrong or the ID is not your ship.',
+                style: TextStyle(color: Colors.white)),
+            icon: Icon(Icons.info, color: Colors.white),
+            background: Colors.transparent,
+            position: Alignment.topCenter,
+            animation: AnimationType.fromTop,
+            showProgressIndicator: true,
+            displayCloseButton: false,
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: 70,
+            borderRadius: BorderRadius.circular(10),
+          ).show(context);
+
           print('Data tidak ditemukan');
         }
       } catch (e) {

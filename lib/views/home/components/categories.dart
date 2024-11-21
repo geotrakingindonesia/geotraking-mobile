@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geotraking/core/models/member.dart';
 import 'package:geotraking/core/routes/app_routes.dart';
+import 'package:geotraking/core/services/auth/authenticate_service.dart';
+import 'package:geotraking/views/auth/login_page.dart';
+import 'package:geotraking/views/profile/profile_page.dart';
 import 'icon_categories.dart';
 
 class Categories extends StatefulWidget {
@@ -14,6 +17,31 @@ class Categories extends StatefulWidget {
 
 class _CategoriesState extends State<Categories> {
   late ScrollController _scrollController;
+  final AuthService _authService = AuthService();
+  MemberUser? _user;
+  bool _isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoggedIn();
+    _scrollController = ScrollController();
+  }
+
+  _checkLoggedIn() async {
+    final user = await _authService.getCurrentUser();
+
+    if (user != null) {
+      print(
+          'Current User: ${user.id}, ${user.name}, ${user.email}, ${user.noHp}, ${user.isAdmin}, ${user.avatar}');
+      setState(() {
+        _user = user;
+        // if (_user!.isAdmin == 1) {
+        _isLoggedIn = true;
+        // }
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -21,58 +49,10 @@ class _CategoriesState extends State<Categories> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
-
-  // void _showBottomSheetForOthers(BuildContext context) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-  //     ),
-  //     builder: (context) {
-  //       return Padding(
-  //         padding: EdgeInsets.all(16.0),
-  //         child: Wrap(
-  //           spacing: 10,
-  //           runSpacing: 10,
-  //           children: [
-  //             IconsCategories(
-  //               label: 'PortRI',
-  //               icon: 'assets/icons/harbor.svg',
-  //               onTap: () {
-  //                 Navigator.pushNamed(context, AppRoutes.portRiPage);
-  //               },
-  //             ),
-  //             IconsCategories(
-  //               label: 'BBM',
-  //               icon: 'assets/icons/fuel.svg',
-  //               onTap: () {
-  //                 Navigator.pushNamed(context, AppRoutes.calcBbmPage);
-  //               },
-  //             ),
-  //             IconsCategories(
-  //               label: 'Other 1',
-  //               icon: 'assets/icons/other1.svg',
-  //               onTap: () {
-  //                 // Handle navigation or action for "Other 1"
-  //               },
-  //             ),
-  //             IconsCategories(
-  //               label: 'Other 2',
-  //               icon: 'assets/icons/other2.svg',
-  //               onTap: () {
-  //                 // Handle navigation or action for "Other 2"
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _scrollController = ScrollController();
   // }
 
   void _showBottomSheetForOthers(BuildContext context) {
@@ -81,39 +61,65 @@ class _CategoriesState extends State<Categories> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
       ),
-      isScrollControlled:
-          true, // Memungkinkan kontrol penuh untuk ketinggian modal
+      isScrollControlled: true,
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.5, // Setengah layar tinggi awal
-          minChildSize: 0.3, // Ukuran minimum saat draggable
-          maxChildSize: 0.8, // Ukuran maksimum
+          initialChildSize: 0.5,
+          minChildSize: 0.3,
+          maxChildSize: 0.8,
           expand: false,
           builder: (context, scrollController) {
             return Container(
               padding: EdgeInsets.all(6.0),
               child: SingleChildScrollView(
-                controller:
-                    scrollController, // ScrollController untuk Draggable
+                controller: scrollController,
                 child: Padding(
-                  // padding: EdgeInsets.all(16.0),
-                  padding:
-                      EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0, top: 16.0),
+                  padding: EdgeInsets.only(
+                      bottom: 16.0, left: 16.0, right: 16.0, top: 16.0),
                   child: Wrap(
                     spacing: 5,
                     runSpacing: 10,
                     children: [
                       IconsCategories(
                         label: 'Airtime',
-                        // icon: FontAwesomeIcons.moneyBillTransfer,
                         icon: 'assets/icons/card.svg',
                         onTap: () {
-                          Navigator.pushNamed(context, AppRoutes.airtimePage);
+                          _isLoggedIn
+                              ? Navigator.pushNamed(
+                                  context, AppRoutes.airtimePage)
+                              : showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Not Logged In'),
+                                      content: Text(
+                                          'Please log in to access the Airtime.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('Close'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginPage()));
+                                          },
+                                          child: Text('Login'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                         },
                       ),
                       IconsCategories(
                         label: 'TopUp',
-                        // icon: Icons.smartphone_rounded,
                         icon: 'assets/icons/money.svg',
                         onTap: () {
                           Navigator.pushNamed(context, AppRoutes.topUpPage);
@@ -121,7 +127,6 @@ class _CategoriesState extends State<Categories> {
                       ),
                       IconsCategories(
                         label: 'IoT',
-                        // icon: Icons.calculate,
                         icon: 'assets/icons/iot.svg',
                         onTap: () {
                           Navigator.pushNamed(context, AppRoutes.iotPage);
@@ -129,7 +134,6 @@ class _CategoriesState extends State<Categories> {
                       ),
                       IconsCategories(
                         label: 'Salmon',
-                        // icon: FontAwesomeIcons.locationCrosshairs,
                         icon: 'assets/icons/gps.svg',
                         onTap: () {
                           Navigator.pushNamed(context, AppRoutes.salmonPage);
@@ -145,7 +149,6 @@ class _CategoriesState extends State<Categories> {
                       ),
                       IconsCategories(
                         label: 'WppRI',
-                        // icon: FontAwesomeIcons.mapLocationDot,
                         icon: 'assets/icons/map.svg',
                         onTap: () {
                           Navigator.pushNamed(context, AppRoutes.wppPage);
@@ -153,7 +156,6 @@ class _CategoriesState extends State<Categories> {
                       ),
                       IconsCategories(
                         label: 'BasarnasRI',
-                        // icon: FontAwesomeIcons.lifeRing,
                         icon: 'assets/icons/lifebuoy.svg',
                         onTap: () {
                           Navigator.pushNamed(context, AppRoutes.basarnasPage);
@@ -161,7 +163,6 @@ class _CategoriesState extends State<Categories> {
                       ),
                       IconsCategories(
                         label: 'PortRI',
-                        // icon: FontAwesomeIcons.towerObservation,
                         icon: 'assets/icons/harbor.svg',
                         onTap: () {
                           Navigator.pushNamed(context, AppRoutes.portRiPage);
@@ -169,7 +170,6 @@ class _CategoriesState extends State<Categories> {
                       ),
                       IconsCategories(
                         label: 'BBM',
-                        // icon: FontAwesomeIcons.oilWell,
                         icon: 'assets/icons/fuel.svg',
                         onTap: () {
                           Navigator.pushNamed(context, AppRoutes.calcBbmPage);
@@ -194,119 +194,50 @@ class _CategoriesState extends State<Categories> {
 
   @override
   Widget build(BuildContext context) {
-    // return Column(
-    //   children: [
-    //     Padding(
-    //       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 5),
-    //       // padding: const EdgeInsets.only(left: 5, right: 5),
-    //       child: Container(
-    //         decoration: const BoxDecoration(
-    //           borderRadius: BorderRadius.only(
-    //             topLeft: Radius.circular(5),
-    //             bottomLeft: Radius.circular(5),
-    //             topRight: Radius.circular(5),
-    //             bottomRight: Radius.circular(5),
-    //           ),
-    //         ),
-    //         child: SingleChildScrollView(
-    //           scrollDirection: Axis.horizontal,
-    //           controller: _scrollController,
-    //           child: Column(
-    //             children: [
-    //               Row(
-    //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //                 children: [
-    //                   IconsCategories(
-    //                     label: 'Airtime',
-    //                     icon: FontAwesomeIcons.moneyBillTransfer,
-    //                     onTap: () {
-    //                       Navigator.pushNamed(context, AppRoutes.airtimePage);
-    //                     },
-    //                   ),
-    //                   IconsCategories(
-    //                     label: 'Pulsa',
-    //                     icon: Icons.wifi_calling_3,
-    //                     onTap: () {
-    //                       Navigator.pushNamed(context, AppRoutes.pulsaPage);
-    //                     },
-    //                   ),
-    //                   IconsCategories(
-    //                     label: 'IoT',
-    //                     icon: Icons.calculate,
-    //                     onTap: () {
-    //                       Navigator.pushNamed(context, AppRoutes.iotPage);
-    //                     },
-    //                   ),
-    //                   IconsCategories(
-    //                     label: 'Salmon',
-    //                     icon: FontAwesomeIcons.locationCrosshairs,
-    //                     onTap: () {
-    //                       Navigator.pushNamed(context, AppRoutes.salmonPage);
-    //                     },
-    //                   ),
-    //                   IconsCategories(
-    //                     label: 'WppRI',
-    //                     icon: FontAwesomeIcons.mapLocationDot,
-    //                     onTap: () {
-    //                       Navigator.pushNamed(context, AppRoutes.wppPage);
-    //                     },
-    //                   ),
-    //                   IconsCategories(
-    //                     label: 'BasarnasRI',
-    //                     icon: FontAwesomeIcons.lifeRing,
-    //                     onTap: () {
-    //                       Navigator.pushNamed(context, AppRoutes.basarnasPage);
-    //                     },
-    //                   ),
-    //                   IconsCategories(
-    //                     label: 'PortRI',
-    //                     icon: FontAwesomeIcons.towerObservation,
-    //                     onTap: () {
-    //                       Navigator.pushNamed(context, AppRoutes.portRiPage);
-    //                     },
-    //                   ),
-
-    //                   IconsCategories(
-    //                     label: 'BBM',
-    //                     icon: FontAwesomeIcons.oilWell,
-    //                     onTap: () {
-    //                       Navigator.pushNamed(context, AppRoutes.calcBbmPage);
-    //                     },
-    //                   ),
-    //                   // IconsCategories(
-    //                   //   label: 'OpenFiber',
-    //                   //   icon: FontAwesomeIcons.wifi,
-    //                   //   onTap: () {
-    //                   //     Navigator.pushNamed(context, AppRoutes.openFiberPage);
-    //                   //   },
-    //                   // ),
-    //                 ],
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ],
-    // );
     return Padding(
-      // padding: EdgeInsets.all(16.0),
       padding: EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
       child: Wrap(
         spacing: 10,
         runSpacing: 10,
         children: [
+          // if (_isLoggedIn)
           IconsCategories(
             label: 'Airtime',
-            // icon: FontAwesomeIcons.moneyBillTransfer,
             icon: 'assets/icons/card.svg',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.airtimePage);
+              _isLoggedIn
+                  ? Navigator.pushNamed(context, AppRoutes.airtimePage)
+                  : showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Not Logged In'),
+                          content: Text('Please log in to access the Airtime.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Close'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()));
+                              },
+                              child: Text('Login'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
             },
           ),
           IconsCategories(
             label: 'TopUp',
-            // icon: Icons.smartphone_rounded,
             icon: 'assets/icons/money.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.topUpPage);
@@ -314,7 +245,6 @@ class _CategoriesState extends State<Categories> {
           ),
           IconsCategories(
             label: 'IoT',
-            // icon: Icons.calculate,
             icon: 'assets/icons/iot.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.iotPage);
@@ -322,7 +252,6 @@ class _CategoriesState extends State<Categories> {
           ),
           IconsCategories(
             label: 'Salmon',
-            // icon: FontAwesomeIcons.locationCrosshairs,
             icon: 'assets/icons/gps.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.salmonPage);
@@ -338,7 +267,6 @@ class _CategoriesState extends State<Categories> {
           ),
           IconsCategories(
             label: 'WppRI',
-            // icon: FontAwesomeIcons.mapLocationDot,
             icon: 'assets/icons/map.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.wppPage);
@@ -346,35 +274,16 @@ class _CategoriesState extends State<Categories> {
           ),
           IconsCategories(
             label: 'BasarnasRI',
-            // icon: FontAwesomeIcons.lifeRing,
             icon: 'assets/icons/lifebuoy.svg',
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.basarnasPage);
             },
           ),
-          // IconsCategories(
-          //   label: 'PortRI',
-          //   // icon: FontAwesomeIcons.towerObservation,
-          //   icon: 'assets/icons/harbor.svg',
-          //   onTap: () {
-          //     Navigator.pushNamed(context, AppRoutes.portRiPage);
-          //   },
-          // ),
-          // IconsCategories(
-          //   label: 'BBM',
-          //   // icon: FontAwesomeIcons.oilWell,
-          //   icon: 'assets/icons/fuel.svg',
-          //   onTap: () {
-          //     Navigator.pushNamed(context, AppRoutes.calcBbmPage);
-          //   },
-          // ),
           IconsCategories(
             label: 'Others',
             icon: 'assets/icons/others.svg',
             onTap: () {
-              _showBottomSheetForOthers(context); // Tampilkan BottomSheet
-
-              // Navigator.pushNamed(context, AppRoutes.calcBbmPage);
+              _showBottomSheetForOthers(context);
             },
           ),
         ].map((widget) {

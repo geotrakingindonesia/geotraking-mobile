@@ -8,10 +8,94 @@ import 'package:mysql1/mysql1.dart';
 class AirtimeService {
   final AuthService _authService = AuthService();
 
+  // Future<Airtime?> getAirtime(String idfull) async {
+  //   MemberUser? currentUser = await _authService.getCurrentUser();
+  //   int memberId = currentUser?.id ?? 0;
+  //   int isAdmin = currentUser?.isAdmin ?? 0;
+
+  //   var settings = Connection.getSettings();
+  //   var conn = await MySqlConnection.connect(settings);
+  //   var results = await conn.query('''
+  //   SELECT
+  //     am.id AS mobile_id,
+  //     am.idfull,
+  //     am.name AS nama_kapal,
+  //     am.sn,
+  //     am.imei,
+  //     mc.name AS kategori,
+  //     mt.name AS type,
+  //     c.customer_name AS custamer,
+  //     COALESCE(am.timestamp, '0000-00-00 00:00:00') AS timestamp,
+  //     COALESCE(am.msgTimestamp_GMT, am.timestamp, '0000-00-00 00:00:00') AS broadcast,
+  //   	COALESCE(NULLIF(am.lat, ''), 0) AS lat,
+  // 		COALESCE(NULLIF(am.lon, ''), 0) AS lon,
+  // 		COALESCE(am.heading, 0) AS heading,
+  // 		COALESCE(am.speed, 0) AS speed,
+  //     COALESCE(speed * 3.6, 0) AS speed_kmh,
+  //     COALESCE(speed * 1.9438, 0) AS speed_kn,
+  //     am.powerstatus,
+  //     COALESCE(am.externalvoltage, 0) AS externalvoltage,
+  //     COALESCE(am.atp_start, '0000-00-00 00:00:00') AS atp_start,
+  //     COALESCE(am.atp_end, '0000-00-00 00:00:00') AS atp_end
+  //   FROM
+  //     ai_mobile AS am
+  //     LEFT JOIN ai_mobile_category AS mc ON mc.id = am.category_id
+  //     LEFT JOIN ai_mobile_type AS mt ON mt.id = am.type_id
+  //     LEFT JOIN ai_customer_data AS c ON c.id = am.customer
+  //   WHERE
+  //     am.idfull =?
+  //   ''', [idfull]);
+
+  //   print('result: $results');
+
+  //   Airtime? dataAirtime;
+
+  //   if (results.isNotEmpty) {
+  //     var row = results.first;
+
+  //     dataAirtime = Airtime(
+  //       mobileId: row['mobile_id'] ?? '',
+  //       idfull: row['idfull'] ?? '',
+  //       namaKapal: row['nama_kapal'] ?? '',
+  //       sn: row['sn'] ?? '',
+  //       imei: row['imei'] ?? '',
+  //       kategori: row['kategori'] ?? '',
+  //       type: row['type'] ?? '',
+  //       custamer: row['custamer'] ?? '',
+  //       lat: double.parse(row['lat'] ?? '0'),
+  //       lon: double.parse(row['lon'] ?? '0'),
+  //       speed: double.parse(row['speed'] ?? '0'),
+  //       speedKmh: row['speed_kmh'] ?? '0',
+  //       speedKn: row['speed_kn'] ?? '0',
+  //       heading: double.parse(row['heading'] ?? '0'),
+  //       powerstatus: row['powerstatus'] ?? '',
+  //       externalvoltage: double.parse(row['externalvoltage'] ?? '0'),
+  //       broadcast: row['broadcast'] as String?,
+  //       timestamp: row['timestamp'] as String?,
+  //       atp_start: row['atp_start'] as String?,
+  //       atp_end: row['atp_end'] as String?,
+  //     );
+  //   }
+
+  //   await conn.close();
+
+  //   return dataAirtime;
+  // }
+
   Future<Airtime?> getAirtime(String idfull) async {
+    MemberUser? currentUser = await _authService.getCurrentUser();
+    int memberId = currentUser?.id ?? 0;
+    int isAdmin = currentUser?.isAdmin ?? 0; // Angka 0 atau 1
+
     var settings = Connection.getSettings();
     var conn = await MySqlConnection.connect(settings);
-    var results = await conn.query('''
+
+    String query;
+    List<dynamic> queryParams;
+
+    if (isAdmin == 0) {
+      // Query untuk user non-admin
+      query = '''
     SELECT 
       am.id AS mobile_id,
       am.idfull,
@@ -23,10 +107,44 @@ class AirtimeService {
       c.customer_name AS custamer,
       COALESCE(am.timestamp, '0000-00-00 00:00:00') AS timestamp,
       COALESCE(am.msgTimestamp_GMT, am.timestamp, '0000-00-00 00:00:00') AS broadcast,
-    	COALESCE(NULLIF(am.lat, ''), 0) AS lat,
-			COALESCE(NULLIF(am.lon, ''), 0) AS lon,
-			COALESCE(am.heading, 0) AS heading,
-			COALESCE(am.speed, 0) AS speed,
+      COALESCE(NULLIF(am.lat, ''), 0) AS lat,
+      COALESCE(NULLIF(am.lon, ''), 0) AS lon,
+      COALESCE(am.heading, 0) AS heading,
+      COALESCE(am.speed, 0) AS speed,
+      COALESCE(speed * 3.6, 0) AS speed_kmh,
+      COALESCE(speed * 1.9438, 0) AS speed_kn,
+      am.powerstatus,
+      COALESCE(am.externalvoltage, 0) AS externalvoltage,
+      COALESCE(am.atp_start, '0000-00-00 00:00:00') AS atp_start,
+      COALESCE(am.atp_end, '0000-00-00 00:00:00') AS atp_end
+    FROM 
+      ai_mobile AS am
+      LEFT JOIN ai_mobile_category AS mc ON mc.id = am.category_id
+      LEFT JOIN ai_mobile_type AS mt ON mt.id = am.type_id
+      LEFT JOIN ai_customer_data AS c ON c.id = am.customer
+      INNER JOIN ai_kapal_member AS km ON km.mobile_id = am.id
+    WHERE 
+      km.member_id = ? AND am.idfull = ?
+    ''';
+      queryParams = [memberId, idfull];
+    } else {
+      // Query untuk admin
+      query = '''
+    SELECT 
+      am.id AS mobile_id,
+      am.idfull,
+      am.name AS nama_kapal,
+      am.sn,
+      am.imei,
+      mc.name AS kategori,
+      mt.name AS type,
+      c.customer_name AS custamer,
+      COALESCE(am.timestamp, '0000-00-00 00:00:00') AS timestamp,
+      COALESCE(am.msgTimestamp_GMT, am.timestamp, '0000-00-00 00:00:00') AS broadcast,
+      COALESCE(NULLIF(am.lat, ''), 0) AS lat,
+      COALESCE(NULLIF(am.lon, ''), 0) AS lon,
+      COALESCE(am.heading, 0) AS heading,
+      COALESCE(am.speed, 0) AS speed,
       COALESCE(speed * 3.6, 0) AS speed_kmh,
       COALESCE(speed * 1.9438, 0) AS speed_kn,
       am.powerstatus,
@@ -39,9 +157,12 @@ class AirtimeService {
       LEFT JOIN ai_mobile_type AS mt ON mt.id = am.type_id
       LEFT JOIN ai_customer_data AS c ON c.id = am.customer
     WHERE 
-      am.idfull =?
-    ''', [idfull]);
+      am.idfull = ?
+    ''';
+      queryParams = [idfull];
+    }
 
+    var results = await conn.query(query, queryParams);
     print('result: $results');
 
     Airtime? dataAirtime;

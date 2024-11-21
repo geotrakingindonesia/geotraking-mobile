@@ -536,7 +536,6 @@ class _EntryPointUIState extends State<EntryPointUI> {
               HomePage(selectedLanguage: _selectedLanguage),
               ProductPage(),
               ChatPage(),
-              // AnimatedTraking(),
               if (_isLoggedIn)
                 _user!.isAdmin == 0
                     ? ProfileTrackingPage()
@@ -556,14 +555,46 @@ class _EntryPointUIState extends State<EntryPointUI> {
                         'Silakan login terlebih dahulu',
                         style: TextStyle(fontSize: 18),
                       ),
+                      SizedBox(height: 13),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
+                        },
+                        child: Text(
+                          'Login',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                        ),
+                      ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     Navigator.pop(context);
+                      //     Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) => LoginPage()));
+                      //   },
+                      //   child: Text('Login'),
+                      // ),
                     ],
                   ),
                 ),
-              // Center(child: Text('Silakan login terlebih dahulu')),
-              // TrakingPage(),
               _isLoggedIn
                   ? ProfilePage(selectedLanguage: _selectedLanguage)
-                  // ? TestProfile()
                   : LoginPage(),
             ][_selectedIndex],
             BottomGradientWidget(),
