@@ -53,6 +53,9 @@ dependencies:
   google_generative_ai: ^0.4.6
   # web_socket_channel: ^3.0.1
   device_preview: ^1.2.0
+
+  dio: ^5.7.0
+  open_filex: ^4.5.0
   
 
 dev_dependencies:

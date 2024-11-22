@@ -259,7 +259,7 @@ class _TabAiscubeState extends State<TabAiscube> {
                     borderRadius: AppDefaults.borderRadius,
                     child: CachedNetworkImage(
                       imageUrl: _convertDriveLink(
-                          "https://drive.google.com/file/d/1Q5xeTW3B3dOeEKNOBcwPO0J4O3JAWWWL/view?usp=sharing"),
+                          "https://drive.google.com/file/d/17w1H1GhK8whdjzfVN1lOURDjpJrkooMS/view?usp=sharing"),
                       width: double.infinity,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
@@ -318,41 +318,42 @@ class _TabAiscubeState extends State<TabAiscube> {
               ],
             ),
             SizedBox(height: 10),
-            Container(
-              color: Colors.transparent,
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black54,
-                        blurRadius: 10.0,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: AppDefaults.borderRadius,
-                    child: CachedNetworkImage(
-                      imageUrl: _convertDriveLink(
-                          "https://drive.google.com/file/d/1ZSCputfmRwuTKjKa_rJaT4vFaYSngwnM/view?usp=sharing"),
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        width: double.infinity,
-                        color: Colors.white,
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.white,
-                        child: Icon(Icons.error, color: Colors.red),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // Container(
+            //   color: Colors.transparent,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(5),
+            //     child: Container(
+            //       decoration: BoxDecoration(
+            //         boxShadow: [
+            //           BoxShadow(
+            //             color: Colors.black54,
+            //             blurRadius: 10.0,
+            //             offset: Offset(0, 5),
+            //           ),
+            //         ],
+            //       ),
+            //       child: ClipRRect(
+            //         borderRadius: AppDefaults.borderRadius,
+            //         child: CachedNetworkImage(
+            //           imageUrl: _convertDriveLink(
+            //               "https://drive.google.com/file/d/1ZSCputfmRwuTKjKa_rJaT4vFaYSngwnM/view?usp=sharing"),
+            //           width: double.infinity,
+            //           fit: BoxFit.cover,
+            //           placeholder: (context, url) => Container(
+            //             width: double.infinity,
+            //             color: Colors.white,
+            //             child: Center(child: CircularProgressIndicator()),
+            //           ),
+            //           errorWidget: (context, url, error) => Container(
+            //             color: Colors.white,
+            //             child: Icon(Icons.error, color: Colors.red),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
           ],
         ),
       ),
@@ -447,16 +448,12 @@ Widget _buildPackageItem(String title, String subtitle, String message) {
   return GestureDetector(
     onTap: () => _launchWhatsApp("6281908192559", message),
     child: Container(
-      // margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       margin: EdgeInsets.only(left: 5, right: 5, top: 10),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         gradient: LinearGradient(
           colors: [
-            // Color.fromARGB(255, 243, 182, 100),
-            // Colors.blue.shade400,
-            // Colors.blue.shade800,
             Colors.blue.shade900,
             Color.fromARGB(255, 2, 21, 38)
           ],
@@ -478,7 +475,6 @@ Widget _buildPackageItem(String title, String subtitle, String message) {
                   fontSize: 12,
                 ),
               ),
-              // SizedBox(height: 3),
               Text(
                 subtitle,
                 style: TextStyle(
@@ -489,43 +485,6 @@ Widget _buildPackageItem(String title, String subtitle, String message) {
               ),
             ],
           ),
-          // Container(
-          //   padding: EdgeInsets.all(10),
-          //   decoration: BoxDecoration(
-          //     color: Colors.white,
-          //     shape: BoxShape.circle,
-          //   ),
-          //   child: Row(
-          //     children: [
-          //       Text(
-          //         "Hubungi Kami",
-          //         style: TextStyle(
-          //           color: Colors.white,
-          //           fontSize: 16,
-          //           fontWeight: FontWeight.w500,
-          //         ),
-          //       ),
-          //       SizedBox(width: 10), // Jarak antara teks dan ikon
-          //       Container(
-          //         padding: EdgeInsets.all(10),
-          //         decoration: BoxDecoration(
-          //           color: Colors.white,
-          //           shape: BoxShape.circle,
-          //         ),
-          //         child: Icon(
-          //           Icons.arrow_forward,
-          //           color: Colors.blue.shade900,
-          //           size: 25,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          //   // child: Icon(
-          //   //   Icons.arrow_forward,
-          //   //   color: Colors.blue.shade900,
-          //   //   size: 25,
-          //   // ),
-          // ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
