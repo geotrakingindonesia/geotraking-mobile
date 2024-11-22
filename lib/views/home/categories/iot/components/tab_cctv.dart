@@ -42,7 +42,7 @@ class _TabCctvState extends State<TabCctv> {
                     borderRadius: AppDefaults.borderRadius,
                     child: CachedNetworkImage(
                       imageUrl: _convertDriveLink(
-                          "https://drive.google.com/file/d/1rkT2KfZCAvLZynktuLueuFQJJiczTqC3/view?usp=sharing"),
+                          "https://drive.google.com/file/d/1s0Y0DQQuan_9rqigwoP6mvv3MqJO3UQd/view?usp=sharing"),
                       width: double.infinity,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -674,56 +674,10 @@ Platform Perangkat Lunak Terpusat: Inti dari Setiap Fuel Monitoring System adala
   }
 }
 
-// Widget _buildProductCard(String title, IconData icon) {
-//   return Container(
-//     // padding: EdgeInsets.all(10),
-//         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10), // Padding lebih kecil
-
-//     decoration: BoxDecoration(
-//       color: Colors.blueAccent,
-//       borderRadius: BorderRadius.circular(10.0),
-//     ),
-//     child: Row(
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       mainAxisSize: MainAxisSize.min,
-//       children: [
-//         // Ikon di sebelah kiri
-//         Icon(
-//           icon,
-//           color: Colors.white,
-//           size: 25,
-//         ),
-//         SizedBox(width: 10),
-//         // Teks di sebelah kanan
-//         Expanded(
-//           child: Text(
-//             title,
-//             style: TextStyle(
-//               color: Colors.white,
-//               fontSize: 10,
-//               fontWeight: FontWeight.bold,
-//             ),
-//             textAlign: TextAlign.left,
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
-
 Widget _buildProductCard(String title, IconData icon) {
   return Container(
     decoration: BoxDecoration(
-      // color: Colors.white,
       color: Colors.transparent,
-      // borderRadius: BorderRadius.circular(10),
-      // boxShadow: [
-      //   BoxShadow(
-      //     color: Colors.white.withOpacity(0.2),
-      //     blurRadius: 5,
-      //     offset: Offset(0, 3),
-      //   ),
-      // ],
     ),
     child: Row(
       children: [
@@ -732,18 +686,6 @@ Widget _buildProductCard(String title, IconData icon) {
           height: 60,
           decoration: BoxDecoration(
             color: Colors.blue,
-            // gradient: LinearGradient(
-            //     colors: [
-            //       Color.fromARGB(255, 3, 52, 110),
-            //       Color.fromARGB(255, 110, 172, 218),
-            //     ],
-            //     begin: Alignment.centerRight,
-            //     end: Alignment.centerLeft,
-            //   ),
-            // borderRadius: BorderRadius.only(
-            //     topLeft: Radius.circular(10),
-            //     bottomLeft: Radius.circular(10),
-            //   ),
           ),
           child: Icon(
             icon,
@@ -795,7 +737,6 @@ Widget _buildBenefitItem(String title, IconData icon) {
     padding: EdgeInsets.all(15),
     child: Row(
       children: [
-        // Icon(Icons.directions_car, color: Colors.blue.shade900),
 
         Icon(
           icon,
@@ -817,109 +758,3 @@ Widget _buildBenefitItem(String title, IconData icon) {
     ),
   );
 }
-
-// import 'package:flutter/material.dart';
-
-// class ShipFuelTrackMonitoringPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Color.fromARGB(255, 2, 21, 38),
-//       body: SingleChildScrollView(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Header Image
-//             Container(
-//               decoration: BoxDecoration(
-//                 boxShadow: [
-//                   BoxShadow(
-//                     color: Colors.black54,
-//                     blurRadius: 10.0,
-//                     offset: Offset(0, 5),
-//                   ),
-//                 ],
-//               ),
-//               child: ClipRRect(
-//                 borderRadius: BorderRadius.circular(10.0),
-//                 child: Image.asset(
-//                   'assets/images/header_image.jpg', // Ganti dengan path gambar Anda
-//                   fit: BoxFit.cover,
-//                   width: double.infinity,
-//                   height: 200,
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-
-//             // Produk Kami
-//             Text(
-//               'PRODUK KAMI',
-//               style: TextStyle(
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.bold,
-//                 color: Colors.white,
-//               ),
-//             ),
-//             Text(
-//               'ONE STOP SOLUTION',
-//               style: TextStyle(
-//                 fontSize: 17,
-//                 fontWeight: FontWeight.bold,
-//                 color: Color.fromARGB(255, 243, 182, 100),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             GridView.count(
-//               crossAxisCount: 2,
-//               shrinkWrap: true,
-//               crossAxisSpacing: 10,
-//               mainAxisSpacing: 10,
-//               physics: NeverScrollableScrollPhysics(),
-//               children: [
-//                 _buildProductCard('RPM Monitoring', Icons.speed),
-//                 _buildProductCard('Bunker Monitoring System', Icons.camera_alt),
-//                 _buildProductCard('Fuel Monitoring System', Icons.wifi),
-//                 _buildProductCard('Tank Monitoring System', Icons.battery_std),
-//                 _buildProductCard('Engine Monitoring System', Icons.engineering),
-//                 _buildProductCard('Flowmeter', Icons.water),
-//               ],
-//             ),
-//             SizedBox(height: 20),
-
-//             // Benefit FTM
-//             Text(
-//               'BENEFIT FTM',
-//               style: TextStyle(
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.bold,
-//                 color: Colors.white,
-//               ),
-//             ),
-//             Text(
-//               'OPTIMALISASI & EFISIENSI',
-//               style: TextStyle(
-//                 fontSize: 17,
-//                 fontWeight: FontWeight.bold,
-//                 color: Color.fromARGB(255, 243, 182, 100),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             Column(
-//               children: [
-//                 _buildBenefitItem(
-//                     'Easy to Analyze', Icons.check_circle, Colors.green),
-//                 _buildBenefitItem(
-//                     'Cost Awareness', Icons.check_circle, Colors.green),
-//                 _buildBenefitItem(
-//                     'Optimizing Cost', Icons.check_circle, Colors.green),
-//                 _buildBenefitItem(
-//                     'Protecting Asset', Icons.check_circle, Colors.green),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
