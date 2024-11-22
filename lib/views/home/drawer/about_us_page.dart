@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/localization_language.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
+import 'package:geotraking/views/profile/support/components/tutorial_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AboutUsPage extends StatefulWidget {
@@ -57,6 +58,10 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     Text(
                       Localization.getTeksAboutUs(_selectedLanguage),
                       textAlign: TextAlign.justify,
+                    ),
+                    TutorialTile(
+                      title: 'Geotraking Mobile Application',
+                      videoUrl: 'https://youtu.be/oH5AQY6HDfc',
                     ),
                     Divider(),
                     Text(

@@ -1,13 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/constants/app_defaults.dart';
-import 'package:geotraking/views/profile/support/components/tutorial_tile_pdf.dart';
 
-class TabAiscube extends StatefulWidget {
-  const TabAiscube({Key? key}) : super(key: key);
+class TabCctv extends StatefulWidget {
+  const TabCctv({Key? key}) : super(key: key);
 
   @override
-  _TabAiscubeState createState() => _TabAiscubeState();
+  _TabCctvState createState() => _TabCctvState();
 }
 
 String _convertDriveLink(String driveUrl) {
@@ -15,7 +14,7 @@ String _convertDriveLink(String driveUrl) {
   return 'https://drive.google.com/uc?export=view&id=$fileId';
 }
 
-class _TabAiscubeState extends State<TabAiscube> {
+class _TabCctvState extends State<TabCctv> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,28 +57,12 @@ class _TabAiscubeState extends State<TabAiscube> {
                       ),
                     ),
                   ),
-                  // child: Container(
-                  //   child: ClipRRect(
-                  //     borderRadius: AppDefaults.borderRadius,
-                  //     child: Image.asset(
-                  //       'assets/images/banner_fuel.jpeg',
-                  //       width: double.infinity,
-                  //       fit: BoxFit.contain,
-                  //     ),
-                  //   ),
-                  // ),
                 ),
               ),
             ),
-            SizedBox(height: 15,),
-            TutorialTilePdf(
-              title: 'Ais Cube Integration',
-              pdfUrl: 'https://drive.google.com/file/d/1Qm0Uekf7jNJd0UkOCNeAXJikELOrSgyl/view?usp=sharing',
+            SizedBox(
+              height: 20,
             ),
-            SizedBox(height: 10,),
-            // Center(
-            //   child: Text('Coming Soon'),
-            // ),
           ],
         ),
       ),

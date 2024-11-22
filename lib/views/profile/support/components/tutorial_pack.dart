@@ -77,8 +77,8 @@ class _TutorialPackState extends State<TutorialPack> {
                   'https://drive.google.com/file/d/1Qm0Uekf7jNJd0UkOCNeAXJikELOrSgyl/view?usp=sharing',
             ),
             TutorialTile(
-              title: 'Dukungan Iridium GO!',
-              videoUrl: 'https://youtu.be/_R2nRaFz7lc',
+              title: 'How To Use Iridium GO! App',
+              videoUrl: 'https://youtu.be/wfFdjfUueG8',
             ),
             TutorialTileTeks(
               title: 'Iridium 9555 Pemecahan Masalah',

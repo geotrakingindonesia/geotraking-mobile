@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
 // import 'package:geotraking/core/components/banner_rekening.dart';
 import 'package:geotraking/core/components/custom_tab_label.dart';
+import 'package:geotraking/core/constants/app_icons.dart';
 import 'package:geotraking/views/home/categories/iot/components/tab_aiscube.dart';
+import 'package:geotraking/views/home/categories/iot/components/tab_cctv.dart';
 import 'package:geotraking/views/home/categories/iot/components/tab_fuel.dart';
 import 'package:geotraking/views/home/categories/iot/components/tab_rpm.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,8 +22,7 @@ class IotPage extends StatefulWidget {
 
 class _IotPageState extends State<IotPage> {
   void _openWhatsApp() async {
-    final whatsappUrl =
-        "https://wa.me/yourPhoneNumber"; 
+    final whatsappUrl = "https://wa.me/yourPhoneNumber";
     if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
       await launchUrl(Uri.parse(whatsappUrl));
     } else {
@@ -38,16 +40,21 @@ class _IotPageState extends State<IotPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         // backgroundColor: Colors.red,
         appBar: AppBar(
           title: Text('IoT'),
-          leading: const AppBackButton(),
-          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: SvgPicture.asset(AppIcons.arrowBackward, color: Colors.white,),
+            onPressed: () => Navigator.pop(context),
+            // color: Colors.white,
+          ),
+
+          backgroundColor: Color.fromARGB(255, 2, 21, 38),
           elevation: 0,
           titleTextStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.black,
+                color: Colors.white,
               ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(40),
@@ -70,10 +77,10 @@ class _IotPageState extends State<IotPage> {
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.black54,
                   tabs: [
-                    CustomTabLabel(label: 'RPM'),
+                    // CustomTabLabel(label: 'RPM'),
                     CustomTabLabel(label: 'Fuel Monitoring'),
                     CustomTabLabel(label: 'AIS Cube'),
-                    CustomTabLabel(label: 'Cctv'),
+                    CustomTabLabel(label: 'CCTV'),
                   ],
                 ),
               ),
@@ -83,18 +90,21 @@ class _IotPageState extends State<IotPage> {
         body: Container(
           child: const TabBarView(
             children: [
-              TabRpm(),
+              // TabRpm(),
               TabFuel(),
               TabAiscube(),
-              TabFuel(),
+              TabCctv(),
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _openWhatsApp,
-          backgroundColor: Colors.green,
-          child: Icon(FontAwesomeIcons.whatsapp, color: Colors.white,),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: _openWhatsApp,
+        //   backgroundColor: Colors.green,
+        //   child: Icon(
+        //     FontAwesomeIcons.whatsapp,
+        //     color: Colors.white,
+        //   ),
+        // ),
       ),
     );
     // return Scaffold(
