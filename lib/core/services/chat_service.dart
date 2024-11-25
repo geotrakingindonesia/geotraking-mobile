@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:geotraking/core/services/connection/connection.dart';
 import 'package:mysql1/mysql1.dart';
+import 'package:http/http.dart' as http;
 
 class ChatService {
   Future<List<Map<String, dynamic>>?> index() async {
@@ -54,7 +55,6 @@ class ChatService {
 
       if (results.isNotEmpty) {
         for (var row in results) {
-
           dataKapalGeosatList.add({
             'id': row['id'],
             'idfull': row['idfull'],
@@ -91,6 +91,68 @@ class ChatService {
       // Handle any errors and print the error for debugging
       print("Error fetching data: $e");
       return null;
+    }
+  }
+
+  Future<bool> store({
+    required String hexData,
+    required String senderId,
+    required String mobileId,
+    required String apiUrl,
+    required String apiUsername,
+    required String apiPassword,
+  }) async {
+    try {
+      // Waktu sekarang dan expired_at
+      final DateTime now = DateTime.now();
+      final DateTime expiredAt = now.add(Duration(days: 180));
+
+      // Kirim data ke API
+      var response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Authorization':
+              'Basic ' + base64Encode(utf8.encode('$apiUsername:$apiPassword')),
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'HexData': hexData}),
+      );
+
+      // Cek apakah respons dari API berhasil
+      if (response.statusCode == 200) {
+        // Jika berhasil, simpan data ke database
+        var settings = Connection.getSettings();
+        var conn = await MySqlConnection.connect(settings);
+
+        var result = await conn.query('''
+          INSERT INTO ai_geo_chat (
+            text, 
+            sender_id, 
+            mobile_id, 
+            created_at, 
+            expired_at
+          ) VALUES (?, ?, ?, ?, ?)
+        ''', [
+          hexData,
+          senderId,
+          mobileId,
+          now.toIso8601String(),
+          expiredAt.toIso8601String(),
+        ]);
+
+        await conn.close();
+
+        // Return true jika data berhasil disimpan ke database
+        return result.affectedRows! > 0;
+      } else {
+        // Cetak error jika respons API gagal
+        print('API error: ${response.statusCode} - ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      // Tangani error lain
+      print("Error: $e");
+      return false;
     }
   }
 }

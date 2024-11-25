@@ -3,7 +3,6 @@
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/components/app_back_button.dart';
-import 'package:geotraking/core/constants/app_colors.dart';
 
 class TabDetail extends StatefulWidget {
   final String vesselName;
@@ -20,7 +19,6 @@ class _TabDetailState extends State<TabDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: AppColors.cardColor,
       backgroundColor: Color.fromARGB(255, 2, 21, 38),
       appBar: AppBar(
         leading: const AppBackButton(),
@@ -50,7 +48,7 @@ class _TabDetailState extends State<TabDetail> {
                         ),
                         BubbleSpecialThree(
                           text: 'Please try and give some feedback on it!',
-                          color: Colors.grey,
+                          color: Color(0xFFE8E8EE),
                           tail: true,
                           isSender: false,
                         ),
@@ -66,38 +64,6 @@ class _TabDetailState extends State<TabDetail> {
           ),
         ],
       ),
-      // body: Padding(
-      //   padding: const EdgeInsets.only(top: 10),
-      //   child: Column(
-      //     children: [
-      //       Expanded(
-      //         child: SingleChildScrollView(
-      //           child: Column(
-      //             children: [
-      //               BubbleSpecialThree(
-      //                 text: 'Please try and give some feedback on it!',
-      //                 color: Color(0xFF1B97F3),
-      //                 tail: true,
-      //                 textStyle: TextStyle(color: Colors.white, fontSize: 16),
-      //               ),
-      //               BubbleSpecialThree(
-      //                 text: 'Please try and give some feedback on it!',
-      //                 color: Colors.grey,
-      //                 tail: true,
-      //                 isSender: false,
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      // bottomNavigationBar: SafeArea(
-      //   child: MessageBar(
-      //     onSend: (_) => print(_),
-      //   ),
-      // ),
     );
   }
 }
