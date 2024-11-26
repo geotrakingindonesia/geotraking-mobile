@@ -103,12 +103,40 @@ class ChatDetail extends StatefulWidget {
 
 class _ChatDetailState extends State<ChatDetail> {
   final ChatService _chatService = ChatService();
-  final List<Map<String, dynamic>> _messages = []; // List untuk menyimpan pesan
+  final List<Map<String, dynamic>> _messages = [];
 
   String stringToHex(String input) {
     return input.codeUnits
         .map((unit) => unit.toRadixString(16).padLeft(2, '0'))
         .join();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMessages();
+  }
+
+  Future<void> _loadMessages() async {
+    try {
+      final List<Map<String, dynamic>> fetchedMessages =
+          await _chatService.show();
+
+      setState(() {
+        _messages.clear();
+        for (var msg in fetchedMessages) {
+          _messages.add({
+            'isSender': msg['sender_id'] == widget.senderId,
+            'text': msg['teks'],
+          });
+        }
+      });
+    } catch (e) {
+      print("Error loading messages: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal memuat pesan')),
+      );
+    }
   }
 
   Future<void> _sendMessage(String message) async {
