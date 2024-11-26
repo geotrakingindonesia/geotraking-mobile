@@ -296,7 +296,7 @@ import 'package:geotraking/core/services/chat_service.dart';
 import 'package:geotraking/views/chat/components/ai_chat.dart';
 // import 'package:geotraking/core/services/vessel/vessel_service.dart';
 // import 'package:geotraking/views/chat/components/request_vessel.dart';
-import 'package:geotraking/views/chat/components/tab_detail.dart';
+import 'package:geotraking/views/chat/components/chat_detail.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -410,10 +410,11 @@ class _ChatPageState extends State<ChatPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TabDetail(
+                      builder: (context) => ChatDetail(
                         vesselName: '',
                         // senderId: _user!.isAdmin,
                         senderId: _user!.id,
+                        mobileId: '',
                       ),
                     ),
                   );
@@ -481,11 +482,12 @@ class _ChatPageState extends State<ChatPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => TabDetail(
+                                  builder: (context) => ChatDetail(
                                     vesselName:
                                         '${_vesselList![index]['nama_kapal']}',
-                                        // senderId: _user!.isAdmin,
-                                        senderId: _user!.id,
+                                    // senderId: _user!.isAdmin,
+                                    senderId: _user!.id,
+                                    mobileId: '${_vesselList![index]['id']}',
                                   ),
                                 ),
                               );

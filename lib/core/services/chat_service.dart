@@ -6,8 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatService {
-  // var apiUrl =
-  //     'https://pulsar.pivotel.com.au/MT/V1/SBD?varMsgID=id0008&serviceID=S1200';
   var apiUrl = 'https://pulsar.pivotel.com.au/MT/V1/SBD';
   var apiUsername = 'PTGIS_Retail';
   var apiPassword = 'Dbc9cHyee*5wd54dCCaJK';
@@ -101,68 +99,9 @@ class ChatService {
     }
   }
 
-  // Future<bool> store({
-  //   required String hexData,
-  //   required String senderId,
-  //   required String mobileId,
-  // }) async {
-  //   try {
-  //     // Waktu sekarang dan expired_at
-  //     final DateTime now = DateTime.now();
-  //     final DateTime expiredAt = now.add(Duration(days: 180));
-
-  //     // Kirim data ke API
-  //     var response = await http.post(
-  //       Uri.parse(apiUrl),
-  //       headers: {
-  //         'Authorization':
-  //             'Basic ' + base64Encode(utf8.encode('$apiUsername:$apiPassword')),
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: jsonEncode({'HexData': hexData}),
-  //     );
-
-  //     // Cek apakah respons dari API berhasil
-  //     if (response.statusCode == 200) {
-  //       // Jika berhasil, simpan data ke database
-  //       var settings = Connection.getSettings();
-  //       var conn = await MySqlConnection.connect(settings);
-
-  //       var result = await conn.query('''
-  //         INSERT INTO ai_geo_chat (
-  //           text,
-  //           sender_id,
-  //           mobile_id,
-  //           created_at,
-  //           expired_at
-  //         ) VALUES (?, ?, ?, ?, ?)
-  //       ''', [
-  //         hexData,
-  //         senderId,
-  //         mobileId,
-  //         now.toIso8601String(),
-  //         expiredAt.toIso8601String(),
-  //       ]);
-
-  //       await conn.close();
-
-  //       // Return true jika data berhasil disimpan ke database
-  //       return result.affectedRows! > 0;
-  //     } else {
-  //       // Cetak error jika respons API gagal
-  //       print('API error: ${response.statusCode} - ${response.body}');
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     // Tangani error lain
-  //     print("Error: $e");
-  //     return false;
-  //   }
-  // }
-
   Future<bool> store({
     required String hexData,
-    required String senderId,
+    required int senderId,
     required String mobileId,
   }) async {
     try {
@@ -172,14 +111,14 @@ class ChatService {
 
       // Buat `varMsgID` sebagai autoincrement
       // Simpan atau ambil nilai terakhir `varMsgID` dari preferensi lokal atau database
-      int currentMsgId = await getLastVarMsgID() ?? 8; // Default mulai dari 8
+      int currentMsgId = await getLastVarMsgID() ?? 1; // Default mulai dari 8
       String varMsgId = 'id${currentMsgId.toString().padLeft(4, '0')}';
 
       // Tingkatkan nilai `varMsgID` untuk penyimpanan berikutnya
       await saveLastVarMsgID(currentMsgId + 1);
 
       // Set `serviceID` sesuai dengan `mobileId`
-      String serviceId = 'S$mobileId';
+      String serviceId = '$mobileId';
 
       // Buat URL API dengan parameter dinamis
       String apiUrlWithParams =
@@ -196,26 +135,42 @@ class ChatService {
         body: jsonEncode({'HexData': hexData}),
       );
 
+      print('--------------');
+      print(response.statusCode);
+      print('--------------');
       // Cek apakah respons dari API berhasil
       if (response.statusCode == 200) {
+        // String responseApi = response.body;
+        Map<String, dynamic> responseJson = jsonDecode(response.body);
+
+        // Konversi JSON ke string biasa
+        String responseApi = '''
+Status: ${responseJson['Status']},
+UniqueClientMessageID: ${responseJson['Confirmation']['UniqueClientMessageID']},
+IMEI: ${responseJson['Confirmation']['IMEI']},
+AutoIDReference: ${responseJson['Confirmation']['AutoIDReference']},
+MessageStatus: ${responseJson['Confirmation']['MessageStatus']}
+''';
         // Jika berhasil, simpan data ke database
         var settings = Connection.getSettings();
         var conn = await MySqlConnection.connect(settings);
 
         var result = await conn.query('''
         INSERT INTO ai_geo_chat (
-          text, 
+          teks, 
           sender_id, 
           mobile_id, 
           created_at, 
-          expired_at
-        ) VALUES (?, ?, ?, ?, ?)
+          expired_at,
+          response_api
+        ) VALUES (?, ?, ?, ?, ?, ?)
       ''', [
           hexData,
           senderId,
           mobileId,
           now.toIso8601String(),
           expiredAt.toIso8601String(),
+          responseApi,
         ]);
 
         await conn.close();
