@@ -412,6 +412,8 @@ class _ChatPageState extends State<ChatPage> {
                     MaterialPageRoute(
                       builder: (context) => TabDetail(
                         vesselName: '',
+                        // senderId: _user!.isAdmin,
+                        senderId: _user!.id,
                       ),
                     ),
                   );
@@ -482,6 +484,8 @@ class _ChatPageState extends State<ChatPage> {
                                   builder: (context) => TabDetail(
                                     vesselName:
                                         '${_vesselList![index]['nama_kapal']}',
+                                        // senderId: _user!.isAdmin,
+                                        senderId: _user!.id,
                                   ),
                                 ),
                               );

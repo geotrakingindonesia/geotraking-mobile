@@ -3,8 +3,15 @@ import 'dart:convert';
 import 'package:geotraking/core/services/connection/connection.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatService {
+  // var apiUrl =
+  //     'https://pulsar.pivotel.com.au/MT/V1/SBD?varMsgID=id0008&serviceID=S1200';
+  var apiUrl = 'https://pulsar.pivotel.com.au/MT/V1/SBD';
+  var apiUsername = 'PTGIS_Retail';
+  var apiPassword = 'Dbc9cHyee*5wd54dCCaJK';
+
   Future<List<Map<String, dynamic>>?> index() async {
     try {
       var settings = Connection.getSettings();
@@ -94,22 +101,93 @@ class ChatService {
     }
   }
 
+  // Future<bool> store({
+  //   required String hexData,
+  //   required String senderId,
+  //   required String mobileId,
+  // }) async {
+  //   try {
+  //     // Waktu sekarang dan expired_at
+  //     final DateTime now = DateTime.now();
+  //     final DateTime expiredAt = now.add(Duration(days: 180));
+
+  //     // Kirim data ke API
+  //     var response = await http.post(
+  //       Uri.parse(apiUrl),
+  //       headers: {
+  //         'Authorization':
+  //             'Basic ' + base64Encode(utf8.encode('$apiUsername:$apiPassword')),
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: jsonEncode({'HexData': hexData}),
+  //     );
+
+  //     // Cek apakah respons dari API berhasil
+  //     if (response.statusCode == 200) {
+  //       // Jika berhasil, simpan data ke database
+  //       var settings = Connection.getSettings();
+  //       var conn = await MySqlConnection.connect(settings);
+
+  //       var result = await conn.query('''
+  //         INSERT INTO ai_geo_chat (
+  //           text,
+  //           sender_id,
+  //           mobile_id,
+  //           created_at,
+  //           expired_at
+  //         ) VALUES (?, ?, ?, ?, ?)
+  //       ''', [
+  //         hexData,
+  //         senderId,
+  //         mobileId,
+  //         now.toIso8601String(),
+  //         expiredAt.toIso8601String(),
+  //       ]);
+
+  //       await conn.close();
+
+  //       // Return true jika data berhasil disimpan ke database
+  //       return result.affectedRows! > 0;
+  //     } else {
+  //       // Cetak error jika respons API gagal
+  //       print('API error: ${response.statusCode} - ${response.body}');
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     // Tangani error lain
+  //     print("Error: $e");
+  //     return false;
+  //   }
+  // }
+
   Future<bool> store({
     required String hexData,
     required String senderId,
     required String mobileId,
-    required String apiUrl,
-    required String apiUsername,
-    required String apiPassword,
   }) async {
     try {
       // Waktu sekarang dan expired_at
       final DateTime now = DateTime.now();
       final DateTime expiredAt = now.add(Duration(days: 180));
 
+      // Buat `varMsgID` sebagai autoincrement
+      // Simpan atau ambil nilai terakhir `varMsgID` dari preferensi lokal atau database
+      int currentMsgId = await getLastVarMsgID() ?? 8; // Default mulai dari 8
+      String varMsgId = 'id${currentMsgId.toString().padLeft(4, '0')}';
+
+      // Tingkatkan nilai `varMsgID` untuk penyimpanan berikutnya
+      await saveLastVarMsgID(currentMsgId + 1);
+
+      // Set `serviceID` sesuai dengan `mobileId`
+      String serviceId = 'S$mobileId';
+
+      // Buat URL API dengan parameter dinamis
+      String apiUrlWithParams =
+          '$apiUrl?varMsgID=$varMsgId&serviceID=$serviceId';
+
       // Kirim data ke API
       var response = await http.post(
-        Uri.parse(apiUrl),
+        Uri.parse(apiUrlWithParams),
         headers: {
           'Authorization':
               'Basic ' + base64Encode(utf8.encode('$apiUsername:$apiPassword')),
@@ -125,14 +203,14 @@ class ChatService {
         var conn = await MySqlConnection.connect(settings);
 
         var result = await conn.query('''
-          INSERT INTO ai_geo_chat (
-            text, 
-            sender_id, 
-            mobile_id, 
-            created_at, 
-            expired_at
-          ) VALUES (?, ?, ?, ?, ?)
-        ''', [
+        INSERT INTO ai_geo_chat (
+          text, 
+          sender_id, 
+          mobile_id, 
+          created_at, 
+          expired_at
+        ) VALUES (?, ?, ?, ?, ?)
+      ''', [
           hexData,
           senderId,
           mobileId,
@@ -154,5 +232,21 @@ class ChatService {
       print("Error: $e");
       return false;
     }
+  }
+
+// Fungsi untuk mendapatkan nilai terakhir `varMsgID`
+  Future<int?> getLastVarMsgID() async {
+    // Ambil nilai terakhir dari shared_preferences atau database
+    // Contoh menggunakan shared_preferences:
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('lastVarMsgID');
+  }
+
+// Fungsi untuk menyimpan nilai terbaru `varMsgID`
+  Future<void> saveLastVarMsgID(int value) async {
+    // Simpan nilai terbaru ke shared_preferences atau database
+    // Contoh menggunakan shared_preferences:
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('lastVarMsgID', value);
   }
 }

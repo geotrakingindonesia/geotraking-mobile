@@ -6,9 +6,11 @@ import 'package:geotraking/core/components/app_back_button.dart';
 
 class TabDetail extends StatefulWidget {
   final String vesselName;
+  final int senderId;
   const TabDetail({
     Key? key,
     required this.vesselName,
+    required this.senderId,
   }) : super(key: key);
 
   @override
@@ -39,6 +41,7 @@ class _TabDetailState extends State<TabDetail> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        Text('ini ${widget.senderId}', style: TextStyle(color: Colors.white),),
                         BubbleSpecialThree(
                           text: 'Please try and give some feedback on it!',
                           color: Color(0xFF1B97F3),
