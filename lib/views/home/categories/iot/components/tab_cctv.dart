@@ -8,7 +8,6 @@ import 'package:geotraking/core/constants/app_defaults.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 class TabCctv extends StatefulWidget {
   const TabCctv({Key? key}) : super(key: key);
 
@@ -164,6 +163,37 @@ class _TabCctvState extends State<TabCctv> {
               ),
             ),
             SizedBox(height: 15),
+            Container(
+              color: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 5,
+                  right: 80,
+                  // top: 20,
+                  bottom: 20,
+                ),
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: AppDefaults.borderRadius,
+                    child: CachedNetworkImage(
+                      imageUrl: _convertDriveLink(
+                          "https://drive.google.com/file/d/1nk3xNmZq-eSR6y4T4IjNjmH74vD6V8vU/view?usp=sharing"),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        width: double.infinity,
+                        color: Colors.white,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.white,
+                        child: Icon(Icons.error, color: Colors.red),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Container(
               margin: EdgeInsets.only(left: 5),
               child: Text(

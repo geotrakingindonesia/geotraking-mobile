@@ -205,49 +205,12 @@ MessageStatus: ${responseJson['Confirmation']['MessageStatus']}
     await prefs.setInt('lastVarMsgID', value);
   }
 
-  // Future<List<Map<String, dynamic>>> show() async {
-  //   try {
-  //     // Koneksi ke database
-  //     var settings = Connection.getSettings();
-  //     var conn = await MySqlConnection.connect(settings);
-
-  //     // Query untuk mendapatkan semua data dari tabel ai_geo_chat
-  //     var results = await conn.query('SELECT * FROM ai_geo_chat');
-
-  //     // Proses hasil query
-  //     List<Map<String, dynamic>> messages = [];
-  //     for (var row in results) {
-  //       String hexText = row['teks'] as String;
-
-  //       // Konversi hex ke string
-  //       String plainText = _hexToString(hexText);
-
-  //       // Tambahkan data ke daftar
-  //       messages.add({
-  //         'id': row['id'],
-  //         'teks': plainText,
-  //         'sender_id': row['sender_id'],
-  //         'mobile_id': row['mobile_id'],
-  //         'created_at': row['created_at'],
-  //         'expired_at': row['expired_at'],
-  //         'response_api': row['response_api'],
-  //       });
-  //     }
-
-  //     await conn.close();
-  //     return messages;
-  //   } catch (e) {
-  //     print("Error fetching messages: $e");
-  //     return [];
-  //   }
-  // }
-
   Future<List<Map<String, dynamic>>> show() async {
     try {
       var settings = Connection.getSettings();
       var conn = await MySqlConnection.connect(settings);
 
-      var results = await conn.query('SELECT teks, sender_id FROM ai_geo_chat');
+      var results = await conn.query('SELECT teks, sender_id, mobile_id, created_at, expired_at, response_api FROM ai_geo_chat');
       await conn.close();
 
       // Ubah teks Hex ke String setelah data diambil
@@ -265,27 +228,6 @@ MessageStatus: ${responseJson['Confirmation']['MessageStatus']}
       return [];
     }
   }
-
-  // Future<List<Map<String, dynamic>>> show() async {
-  //   try {
-  //     var settings = Connection.getSettings();
-  //     var conn = await MySqlConnection.connect(settings);
-
-  //     var results = await conn.query('SELECT teks, sender_id FROM ai_geo_chat');
-  //     await conn.close();
-
-  //     // Pastikan teks di-cast ke String
-  //     return results.map((row) {
-  //       return {
-  //         'teks': row['teks']?.toString() ?? '', // Ubah ke string
-  //         'sender_id': row['sender_id'],
-  //       };
-  //     }).toList();
-  //   } catch (e) {
-  //     print("Error fetching messages: $e");
-  //     return [];
-  //   }
-  // }
 
   // Fungsi untuk mengonversi hex ke string
   String _hexToString(String hex) {
