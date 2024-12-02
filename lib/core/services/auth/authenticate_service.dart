@@ -2,18 +2,49 @@
 
 import 'dart:io';
 
+import 'package:email_otp/email_otp.dart';
 import 'package:geotraking/core/models/member.dart';
 import 'package:geotraking/core/services/connection/connection.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:bcrypt/bcrypt.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 class AuthService {
+  Future<String> getDeviceId() async {
+    final deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      final androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.id;
+    } else if (Platform.isIOS) {
+      final iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor!;
+    }
+    return "unknown_device";
+  }
+
+  Future<bool> sendOtp(String email) async {
+    EmailOTP.config(
+      appEmail: 'geotrakingindonesia@gmail.com', 
+      appName: 'PT. Geomatika Satelit Indonesia',
+      otpLength: 4,
+      otpType: OTPType.numeric,
+    );
+
+    bool result = await EmailOTP.sendOTP(email: email);
+    return result;
+  }
+
+  Future<bool> verifyOtp(String email, String otp) async {
+    return await EmailOTP.verifyOTP(otp: otp);
+  }
+
   Future<bool> validateLogin(String email, String password) async {
     var settings = Connection.getSettings();
     var conn = await MySqlConnection.connect(settings);
+
+    final deviceId = await getDeviceId();
 
     var result =
         await conn.query('SELECT * FROM ai_member WHERE email = ?', [email]);
@@ -23,13 +54,25 @@ class AuthService {
     if (result.isNotEmpty) {
       var user = result.first;
       var hashedPassword = user['password'];
-      String? avatar = user['avatar']; 
+      String? avatar = user['avatar'];
+      int isLoggedIn = user['is_loggedin'];
+      String? storedDeviceId = user['device_id'];
 
       print('User found: $user');
       print('Hashed password: $hashedPassword');
+      print('Stored device ID: $storedDeviceId');
 
       if (BCrypt.checkpw(password, hashedPassword)) {
         print('Password is correct');
+
+        // if (!await validateOtp(email, otp)) {
+        //   throw Exception('Invalid OTP');
+        // }
+
+        // Cek apakah akun sudah login di perangkat lain
+        if (storedDeviceId != null && storedDeviceId != deviceId) {
+          await logoutFromOtherDevice(storedDeviceId); 
+        }
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setInt('id', user['id']);
@@ -41,6 +84,10 @@ class AuthService {
         await prefs.setInt('is_admin', user['is_admin']);
 
         print('User data saved to shared preferences');
+
+        await conn.query(
+            'UPDATE ai_member SET is_loggedin = 1, device_id = ? WHERE email = ?',
+            [deviceId, email]);
 
         return true;
       } else {
@@ -62,7 +109,6 @@ class AuthService {
         email: prefs.getString('email') ?? '',
         noHp: prefs.getString('no_hp') ?? '',
         isAdmin: prefs.getInt('is_admin') ?? 0,
-        // avatar: prefs.getString('avatar') ?? 'assets/images/user.png',
         avatar: prefs.getString('avatar'),
       );
     }
@@ -70,8 +116,8 @@ class AuthService {
     return null;
   }
 
-  Future<void> saveLoginHistory(int memberId,
-      String device, String model, String brand, String host) async {
+  Future<void> saveLoginHistory(int memberId, String device, String model,
+      String brand, String host) async {
     var settings = Connection.getSettings();
     var conn = await MySqlConnection.connect(settings);
     final create_at = DateTime.now().toUtc().add(Duration(hours: 7));
@@ -90,6 +136,18 @@ class AuthService {
     await conn.query(
         'UPDATE personal_history_access SET delete_at = ? WHERE member_id = ? AND delete_at IS NULL',
         [delete_at, memberId]);
+  }
+
+  Future<void> logoutFromOtherDevice(String deviceId) async {
+    // Logout perangkat lain yang terhubung dengan akun yang sama
+    var settings = Connection.getSettings();
+    var conn = await MySqlConnection.connect(settings);
+
+    // Update status login perangkat lain
+    await conn.query(
+        'UPDATE ai_member SET is_loggedin = 0 WHERE device_id = ?', [deviceId]);
+
+    print('Logged out from other device');
   }
 
   Future<void> logout() async {
@@ -119,7 +177,7 @@ class AuthService {
         'INSERT INTO ai_member (name, email, no_hp, password) VALUES (?, ?, ?, ?)',
         [name, email, noHp, hashedPassword]);
 
-    await validateLogin(email, password);
+    // await validateLogin(email, password, otp);
 
     print('User registered and logged in successfully');
 

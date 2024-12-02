@@ -89,10 +89,12 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
   Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _selectedSpeedPreferences = prefs.getString('SetSpeedPreferences') ?? 'Knots';
+      _selectedSpeedPreferences =
+          prefs.getString('SetSpeedPreferences') ?? 'Knots';
       _selectedCoordinatePreferences =
           prefs.getString('SetCoordinatePreferences') ?? 'Degrees';
-      _selectedTimezonePreferences = prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
+      _selectedTimezonePreferences =
+          prefs.getString('SetTimezonePreferences') ?? 'UTC+7';
       _selectedLanguage = prefs.getString('language') ?? 'English';
     });
   }
@@ -153,7 +155,9 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.transparent,
+
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
             Localization.getKapalKu(_selectedLanguage) + ' (${widget.idFull})'),
@@ -462,9 +466,12 @@ class _ProfileTrackingOnePageState extends State<ProfileTrackingOnePage>
                                 if (_showVesselModal)
                                   VesselDataModal(
                                     vesselData: _vesselData,
-                                    selectedTimeZonePreferences: _selectedTimezonePreferences,
-                                    selectedSpeedPreferences: _selectedSpeedPreferences,
-                                    selectedCoordinatePreferences: _selectedCoordinatePreferences,
+                                    selectedTimeZonePreferences:
+                                        _selectedTimezonePreferences,
+                                    selectedSpeedPreferences:
+                                        _selectedSpeedPreferences,
+                                    selectedCoordinatePreferences:
+                                        _selectedCoordinatePreferences,
                                   ),
                                 if (_showTrackingModal)
                                   TrakingDataModal(

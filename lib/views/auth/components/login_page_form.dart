@@ -27,6 +27,8 @@ class _LoginPageFormState extends State<LoginPageForm> {
   final _key = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
+  String _otp = '';
+  bool _isOtpSent = false;
   final _authService = AuthService();
 
   bool isPasswordShown = false;
@@ -37,24 +39,80 @@ class _LoginPageFormState extends State<LoginPageForm> {
     setState(() {});
   }
 
-  onLogin() async {
+  Future<void> sendOtp() async {
+    try {
+      bool isOtpSent = await _authService.sendOtp(_email);
+      if (isOtpSent) {
+        setState(() {
+          _isOtpSent = true;
+          _errorMessage = null;
+        });
+      } else {
+        setState(() {
+          _errorMessage = 'Failed to send OTP';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error sending OTP: $e';
+      });
+    }
+  }
+
+  // onLogin() async {
+  //   if (_key.currentState!.validate()) {
+  //     _key.currentState!.save();
+  //     try {
+  //       bool isValid = await _authService.validateLogin(_email, _password);
+  //       if (isValid) {
+  //         setState(() {
+  //           _errorMessage = null;
+  //         });
+  //         Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => EntryPointUI()),
+  //         );
+  //       }
+  //     } catch (e) {
+  //       setState(() {
+  //         _errorMessage = e.toString();
+  //       });
+  //     }
+  //   }
+  // }
+
+  Future<void> onLogin() async {
     if (_key.currentState!.validate()) {
       _key.currentState!.save();
-      try {
-        bool isValid = await _authService.validateLogin(_email, _password);
-        if (isValid) {
+
+      if (!_isOtpSent) {
+        // If OTP hasn't been sent yet, send OTP first
+        await sendOtp();
+      } else {
+        // Verify OTP after it's sent
+        bool otpVerified = await _authService.verifyOtp(_email, _otp);
+        if (otpVerified) {
+          try {
+            bool isValid = await _authService.validateLogin(_email, _password);
+            if (isValid) {
+              setState(() {
+                _errorMessage = null;
+              });
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => EntryPointUI()),
+              );
+            }
+          } catch (e) {
+            setState(() {
+              _errorMessage = e.toString();
+            });
+          }
+        } else {
           setState(() {
-            _errorMessage = null;
+            _errorMessage = 'Invalid OTP';
           });
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => EntryPointUI()),
-          );
         }
-      } catch (e) {
-        setState(() {
-          _errorMessage = e.toString();
-        });
       }
     }
   }
@@ -66,9 +124,6 @@ class _LoginPageFormState extends State<LoginPageForm> {
         inputDecorationTheme: AppTheme.secondaryInputDecorationTheme,
       ),
       child: Padding(
-        // padding:
-        // EdgeInsets.only(left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
-
         padding:
             const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
         child: Form(
@@ -138,20 +193,52 @@ class _LoginPageFormState extends State<LoginPageForm> {
               SizedBox(
                 height: 5,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (_errorMessage != null) ...[
-                    Text(
-                      'Gagal login.',
-                      style: const TextStyle(color: Colors.red),
+              if (_isOtpSent) ...[
+                const SizedBox(height: 8),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.done,
+                  validator: (value) => Validators.required(value),
+                  onSaved: (value) => _otp = value!,
+                  decoration: InputDecoration(
+                    labelText: 'Enter OTP',
+                    prefixIcon: const Icon(Icons.security, color: Colors.black),
+                    labelStyle: const TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.black),
                     ),
-                  ] else ...[
-                    Spacer(),
-                  ],
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.black),
+                    ),
+                    filled: true,
+                  ),
+                ),
+                SizedBox(height: 5),
+                if (_errorMessage != null) ...[
+                  Text(
+                    _errorMessage!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                 ],
-              ),
-              LoginButton(onPressed: onLogin),
+                LoginButton(onPressed: onLogin),
+                // ],
+              ],
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     if (_errorMessage != null) ...[
+              //       Text(
+              //         'Gagal login.',
+              //         style: const TextStyle(color: Colors.red),
+              //       ),
+              //     ] else ...[
+              //       Spacer(),
+              //     ],
+              //   ],
+              // ),
+              // LoginButton(onPressed: onLogin),
             ],
           ),
         ),
