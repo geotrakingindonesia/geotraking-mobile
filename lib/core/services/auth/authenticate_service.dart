@@ -26,7 +26,7 @@ class AuthService {
 
   Future<bool> sendOtp(String email) async {
     EmailOTP.config(
-      appEmail: 'geotrakingindonesia@gmail.com', 
+      appEmail: 'geotrakingindonesia@gmail.com',
       appName: 'PT. Geomatika Satelit Indonesia',
       otpLength: 4,
       otpType: OTPType.numeric,
@@ -65,13 +65,14 @@ class AuthService {
       if (BCrypt.checkpw(password, hashedPassword)) {
         print('Password is correct');
 
-        // if (!await validateOtp(email, otp)) {
+        // if (!await verifyOtp(email, otp)) {
         //   throw Exception('Invalid OTP');
         // }
 
         // Cek apakah akun sudah login di perangkat lain
         if (storedDeviceId != null && storedDeviceId != deviceId) {
-          await logoutFromOtherDevice(storedDeviceId); 
+          print('Account already logged in on another device');
+          await logoutFromOtherDevice(storedDeviceId);
         }
 
         final prefs = await SharedPreferences.getInstance();
@@ -98,19 +99,54 @@ class AuthService {
     }
   }
 
+  // Future<MemberUser?> getCurrentUser() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final memberId = prefs.getInt('id');
+
+  //   if (memberId != null) {
+  //     return MemberUser(
+  //       id: memberId,
+  //       name: prefs.getString('name') ?? '',
+  //       email: prefs.getString('email') ?? '',
+  //       noHp: prefs.getString('no_hp') ?? '',
+  //       isAdmin: prefs.getInt('is_admin') ?? 0,
+  //       avatar: prefs.getString('avatar'),
+  //     );
+  //   }
+
+  //   return null;
+  // }
+
   Future<MemberUser?> getCurrentUser() async {
     final prefs = await SharedPreferences.getInstance();
     final memberId = prefs.getInt('id');
 
     if (memberId != null) {
-      return MemberUser(
-        id: memberId,
-        name: prefs.getString('name') ?? '',
-        email: prefs.getString('email') ?? '',
-        noHp: prefs.getString('no_hp') ?? '',
-        isAdmin: prefs.getInt('is_admin') ?? 0,
-        avatar: prefs.getString('avatar'),
-      );
+      var settings = Connection.getSettings();
+      var conn = await MySqlConnection.connect(settings);
+
+      final result = await conn
+          .query('SELECT device_id FROM ai_member WHERE id = ?', [memberId]);
+
+      if (result.isNotEmpty) {
+        final storedDeviceId = result.first['device_id'];
+        final currentDeviceId = await getDeviceId();
+
+        if (storedDeviceId != currentDeviceId) {
+          print('Device ID mismatch, logging out');
+          await logout(); // Logout otomatis
+          return null;
+        }
+
+        return MemberUser(
+          id: memberId,
+          name: prefs.getString('name') ?? '',
+          email: prefs.getString('email') ?? '',
+          noHp: prefs.getString('no_hp') ?? '',
+          isAdmin: prefs.getInt('is_admin') ?? 0,
+          avatar: prefs.getString('avatar'),
+        );
+      }
     }
 
     return null;
@@ -138,27 +174,58 @@ class AuthService {
         [delete_at, memberId]);
   }
 
+  // Future<void> logoutFromOtherDevice(String deviceId) async {
+  //   // Logout perangkat lain yang terhubung dengan akun yang sama
+  //   var settings = Connection.getSettings();
+  //   var conn = await MySqlConnection.connect(settings);
+
+  //   // Update status login perangkat lain
+  //   await conn.query(
+  //       'UPDATE ai_member SET is_loggedin = 0 WHERE device_id = ?', [deviceId]);
+
+  //   print('Logged out from other device');
+  // }
+
   Future<void> logoutFromOtherDevice(String deviceId) async {
-    // Logout perangkat lain yang terhubung dengan akun yang sama
     var settings = Connection.getSettings();
     var conn = await MySqlConnection.connect(settings);
 
     // Update status login perangkat lain
     await conn.query(
-        'UPDATE ai_member SET is_loggedin = 0 WHERE device_id = ?', [deviceId]);
+        'UPDATE ai_member SET is_loggedin = 0, device_id = NULL WHERE device_id = ?',
+        [deviceId]);
 
     print('Logged out from other device');
   }
 
+  // Future<void> logout() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.remove('id');
+  //   await prefs.remove('name');
+  //   await prefs.remove('no_hp');
+  //   await prefs.remove('email');
+  //   await prefs.remove('password');
+  //   await prefs.remove('avatar');
+  //   await prefs.remove('is_admin');
+  // }
+
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('id');
-    await prefs.remove('name');
-    await prefs.remove('no_hp');
-    await prefs.remove('email');
-    await prefs.remove('password');
-    await prefs.remove('avatar');
-    await prefs.remove('is_admin');
+    final memberId = prefs.getInt('id');
+
+    if (memberId != null) {
+      var settings = Connection.getSettings();
+      var conn = await MySqlConnection.connect(settings);
+
+      // Set `is_loggedin` menjadi 0 di database
+      await conn.query(
+          'UPDATE ai_member SET is_loggedin = 0 WHERE id = ?', [memberId]);
+    }
+
+    // Hapus data dari shared preferences
+    await prefs.clear();
+
+    print('User logged out successfully');
   }
 
   Future<bool> register(
@@ -177,7 +244,7 @@ class AuthService {
         'INSERT INTO ai_member (name, email, no_hp, password) VALUES (?, ?, ?, ?)',
         [name, email, noHp, hashedPassword]);
 
-    // await validateLogin(email, password, otp);
+    await validateLogin(email, password);
 
     print('User registered and logged in successfully');
 
