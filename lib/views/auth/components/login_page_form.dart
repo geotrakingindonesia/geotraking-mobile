@@ -118,6 +118,102 @@ class _LoginPageFormState extends State<LoginPageForm> {
   }
 
   @override
+  // Widget build(BuildContext context) {
+  //   return Theme(
+  //     data: AppTheme.defaultTheme.copyWith(
+  //       inputDecorationTheme: AppTheme.secondaryInputDecorationTheme,
+  //     ),
+  //     child: Padding(
+  //       padding:
+  //           const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+  //       child: Form(
+  //         key: _key,
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             // email
+  //             TextFormField(
+  //               focusNode: widget.emailFocusNode,
+  //               keyboardType: TextInputType.emailAddress,
+  //               textInputAction: TextInputAction.done,
+  //               validator: (value) => Validators.required(value),
+  //               onSaved: (value) => _email = value!,
+  //               style: const TextStyle(color: Colors.black),
+  //               decoration: InputDecoration(
+  //                 labelText: 'Email',
+  //                 prefixIcon: const Icon(Icons.email, color: Colors.black),
+  //                 labelStyle: const TextStyle(color: Colors.black),
+  //                 border: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(20),
+  //                   borderSide: const BorderSide(color: Colors.black),
+  //                 ),
+  //                 focusedBorder: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(20),
+  //                   borderSide: const BorderSide(color: Colors.black),
+  //                 ),
+  //                 filled: true,
+  //               ),
+  //             ),
+  //             // password
+  //             const SizedBox(height: 8),
+  //             TextFormField(
+  //               focusNode: widget.passwordFocusNode,
+  //               keyboardType: TextInputType.text,
+  //               textInputAction: TextInputAction.done,
+  //               obscureText: !isPasswordShown,
+  //               validator: (value) => Validators.required(value),
+  //               onSaved: (value) => _password = value!,
+  //               style: const TextStyle(color: Colors.black),
+  //               decoration: InputDecoration(
+  //                 labelText: 'Password',
+  //                 prefixIcon:
+  //                     const Icon(Icons.password_rounded, color: Colors.black),
+  //                 labelStyle: const TextStyle(color: Colors.black),
+  //                 border: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(8.0),
+  //                   borderSide: BorderSide.none,
+  //                 ),
+  //                 focusedBorder: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(20),
+  //                   borderSide: const BorderSide(color: Colors.black),
+  //                 ),
+  //                 suffixIcon: Material(
+  //                   color: Colors.transparent,
+  //                   child: IconButton(
+  //                     onPressed: onPassShowClicked,
+  //                     icon: SvgPicture.asset(
+  //                       AppIcons.eye,
+  //                       width: 24,
+  //                       color: Colors.black,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               height: 5,
+  //             ),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 if (_errorMessage != null) ...[
+  //                   Text(
+  //                     'Gagal login.',
+  //                     style: const TextStyle(color: Colors.red),
+  //                   ),
+  //                 ] else ...[
+  //                   Spacer(),
+  //                 ],
+  //               ],
+  //             ),
+  //             LoginButton(onPressed: onLogin),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget build(BuildContext context) {
     return Theme(
       data: AppTheme.defaultTheme.copyWith(
@@ -131,7 +227,7 @@ class _LoginPageFormState extends State<LoginPageForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // email
+              // Email Field
               TextFormField(
                 focusNode: widget.emailFocusNode,
                 keyboardType: TextInputType.emailAddress,
@@ -154,7 +250,7 @@ class _LoginPageFormState extends State<LoginPageForm> {
                   filled: true,
                 ),
               ),
-              // password
+              // Password Field
               const SizedBox(height: 8),
               TextFormField(
                 focusNode: widget.passwordFocusNode,
@@ -190,9 +286,7 @@ class _LoginPageFormState extends State<LoginPageForm> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 5,
-              ),
+              // OTP Input Field
               if (_isOtpSent) ...[
                 const SizedBox(height: 8),
                 TextFormField(
@@ -200,6 +294,7 @@ class _LoginPageFormState extends State<LoginPageForm> {
                   textInputAction: TextInputAction.done,
                   validator: (value) => Validators.required(value),
                   onSaved: (value) => _otp = value!,
+                  style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     labelText: 'Enter OTP',
                     prefixIcon: const Icon(Icons.security, color: Colors.black),
@@ -215,30 +310,15 @@ class _LoginPageFormState extends State<LoginPageForm> {
                     filled: true,
                   ),
                 ),
-                SizedBox(height: 5),
-                if (_errorMessage != null) ...[
-                  Text(
-                    _errorMessage!,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ],
-                LoginButton(onPressed: onLogin),
-                // ],
               ],
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     if (_errorMessage != null) ...[
-              //       Text(
-              //         'Gagal login.',
-              //         style: const TextStyle(color: Colors.red),
-              //       ),
-              //     ] else ...[
-              //       Spacer(),
-              //     ],
-              //   ],
-              // ),
-              // LoginButton(onPressed: onLogin),
+              SizedBox(height: 5),
+              if (_errorMessage != null) ...[
+                Text(
+                  _errorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ],
+              LoginButton(onPressed: onLogin),
             ],
           ),
         ),
