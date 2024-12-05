@@ -319,7 +319,7 @@ class VesselService {
         LEFT JOIN ai_mobile_type mt ON m.type_id = mt.id
         LEFT JOIN ai_customer_data c ON m.customer = c.id
       WHERE 
-        m.type_id IN (1, 2, 4, 5, 15)
+        m.type_id IN (1, 2, 4, 5, 15, 19, 20)
       ORDER BY 
         tgl_aktifasi DESC
     ''');

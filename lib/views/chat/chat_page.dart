@@ -407,17 +407,17 @@ class _ChatPageState extends State<ChatPage> {
               ),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatDetail(
-                        vesselName: '',
-                        // senderId: _user!.isAdmin,
-                        senderId: _user!.id,
-                        mobileId: '',
-                      ),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => ChatDetail(
+                  //       vesselName: '',
+                  //       // senderId: _user!.isAdmin,
+                  //       senderId: _user!.id,
+                  //       mobileId: '',
+                  //     ),
+                  //   ),
+                  // );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
