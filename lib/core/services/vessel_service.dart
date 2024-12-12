@@ -319,9 +319,9 @@ class VesselService {
         LEFT JOIN ai_mobile_type mt ON m.type_id = mt.id
         LEFT JOIN ai_customer_data c ON m.customer = c.id
       WHERE 
-        m.type_id IN (1, 2, 4, 5, 15, 19, 20)
+        m.type_id IN (1, 2, 4, 5, 15, 19, 20) AND m.timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
       ORDER BY 
-        tgl_aktifasi DESC
+        m.timestamp DESC
     ''');
 
       List<Map<String, dynamic>> dataKapalGeosatList = [];
@@ -1303,7 +1303,7 @@ class VesselService {
       var result = await conn.query('''
       SELECT COUNT(*) AS count 
       FROM ai_mobile 
-      WHERE type_id IN (1, 2, 4, 5, 15, 19, 20)
+      WHERE type_id IN (1, 2, 4, 5, 15, 19, 20) AND timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
     ''');
       count = result.first['count'] as int;
     }

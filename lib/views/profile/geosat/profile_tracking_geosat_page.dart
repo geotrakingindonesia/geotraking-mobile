@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:geotraking/core/components/app_back_button.dart';
 import 'package:geotraking/core/components/card_vessel_color.dart';
@@ -27,7 +28,7 @@ import 'package:geotraking/core/services/vessel_service.dart';
 import 'package:geotraking/core/services/wpp_service.dart';
 import 'package:geotraking/views/profile/components/modal/airtime/airtime_data_modal.dart';
 import 'package:geotraking/views/profile/components/modal/traking/traking_data_modal.dart';
-import 'package:geotraking/views/profile/geosat/components/modal/vessel/vessel_data_geosat_modal.dart';
+// import 'package:geotraking/views/profile/geosat/components/modal/vessel/vessel_data_geosat_modal.dart';
 import 'package:geotraking/views/profile/geosat/components/modal/vessel/vessel_geosat_info_widget.dart';
 import 'package:info_popup/info_popup.dart';
 import 'package:latlong2/latlong.dart';
@@ -441,6 +442,7 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50.0),
           child: ClipRRect(
@@ -506,7 +508,7 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
                   urlTemplate: MapConfig.getUrlTemplate(_selectedMapProvider),
                   userAgentPackageName: 'com.example.app',
                 ),
-                PolygonLayer<Object>(polygons: _isShowWpp ? _polygons : []),
+                // PolygonLayer<Object>(polygons: _isShowWpp ? _polygons : []),
                 MarkerLayer(
                   markers: _isShowBasarnas
                       ? _basarnasList.map((basarnas) {
@@ -555,98 +557,238 @@ class _ProfileTrackingGeosatPageState extends State<ProfileTrackingGeosatPage> {
                 //   CircleLayer(circles: _circleMarkers),
                 // ],
                 // if (_currentZoom >= 7) ...[
-                MarkerLayer(
-                  markers: _kapalGeosatList.map((kapalGeosat) {
-                    bool isSelected = _selectedKapal == kapalGeosat;
+                Stack(
+                  children: [
+                    PolygonLayer<Object>(
+                      polygons: _isShowWpp ? _polygons : [],
+                    ),
+                    MarkerClusterLayerWidget(
+                      options: MarkerClusterLayerOptions(
+                        maxClusterRadius: 45,
+                        size: const Size(40, 40),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(50),
+                        maxZoom: 15,
+                        markers: _kapalGeosatList.map((kapalGeosat) {
+                          bool isSelected = _selectedKapal == kapalGeosat;
 
-                    LatLng kapalPosition = LatLng(
-                      double.parse(kapalGeosat['lat']),
-                      double.parse(kapalGeosat['lon']),
-                    );
+                          LatLng kapalPosition = LatLng(
+                            double.parse(kapalGeosat['lat']),
+                            double.parse(kapalGeosat['lon']),
+                          );
 
-                    String? nameOfWpp;
+                          String? nameOfWpp;
 
-                    for (var polygon in _polygons) {
-                      if (isPointInPolygon(kapalPosition, polygon.points)) {
-                        nameOfWpp = polygon.label;
-                        print(
-                            "Kapal ${kapalGeosat['nama_kapal']} berada dalam WPP: ${polygon.label}");
-                        break;
-                      }
-                    }
+                          for (var polygon in _polygons) {
+                            if (isPointInPolygon(
+                                kapalPosition, polygon.points)) {
+                              nameOfWpp = polygon.label;
+                              print(
+                                  "Kapal ${kapalGeosat['nama_kapal']} berada dalam WPP: ${polygon.label}");
+                              break;
+                            }
+                          }
 
-                    return Marker(
-                      width: 30,
-                      height: 30,
-                      point: LatLng(double.parse(kapalGeosat['lat']),
-                          double.parse(kapalGeosat['lon'])),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedKapal = kapalGeosat;
-                          });
-                        },
-                        child: Stack(
-                          children: [
-                            MarkerImageWidget(
-                              timestamp: kapalGeosat['tgl_aktifasi'],
-                              heading: kapalGeosat['heading'],
-                            ),
-                            if (isSelected)
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                top: 0,
-                                bottom: 0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.red, width: 2),
-                                    borderRadius: BorderRadius.circular(15),
+                          return Marker(
+                            width: 30,
+                            height: 30,
+                            point: LatLng(double.parse(kapalGeosat['lat']),
+                                double.parse(kapalGeosat['lon'])),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedKapal = kapalGeosat;
+                                });
+                              },
+                              child: Stack(
+                                children: [
+                                  MarkerImageWidget(
+                                    timestamp: kapalGeosat['tgl_aktifasi'],
+                                    heading: kapalGeosat['heading'],
                                   ),
-                                ),
+                                  if (isSelected)
+                                    Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      top: 0,
+                                      bottom: 0,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.red, width: 2),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                      ),
+                                    ),
+                                  if (isSelected)
+                                    InfoPopupWidget(
+                                      child: MarkerImageWidget(
+                                        timestamp: kapalGeosat['tgl_aktifasi'],
+                                        heading: kapalGeosat['heading'],
+                                      ),
+                                      customContent: () =>
+                                          VesselGeosatInfoWidget(
+                                        vesselData: kapalGeosat,
+                                        selectedTimeZonePreferences:
+                                            _selectedTimezonePreferences,
+                                        selectedSpeedPreferences:
+                                            _selectedSpeedPreferences,
+                                        selectedCoordinatePreferences:
+                                            _selectedCoordinatePreferences,
+                                        nameOfWpp: nameOfWpp,
+                                      ),
+                                      dismissTriggerBehavior:
+                                          PopupDismissTriggerBehavior.onTapArea,
+                                      areaBackgroundColor: Colors.transparent,
+                                      indicatorOffset: Offset.zero,
+                                      contentOffset: Offset.zero,
+                                      onControllerCreated: (controller) {
+                                        print('Info Popup Controller Created');
+                                      },
+                                      onAreaPressed:
+                                          (InfoPopupController controller) {
+                                        print('Area Pressed');
+                                      },
+                                      infoPopupDismissed: () {
+                                        print('Info Popup Dismissed');
+                                      },
+                                      onLayoutMounted: (Size size) {
+                                        print('Info Popup Layout Mounted');
+                                      },
+                                    ),
+                                ],
                               ),
-                            if (isSelected)
-                              InfoPopupWidget(
-                                child: MarkerImageWidget(
-                                  timestamp: kapalGeosat['tgl_aktifasi'],
-                                  heading: kapalGeosat['heading'],
+                            ),
+                          );
+                        }).toList(),
+                        builder: (context, markers) {
+                          Color color;
+                          if (markers.length <= 10) {
+                            color = Color.fromARGB(205, 127, 183, 126);
+                          } else if (markers.length <= 100) {
+                            color = Color.fromARGB(205, 255, 222, 77);
+                          } else {
+                            color = Color.fromARGB(205, 243, 182, 100);
+                          }
+
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: color,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: color.withOpacity(0.5),
+                                  spreadRadius: 4,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 0),
                                 ),
-                                customContent: () => VesselGeosatInfoWidget(
-                                  vesselData: kapalGeosat,
-                                  selectedTimeZonePreferences:
-                                      _selectedTimezonePreferences,
-                                  selectedSpeedPreferences:
-                                      _selectedSpeedPreferences,
-                                  selectedCoordinatePreferences:
-                                      _selectedCoordinatePreferences,
-                                  nameOfWpp: nameOfWpp,
-                                ),
-                                dismissTriggerBehavior:
-                                    PopupDismissTriggerBehavior.onTapArea,
-                                areaBackgroundColor: Colors.transparent,
-                                indicatorOffset: Offset.zero,
-                                contentOffset: Offset.zero,
-                                onControllerCreated: (controller) {
-                                  print('Info Popup Controller Created');
-                                },
-                                onAreaPressed:
-                                    (InfoPopupController controller) {
-                                  print('Area Pressed');
-                                },
-                                infoPopupDismissed: () {
-                                  print('Info Popup Dismissed');
-                                },
-                                onLayoutMounted: (Size size) {
-                                  print('Info Popup Layout Mounted');
-                                },
+                              ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                markers.length.toString(),
+                                style: const TextStyle(color: Colors.black54),
                               ),
-                          ],
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  }).toList(),
+                    ),
+                  ],
                 ),
+                // MarkerLayer(
+                //   markers: _kapalGeosatList.map((kapalGeosat) {
+                //     bool isSelected = _selectedKapal == kapalGeosat;
+
+                //     LatLng kapalPosition = LatLng(
+                //       double.parse(kapalGeosat['lat']),
+                //       double.parse(kapalGeosat['lon']),
+                //     );
+
+                //     String? nameOfWpp;
+
+                //     for (var polygon in _polygons) {
+                //       if (isPointInPolygon(kapalPosition, polygon.points)) {
+                //         nameOfWpp = polygon.label;
+                //         print(
+                //             "Kapal ${kapalGeosat['nama_kapal']} berada dalam WPP: ${polygon.label}");
+                //         break;
+                //       }
+                //     }
+
+                //     return Marker(
+                //       width: 30,
+                //       height: 30,
+                //       point: LatLng(double.parse(kapalGeosat['lat']),
+                //           double.parse(kapalGeosat['lon'])),
+                //       child: GestureDetector(
+                //         onTap: () {
+                //           setState(() {
+                //             _selectedKapal = kapalGeosat;
+                //           });
+                //         },
+                //         child: Stack(
+                //           children: [
+                //             MarkerImageWidget(
+                //               timestamp: kapalGeosat['tgl_aktifasi'],
+                //               heading: kapalGeosat['heading'],
+                //             ),
+                //             if (isSelected)
+                //               Positioned(
+                //                 left: 0,
+                //                 right: 0,
+                //                 top: 0,
+                //                 bottom: 0,
+                //                 child: Container(
+                //                   decoration: BoxDecoration(
+                //                     border:
+                //                         Border.all(color: Colors.red, width: 2),
+                //                     borderRadius: BorderRadius.circular(15),
+                //                   ),
+                //                 ),
+                //               ),
+                //             if (isSelected)
+                //               InfoPopupWidget(
+                //                 child: MarkerImageWidget(
+                //                   timestamp: kapalGeosat['tgl_aktifasi'],
+                //                   heading: kapalGeosat['heading'],
+                //                 ),
+                //                 customContent: () => VesselGeosatInfoWidget(
+                //                   vesselData: kapalGeosat,
+                //                   selectedTimeZonePreferences:
+                //                       _selectedTimezonePreferences,
+                //                   selectedSpeedPreferences:
+                //                       _selectedSpeedPreferences,
+                //                   selectedCoordinatePreferences:
+                //                       _selectedCoordinatePreferences,
+                //                   nameOfWpp: nameOfWpp,
+                //                 ),
+                //                 dismissTriggerBehavior:
+                //                     PopupDismissTriggerBehavior.onTapArea,
+                //                 areaBackgroundColor: Colors.transparent,
+                //                 indicatorOffset: Offset.zero,
+                //                 contentOffset: Offset.zero,
+                //                 onControllerCreated: (controller) {
+                //                   print('Info Popup Controller Created');
+                //                 },
+                //                 onAreaPressed:
+                //                     (InfoPopupController controller) {
+                //                   print('Area Pressed');
+                //                 },
+                //                 infoPopupDismissed: () {
+                //                   print('Info Popup Dismissed');
+                //                 },
+                //                 onLayoutMounted: (Size size) {
+                //                   print('Info Popup Layout Mounted');
+                //                 },
+                //               ),
+                //           ],
+                //         ),
+                //       ),
+                //     );
+                //   }).toList(),
+                // ),
                 // ],
                 // if (_isShowNamaKapal)
                 //   MarkerLayer(

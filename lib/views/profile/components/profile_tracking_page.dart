@@ -458,123 +458,139 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                   urlTemplate: MapConfig.getUrlTemplate(_selectedMapProvider),
                   userAgentPackageName: 'com.example.app',
                 ),
-                MarkerClusterLayerWidget(
-                  options: MarkerClusterLayerOptions(
-                    maxClusterRadius: 45,
-                    size: const Size(40, 40),
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(50),
-                    maxZoom: 15,
-                    markers: _kapalMemberList.map((kapalMember) {
-                      bool isSelected = _selectedKapalMember == kapalMember;
+                Stack(
+                  children: [
+                    PolygonLayer<Object>(
+                      polygons: _isShowWpp ? _polygons : [],
+                    ),
+                    MarkerClusterLayerWidget(
+                      options: MarkerClusterLayerOptions(
+                        maxClusterRadius: 45,
+                        size: const Size(40, 40),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(50),
+                        maxZoom: 15,
+                        markers: _kapalMemberList.map((kapalMember) {
+                          bool isSelected = _selectedKapalMember == kapalMember;
 
-                      LatLng kapalPosition = LatLng(
-                        double.parse(kapalMember['lat']),
-                        double.parse(kapalMember['lon']),
-                      );
+                          LatLng kapalPosition = LatLng(
+                            double.parse(kapalMember['lat']),
+                            double.parse(kapalMember['lon']),
+                          );
 
-                      String? nameOfWpp;
+                          String? nameOfWpp;
 
-                      for (var polygon in _polygons) {
-                        if (isPointInPolygon(kapalPosition, polygon.points)) {
-                          nameOfWpp = polygon.label;
-                          print(
-                              "Kapal ${kapalMember['nama_kapal']} berada dalam WPP: ${polygon.label}");
-                          break;
-                        }
-                      }
+                          for (var polygon in _polygons) {
+                            if (isPointInPolygon(
+                                kapalPosition, polygon.points)) {
+                              nameOfWpp = polygon.label;
+                              print(
+                                  "Kapal ${kapalMember['nama_kapal']} berada dalam WPP: ${polygon.label}");
+                              break;
+                            }
+                          }
 
-                      return Marker(
-                        width: 30,
-                        height: 30,
-                        point: LatLng(
-                          double.parse(kapalMember['lat']),
-                          double.parse(kapalMember['lon']),
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedKapalMember = kapalMember;
-                            });
-                          },
-                          child: Stack(
-                            children: [
-                              MarkerImageWidget(
-                                timestamp: kapalMember['timestamp'],
-                                heading: kapalMember['heading'],
-                              ),
-                              if (isSelected)
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.red, width: 2),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                              if (isSelected)
-                                InfoPopupWidget(
-                                  child: MarkerImageWidget(
+                          return Marker(
+                            width: 30,
+                            height: 30,
+                            point: LatLng(
+                              double.parse(kapalMember['lat']),
+                              double.parse(kapalMember['lon']),
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedKapalMember = kapalMember;
+                                });
+                              },
+                              child: Stack(
+                                children: [
+                                  MarkerImageWidget(
                                     timestamp: kapalMember['timestamp'],
                                     heading: kapalMember['heading'],
                                   ),
-                                  customContent: () => VesselInfoWidget(
-                                    vesselData: kapalMember,
-                                    selectedTimeZonePreferences:
-                                        _selectedTimezonePreferences,
-                                    selectedSpeedPreferences:
-                                        _selectedSpeedPreferences,
-                                    selectedCoordinatePreferences:
-                                        _selectedCoordinatePreferences,
-                                    nameOfWpp: nameOfWpp,
-                                  ),
-                                  dismissTriggerBehavior:
-                                      PopupDismissTriggerBehavior.onTapArea,
-                                  areaBackgroundColor: Colors.transparent,
-                                  indicatorOffset: Offset.zero,
-                                  contentOffset: Offset.zero,
-                                  onControllerCreated: (controller) {
-                                    print('Info Popup Controller Created');
-                                  },
-                                  onAreaPressed:
-                                      (InfoPopupController controller) {
-                                    print('Area Pressed');
-                                  },
-                                  infoPopupDismissed: () {
-                                    print('Info Popup Dismissed');
-                                  },
-                                  onLayoutMounted: (Size size) {
-                                    print('Info Popup Layout Mounted');
-                                  },
-                                ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    builder: (context, markers) {
-                      Color color;
-                      if (markers.length <= 10) {
-                        color = Color.fromARGB(255, 127, 183, 126);
-                      } else if (markers.length <= 100) {
-                        color = Color.fromARGB(255, 255, 222, 77);
-                      } else {
-                        color = Color.fromARGB(255, 243, 182, 100);
-                      }
+                                  if (isSelected)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.red, width: 2),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                  if (isSelected)
+                                    InfoPopupWidget(
+                                      child: MarkerImageWidget(
+                                        timestamp: kapalMember['timestamp'],
+                                        heading: kapalMember['heading'],
+                                      ),
+                                      customContent: () => VesselInfoWidget(
+                                        vesselData: kapalMember,
+                                        selectedTimeZonePreferences:
+                                            _selectedTimezonePreferences,
+                                        selectedSpeedPreferences:
+                                            _selectedSpeedPreferences,
+                                        selectedCoordinatePreferences:
+                                            _selectedCoordinatePreferences,
+                                        nameOfWpp: nameOfWpp,
+                                      ),
+                                      dismissTriggerBehavior:
+                                          PopupDismissTriggerBehavior.onTapArea,
+                                      areaBackgroundColor: Colors.transparent,
+                                      indicatorOffset: Offset.zero,
+                                      contentOffset: Offset.zero,
+                                      onControllerCreated: (controller) {
+                                        print('Info Popup Controller Created');
+                                      },
+                                      onAreaPressed:
+                                          (InfoPopupController controller) {
+                                        print('Area Pressed');
+                                      },
+                                      infoPopupDismissed: () {
+                                        print('Info Popup Dismissed');
+                                      },
+                                      onLayoutMounted: (Size size) {
+                                        print('Info Popup Layout Mounted');
+                                      },
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        builder: (context, markers) {
+                          Color color;
+                          if (markers.length <= 10) {
+                            color = Color.fromARGB(205, 127, 183, 126);
+                          } else if (markers.length <= 100) {
+                            color = Color.fromARGB(205, 255, 222, 77);
+                          } else {
+                            color = Color.fromARGB(205, 243, 182, 100);
+                          }
 
-                      return Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            // color: Color.fromARGB(255, 243, 182, 100)),
-                            color: color),
-                        child: Center(
-                          child: Text(
-                            markers.length.toString(),
-                            style: const TextStyle(color: Colors.black54),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: color,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: color.withOpacity(0.5),
+                                  spreadRadius: 4,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 0),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                markers.length.toString(),
+                                style: const TextStyle(color: Colors.black54),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 PolylineLayer<Object>(
                   polylines: _isShowBasarnas ? _polylinesBasarnas : [],
@@ -583,9 +599,9 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                   polylines:
                       _isShowPortPelabuhan ? _polylinesPortPelabuhan : [],
                 ),
-                PolygonLayer<Object>(
-                  polygons: _isShowWpp ? _polygons : [],
-                ),
+                // PolygonLayer<Object>(
+                //   polygons: _isShowWpp ? _polygons : [],
+                // ),
                 MarkerLayer(
                   markers: _isShowBasarnas
                       ? _basarnasList.map((basarnas) {

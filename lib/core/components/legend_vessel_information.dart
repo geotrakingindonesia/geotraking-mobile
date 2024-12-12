@@ -68,7 +68,7 @@
 //                       ),
 //                     ],
 //                   ),
-                  
+
 //                   SizedBox(width: 8),
 //                   Column(
 //                     children: [
@@ -118,7 +118,6 @@
 //   }
 // }
 
-
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
@@ -136,7 +135,7 @@ class LegendVesselInformation extends StatelessWidget {
       child: Container(
         // Remove the fixed width and use padding and constraints to make the container fit the content
         decoration: const BoxDecoration(
-          color: Colors.black,
+          color: Colors.black45,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.all(
             Radius.circular(10),
@@ -151,10 +150,16 @@ class LegendVesselInformation extends StatelessWidget {
               children: [
                 Row(
                   children: [
+                    // Container(
+                    //   width: 10,
+                    //   height: 10,
+                    //   color: Color.fromARGB(255, 127, 183, 126),
+                    // ),
                     Container(
-                      width: 10,
-                      height: 10,
-                      color: Color.fromARGB(255, 127, 183, 126),
+                      width: 20,
+                      height: 20,
+                      child: Image.asset('assets/images/kapal-hijau.png',
+                          fit: BoxFit.contain),
                     ),
                     SizedBox(width: 3),
                     Text(
@@ -168,10 +173,16 @@ class LegendVesselInformation extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    // Container(
+                    //   width: 10,
+                    //   height: 10,
+                    //   color: Color.fromARGB(255, 255, 222, 77),
+                    // ),
                     Container(
-                      width: 10,
-                      height: 10,
-                      color: Color.fromARGB(255, 255, 222, 77),
+                      width: 20,
+                      height: 20,
+                      child: Image.asset('assets/images/kapal-kuning.png',
+                          fit: BoxFit.contain),
                     ),
                     SizedBox(width: 3),
                     Text(
@@ -185,15 +196,21 @@ class LegendVesselInformation extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 5),
             Column(
               children: [
                 Row(
                   children: [
+                    // Container(
+                    //   width: 10,
+                    //   height: 10,
+                    //   color: Color.fromARGB(255, 243, 182, 100),
+                    // ),
                     Container(
-                      width: 10,
-                      height: 10,
-                      color: Color.fromARGB(255, 243, 182, 100),
+                      width: 20,
+                      height: 20,
+                      child: Image.asset('assets/images/kapal-orange.png',
+                          fit: BoxFit.contain),
                     ),
                     SizedBox(width: 3),
                     Text(
@@ -207,10 +224,16 @@ class LegendVesselInformation extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    // Container(
+                    //   width: 10,
+                    //   height: 10,
+                    //   color: Color.fromARGB(255, 117, 134, 148),
+                    // ),
                     Container(
-                      width: 10,
-                      height: 10,
-                      color: Color.fromARGB(255, 117, 134, 148),
+                      width: 20,
+                      height: 20,
+                      child: Image.asset('assets/images/kapal-abu.png',
+                          fit: BoxFit.contain),
                     ),
                     SizedBox(width: 3),
                     Text(
