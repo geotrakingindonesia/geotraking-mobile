@@ -2,6 +2,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geotraking/core/components/card_vessel_color.dart';
 import 'package:geotraking/core/components/legend_vessel_information.dart';
@@ -102,7 +103,59 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
     super.initState();
     _fetchData();
     _loadPreferences();
+    // _generateClusterPolygons();
   }
+
+  // List<Marker> _createClusterMarkers(List<Map<String, dynamic>> kapalMembers) {
+  //   final clusterMarkers = <Marker>[];
+
+  //   // Buat sebuah cluster untuk setiap grup kapal yang berdekatan
+  //   for (var i = 0; i < kapalMembers.length; i++) {
+  //     final kapalMember = kapalMembers[i];
+  //     final lat = double.parse(kapalMember['lat']);
+  //     final lon = double.parse(kapalMember['lon']);
+
+  //     // Cari kapal lain yang berdekatan dengan kapal ini
+  //     final nearbyKapalMembers = kapalMembers.where((otherKapalMember) {
+  //       final otherLat = double.parse(otherKapalMember['lat']);
+  //       final otherLon = double.parse(otherKapalMember['lon']);
+  //       return (otherLat - lat).abs() < 0.01 && (otherLon - lon).abs() < 0.01;
+  //     }).toList();
+
+  //     // Jika ada kapal lain yang berdekatan, buat sebuah cluster
+  //     if (nearbyKapalMembers.length > 1) {
+  //       final clusterMarker = Marker(
+  //         point: LatLng(lat, lon),
+  //         child: Container(
+  //           padding: const EdgeInsets.all(5),
+  //           decoration: BoxDecoration(
+  //             color: Colors.orange,
+  //             borderRadius: BorderRadius.circular(15),
+  //           ),
+  //           child: Center(
+  //             child: Text(
+  //               '${nearbyKapalMembers.length} kapal',
+  //               style: TextStyle(color: Colors.white),
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //       clusterMarkers.add(clusterMarker);
+  //     } else {
+  //       // Jika tidak ada kapal lain yang berdekatan, buat sebuah marker biasa
+  //       final marker = Marker(
+  //         point: LatLng(lat, lon),
+  //         child: MarkerImageWidget(
+  //           timestamp: kapalMember['timestamp'],
+  //           heading: kapalMember['heading'],
+  //         ),
+  //       );
+  //       clusterMarkers.add(marker);
+  //     }
+  //   }
+
+  //   return clusterMarkers;
+  // }
 
   Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
@@ -405,6 +458,114 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                   urlTemplate: MapConfig.getUrlTemplate(_selectedMapProvider),
                   userAgentPackageName: 'com.example.app',
                 ),
+                MarkerClusterLayerWidget(
+                  options: MarkerClusterLayerOptions(
+                    maxClusterRadius: 45,
+                    size: const Size(40, 40),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(50),
+                    maxZoom: 15,
+                    markers: _kapalMemberList.map((kapalMember) {
+                      bool isSelected = _selectedKapalMember == kapalMember;
+
+                      LatLng kapalPosition = LatLng(
+                        double.parse(kapalMember['lat']),
+                        double.parse(kapalMember['lon']),
+                      );
+
+                      String? nameOfWpp;
+
+                      for (var polygon in _polygons) {
+                        if (isPointInPolygon(kapalPosition, polygon.points)) {
+                          nameOfWpp = polygon.label;
+                          print(
+                              "Kapal ${kapalMember['nama_kapal']} berada dalam WPP: ${polygon.label}");
+                          break;
+                        }
+                      }
+
+                      return Marker(
+                        width: 30,
+                        height: 30,
+                        point: LatLng(
+                          double.parse(kapalMember['lat']),
+                          double.parse(kapalMember['lon']),
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedKapalMember = kapalMember;
+                            });
+                          },
+                          child: Stack(
+                            children: [
+                              MarkerImageWidget(
+                                timestamp: kapalMember['timestamp'],
+                                heading: kapalMember['heading'],
+                              ),
+                              if (isSelected)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.red, width: 2),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                              if (isSelected)
+                                InfoPopupWidget(
+                                  child: MarkerImageWidget(
+                                    timestamp: kapalMember['timestamp'],
+                                    heading: kapalMember['heading'],
+                                  ),
+                                  customContent: () => VesselInfoWidget(
+                                    vesselData: kapalMember,
+                                    selectedTimeZonePreferences:
+                                        _selectedTimezonePreferences,
+                                    selectedSpeedPreferences:
+                                        _selectedSpeedPreferences,
+                                    selectedCoordinatePreferences:
+                                        _selectedCoordinatePreferences,
+                                    nameOfWpp: nameOfWpp,
+                                  ),
+                                  dismissTriggerBehavior:
+                                      PopupDismissTriggerBehavior.onTapArea,
+                                  areaBackgroundColor: Colors.transparent,
+                                  indicatorOffset: Offset.zero,
+                                  contentOffset: Offset.zero,
+                                  onControllerCreated: (controller) {
+                                    print('Info Popup Controller Created');
+                                  },
+                                  onAreaPressed:
+                                      (InfoPopupController controller) {
+                                    print('Area Pressed');
+                                  },
+                                  infoPopupDismissed: () {
+                                    print('Info Popup Dismissed');
+                                  },
+                                  onLayoutMounted: (Size size) {
+                                    print('Info Popup Layout Mounted');
+                                  },
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    builder: (context, markers) {
+                      return Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.blue),
+                        child: Center(
+                          child: Text(
+                            markers.length.toString(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
                 PolylineLayer<Object>(
                   polylines: _isShowBasarnas ? _polylinesBasarnas : [],
                 ),
@@ -459,94 +620,94 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                         }).toList()
                       : [],
                 ),
-                MarkerLayer(
-                  markers: _kapalMemberList.map((kapalMember) {
-                    bool isSelected = _selectedKapalMember == kapalMember;
+                // MarkerLayer(
+                //   markers: _kapalMemberList.map((kapalMember) {
+                //     bool isSelected = _selectedKapalMember == kapalMember;
 
-                    LatLng kapalPosition = LatLng(
-                      double.parse(kapalMember['lat']),
-                      double.parse(kapalMember['lon']),
-                    );
+                //     LatLng kapalPosition = LatLng(
+                //       double.parse(kapalMember['lat']),
+                //       double.parse(kapalMember['lon']),
+                //     );
 
-                    String? nameOfWpp;
+                //     String? nameOfWpp;
 
-                    for (var polygon in _polygons) {
-                      if (isPointInPolygon(kapalPosition, polygon.points)) {
-                        nameOfWpp = polygon.label;
-                        print(
-                            "Kapal ${kapalMember['nama_kapal']} berada dalam WPP: ${polygon.label}");
-                        break;
-                      }
-                    }
+                //     for (var polygon in _polygons) {
+                //       if (isPointInPolygon(kapalPosition, polygon.points)) {
+                //         nameOfWpp = polygon.label;
+                //         print(
+                //             "Kapal ${kapalMember['nama_kapal']} berada dalam WPP: ${polygon.label}");
+                //         break;
+                //       }
+                //     }
 
-                    return Marker(
-                      width: 30,
-                      height: 30,
-                      point: LatLng(
-                        double.parse(kapalMember['lat']),
-                        double.parse(kapalMember['lon']),
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedKapalMember = kapalMember;
-                          });
-                        },
-                        child: Stack(
-                          children: [
-                            MarkerImageWidget(
-                              timestamp: kapalMember['timestamp'],
-                              heading: kapalMember['heading'],
-                            ),
-                            if (isSelected)
-                              Container(
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.red, width: 2),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                              ),
-                            if (isSelected)
-                              InfoPopupWidget(
-                                child: MarkerImageWidget(
-                                  timestamp: kapalMember['timestamp'],
-                                  heading: kapalMember['heading'],
-                                ),
-                                customContent: () => VesselInfoWidget(
-                                  vesselData: kapalMember,
-                                  selectedTimeZonePreferences:
-                                      _selectedTimezonePreferences,
-                                  selectedSpeedPreferences:
-                                      _selectedSpeedPreferences,
-                                  selectedCoordinatePreferences:
-                                      _selectedCoordinatePreferences,
-                                  nameOfWpp: nameOfWpp,
-                                ),
-                                dismissTriggerBehavior:
-                                    PopupDismissTriggerBehavior.onTapArea,
-                                areaBackgroundColor: Colors.transparent,
-                                indicatorOffset: Offset.zero,
-                                contentOffset: Offset.zero,
-                                onControllerCreated: (controller) {
-                                  print('Info Popup Controller Created');
-                                },
-                                onAreaPressed:
-                                    (InfoPopupController controller) {
-                                  print('Area Pressed');
-                                },
-                                infoPopupDismissed: () {
-                                  print('Info Popup Dismissed');
-                                },
-                                onLayoutMounted: (Size size) {
-                                  print('Info Popup Layout Mounted');
-                                },
-                              ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
+                //     return Marker(
+                //       width: 30,
+                //       height: 30,
+                //       point: LatLng(
+                //         double.parse(kapalMember['lat']),
+                //         double.parse(kapalMember['lon']),
+                //       ),
+                //       child: GestureDetector(
+                //         onTap: () {
+                //           setState(() {
+                //             _selectedKapalMember = kapalMember;
+                //           });
+                //         },
+                //         child: Stack(
+                //           children: [
+                //             MarkerImageWidget(
+                //               timestamp: kapalMember['timestamp'],
+                //               heading: kapalMember['heading'],
+                //             ),
+                //             if (isSelected)
+                //               Container(
+                //                 decoration: BoxDecoration(
+                //                   border:
+                //                       Border.all(color: Colors.red, width: 2),
+                //                   borderRadius: BorderRadius.circular(15),
+                //                 ),
+                //               ),
+                //             if (isSelected)
+                //               InfoPopupWidget(
+                //                 child: MarkerImageWidget(
+                //                   timestamp: kapalMember['timestamp'],
+                //                   heading: kapalMember['heading'],
+                //                 ),
+                //                 customContent: () => VesselInfoWidget(
+                //                   vesselData: kapalMember,
+                //                   selectedTimeZonePreferences:
+                //                       _selectedTimezonePreferences,
+                //                   selectedSpeedPreferences:
+                //                       _selectedSpeedPreferences,
+                //                   selectedCoordinatePreferences:
+                //                       _selectedCoordinatePreferences,
+                //                   nameOfWpp: nameOfWpp,
+                //                 ),
+                //                 dismissTriggerBehavior:
+                //                     PopupDismissTriggerBehavior.onTapArea,
+                //                 areaBackgroundColor: Colors.transparent,
+                //                 indicatorOffset: Offset.zero,
+                //                 contentOffset: Offset.zero,
+                //                 onControllerCreated: (controller) {
+                //                   print('Info Popup Controller Created');
+                //                 },
+                //                 onAreaPressed:
+                //                     (InfoPopupController controller) {
+                //                   print('Area Pressed');
+                //                 },
+                //                 infoPopupDismissed: () {
+                //                   print('Info Popup Dismissed');
+                //                 },
+                //                 onLayoutMounted: (Size size) {
+                //                   print('Info Popup Layout Mounted');
+                //                 },
+                //               ),
+                //           ],
+                //         ),
+                //       ),
+                //     );
+                //   }).toList(),
+                // ),
                 if (_isShowNamaKapal)
                   MarkerLayer(
                     markers: _kapalMemberList.map((kapalMember) {

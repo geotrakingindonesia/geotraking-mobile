@@ -123,41 +123,6 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
     }
   }
 
-  // _loadDataFromSharedPreferences() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final radioValue = prefs.getInt('radioValue');
-  //   final textFieldValue = prefs.getString('textFieldValue');
-  //   final mobileId = prefs.getString('mobileId');
-
-  //   print('radio ${radioValue}');
-  //   print('text ${textFieldValue}');
-  //   print('mobile Id ${mobileId}');
-  //   print('mobile Id widget ${widget.mobileId}');
-
-  //   if (widget.mobileId != mobileId) {
-  //     setState(() {
-  //       _radioValue = null;
-  //       _textFieldValue = '';
-  //       _textController.text = '';
-  //     });
-  //   } else {
-  //     setState(() {
-  //       if (radioValue != null) {
-  //         _radioValue = radioValue;
-  //       }
-
-  //       if (textFieldValue != null) {
-  //         _textFieldValue = textFieldValue;
-  //         _textController.text = textFieldValue;
-  //       }
-
-  //       if (mobileId != null) {
-  //         widget.mobileId = mobileId;
-  //       }
-  //     });
-  //   }
-  // }
-
   Future<void> _saveDataToSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt('radioValue', _radioValue!);
@@ -249,6 +214,24 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                       Text('Last Day Position'),
                     ],
                   ),
+                  // Row(
+                  //   children: [
+                  //     Radio(
+                  //       value: 3,
+                  //       groupValue: _radioValue,
+                  //       onChanged: (value) {
+                  //         setState(() {
+                  //           _radioValue = value as int;
+                  //           _maxValue = 7;
+                  //           _textController.text = '7';
+                  //           _isRadioButtonSelected = true;
+                  //         });
+                  //         _saveDataToSharedPreferences();
+                  //       },
+                  //     ),
+                  //     Text('Select range date'),
+                  //   ],
+                  // ),
                 ],
               ),
               Row(
@@ -309,27 +292,6 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue.shade400),
                       child: _loading
-                          // ? Row(
-                          //     mainAxisAlignment: MainAxisAlignment.center,
-                          //     children: [
-                          //       Text(
-                          //         'Getting Data',
-                          //         style: Theme.of(context)
-                          //             .textTheme
-                          //             .bodyMedium
-                          //             ?.copyWith(color: Colors.white),
-                          //       ),
-                          //       SizedBox(width: 8),
-                          //       SizedBox(
-                          //         width: 16,
-                          //         height: 16,
-                          //         child: CircularProgressIndicator(
-                          //           color: Colors.white,
-                          //           strokeWidth: 2,
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   )
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -449,27 +411,6 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                             ),
                                           ],
                                         ),
-                                        // Divider(),
-                                        // Row(
-                                        //   mainAxisAlignment:
-                                        //       MainAxisAlignment.spaceBetween,
-                                        //   children: [
-                                        //     Expanded(
-                                        //       child: Text(
-                                        //         'Broadcast date (${_selectedTimezonePreferences})',
-                                        //         style: TextStyle(fontSize: 12),
-                                        //       ),
-                                        //     ),
-                                        //     Expanded(
-                                        //       child: Text(
-                                        //         data['broadcast'] != null
-                                        //             ? '${DateFormat('dd MMM y (HH:mm:ss)').format(DateTime.parse(data['broadcast']!))}'
-                                        //             : '-',
-                                        //         style: TextStyle(fontSize: 12),
-                                        //       ),
-                                        //     ),
-                                        //   ],
-                                        // ),
                                         Divider(),
                                         Row(
                                           mainAxisAlignment:
@@ -510,7 +451,6 @@ class _TrakingDataModalState extends State<TrakingDataModal> {
                                                         'Degrees'
                                                     ? ': ${formatterLatlong.formatLongitude(longitude)}'
                                                     : ': ${longitude.toString()}',
-                                                // ': ${formatterLatlong.formatLongitude(longitude)}',
                                                 style: TextStyle(fontSize: 12),
                                               ),
                                             ),

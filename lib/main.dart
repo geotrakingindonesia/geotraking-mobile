@@ -15,16 +15,16 @@ void main() async {
 
   await SharedPreferences.getInstance();
   
-  // runApp(const MainApp());
-  runApp(
-    DevicePreview(
-      enabled: true,
-      tools: const [
-        ...DevicePreview.defaultTools,
-      ],
-      builder: (context) => const MainApp(),
-    ),
-  );
+  runApp(const MainApp());
+  // runApp(
+  //   DevicePreview(
+  //     enabled: true,
+  //     tools: const [
+  //       ...DevicePreview.defaultTools,
+  //     ],
+  //     builder: (context) => const MainApp(),
+  //   ),
+  // );
 }
 
 class MainApp extends StatelessWidget {

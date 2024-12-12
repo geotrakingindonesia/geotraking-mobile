@@ -364,7 +364,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     borderRadius: AppDefaults.borderRadius,
                                   ),
                                   child: Text(
-                                    'Version 1.0.12',
+                                    'Version 1.0.13',
                                     style: TextStyle(color: Colors.black54),
                                   )),
                               Spacer(),
