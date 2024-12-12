@@ -90,10 +90,12 @@ class _MapToolState extends State<MapTool> {
                   child: IconButton(
                     icon: const Icon(Icons.zoom_out, color: Colors.white),
                     onPressed: () {
-                      widget.mapController.move(
-                        widget.mapController.camera.center,
-                        widget.mapController.camera.zoom - 0.5,
-                      );
+                      if (widget.mapController.camera.zoom > 2) {
+                        widget.mapController.move(
+                          widget.mapController.camera.center,
+                          widget.mapController.camera.zoom - 0.5,
+                        );
+                      }
                     },
                   ),
                 ),

@@ -552,14 +552,24 @@ class _ProfileTrackingPageState extends State<ProfileTrackingPage> {
                       );
                     }).toList(),
                     builder: (context, markers) {
+                      Color color;
+                      if (markers.length <= 10) {
+                        color = Color.fromARGB(255, 127, 183, 126);
+                      } else if (markers.length <= 100) {
+                        color = Color.fromARGB(255, 255, 222, 77);
+                      } else {
+                        color = Color.fromARGB(255, 243, 182, 100);
+                      }
+
                       return Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.blue),
+                            // color: Color.fromARGB(255, 243, 182, 100)),
+                            color: color),
                         child: Center(
                           child: Text(
                             markers.length.toString(),
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.black54),
                           ),
                         ),
                       );
