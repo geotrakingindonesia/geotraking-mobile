@@ -24,7 +24,7 @@ class VesselService {
     print('select time: $timeZonePreferences');
     print('Current User ID: $memberId');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -146,7 +146,7 @@ class VesselService {
   //   final prefs = await SharedPreferences.getInstance();
   //   final timeZonePreferences = prefs.getString('SetTimezonePreferences');
 
-  //   var settings = Connection.getSettings();
+  //   var settings = Connection.getConnect();
   //   var conn = await MySqlConnection.connect(settings);
   //   var results = await conn.query('''
   //     SELECT
@@ -279,7 +279,7 @@ class VesselService {
       print("Debug: Fetching new data from the database.");
 
       // Fetch new data from the database
-      var settings = Connection.getSettings();
+      var settings = Connection.getConnect();
       var conn = await MySqlConnection.connect(settings);
       var results = await conn.query('''
       SELECT 
@@ -296,12 +296,14 @@ class VesselService {
         COALESCE(m.atp_start, '0000-00-00 00:00:00') AS atp_start,
         COALESCE(m.atp_end, '0000-00-00 00:00:00') AS atp_end,
         CASE 
-          WHEN m.lat IS NULL OR m.lat = '' OR m.lat = 'None' THEN 0 
-          ELSE m.lat 
+        WHEN m.lat IS NULL OR m.lat = '' OR m.lat = 'None' THEN 0 
+        WHEN m.lat > 90 THEN m.lon  -- If lat > 90, set lat to lon
+        ELSE m.lat 
         END AS lat,
         CASE 
-          WHEN m.lon IS NULL OR m.lon = '' OR m.lon = 'None' THEN 0 
-          ELSE m.lon 
+            WHEN m.lon IS NULL OR m.lon = '' OR m.lon = 'None' THEN 0 
+            WHEN m.lat > 90 THEN m.lat  -- If lat > 90, set lon to lat
+            ELSE m.lon 
         END AS lon,
         COALESCE(m.heading, 0) AS heading,
         COALESCE(m.speed, 0) AS speed, 
@@ -319,7 +321,7 @@ class VesselService {
         LEFT JOIN ai_mobile_type mt ON m.type_id = mt.id
         LEFT JOIN ai_customer_data c ON m.customer = c.id
       WHERE 
-        m.type_id IN (1, 2, 4, 5, 15, 19, 20) AND m.timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+        m.type_id IN (1, 2, 4, 5, 15, 19, 20)
       ORDER BY 
         m.timestamp DESC
     ''');
@@ -402,7 +404,7 @@ class VesselService {
 
   // fungsi get data kapal(vessel) admin(apn)
   Future<List<Map<String, dynamic>>?> getDataKapalAPN() async {
-    var settings = Connection.getSettingsAPN();
+    var settings = Connection.getConnectAPN();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
       SELECT 
@@ -515,7 +517,7 @@ class VesselService {
 
   // fungsi get list data airtime kapal(vessel)
   Future<List<Map<String, dynamic>>?> getAirtimeKapal(String idfull) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -553,7 +555,7 @@ class VesselService {
   //   final prefs = await SharedPreferences.getInstance();
   //   final timeZonePreferences = prefs.getString('SetTimezonePreferences');
 
-  //   var settings = Connection.getSettings();
+  //   var settings = Connection.getConnect();
   //   var conn = await MySqlConnection.connect(settings);
 
   //   String query = '';
@@ -670,7 +672,7 @@ class VesselService {
     final prefs = await SharedPreferences.getInstance();
     final timeZonePreferences = prefs.getString('SetTimezonePreferences');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     String query = '';
@@ -783,7 +785,7 @@ class VesselService {
 
   // fungsi cari kapal berdasarkan mobile_id
   Future<Map<String, dynamic>?> searchDataKapal(String mobileId) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
       SELECT 
@@ -855,7 +857,7 @@ class VesselService {
   // // fungsi hitung jarak tempuh histori traking kapal
   // Future<List<Map<String, dynamic>>?> getJarakTempuhHistoryTraking(
   //     String mobileId, DateTime? startDate, DateTime? endDate) async {
-  //   var settings = Connection.getSettings();
+  //   var settings = Connection.getConnect();
   //   var conn = await MySqlConnection.connect(settings);
 
   //   DateTime startDateTime = DateTime(
@@ -1064,7 +1066,7 @@ class VesselService {
     final prefs = await SharedPreferences.getInstance();
     final timeZonePreferences = prefs.getString('SetTimezonePreferences');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     DateTime startDateTime = DateTime(
@@ -1193,7 +1195,7 @@ class VesselService {
 
   //   print('Current User ID: $memberId, Admin Level: $adminLevel');
 
-  //   var settings = Connection.getSettings();
+  //   var settings = Connection.getConnect();
   //   var conn = await MySqlConnection.connect(settings);
   //   int count = 0;
 
@@ -1243,7 +1245,7 @@ class VesselService {
   //   print('Current User ID: $memberId, Admin Level: $adminLevel');
 
   //   // Fetch data from the database
-  //   var settings = Connection.getSettings();
+  //   var settings = Connection.getConnect();
   //   var conn = await MySqlConnection.connect(settings);
   //   int count = 0;
 
@@ -1288,7 +1290,7 @@ class VesselService {
     print('Current User ID: $memberId, Admin Level: $adminLevel');
 
     // Fetch data from the database
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     int count = 0;
 
@@ -1303,7 +1305,7 @@ class VesselService {
       var result = await conn.query('''
       SELECT COUNT(*) AS count 
       FROM ai_mobile 
-      WHERE type_id IN (1, 2, 4, 5, 15, 19, 20) AND timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+      WHERE type_id IN (1, 2, 4, 5, 15, 19, 20)
     ''');
       count = result.first['count'] as int;
     }
@@ -1349,7 +1351,7 @@ class VesselService {
 
   //   print('Current User ID: $memberId, Admin Level: $adminLevel');
 
-  //   var settings = Connection.getSettings();
+  //   var settings = Connection.getConnect();
   //   var conn = await MySqlConnection.connect(settings);
   //   int count = 0;
 
@@ -1411,7 +1413,7 @@ class VesselService {
 
     print('Current User ID: $memberId, Admin Level: $adminLevel');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     int count = 0;
 

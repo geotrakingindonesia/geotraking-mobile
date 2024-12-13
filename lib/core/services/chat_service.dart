@@ -12,7 +12,7 @@ class ChatService {
 
   Future<List<Map<String, dynamic>>?> index() async {
     try {
-      var settings = Connection.getSettings();
+      var settings = Connection.getConnect();
       var conn = await MySqlConnection.connect(settings);
       var results = await conn.query('''
       SELECT 
@@ -152,7 +152,7 @@ AutoIDReference: ${responseJson['Confirmation']['AutoIDReference']},
 MessageStatus: ${responseJson['Confirmation']['MessageStatus']}
 ''';
         // Jika berhasil, simpan data ke database
-        var settings = Connection.getSettings();
+        var settings = Connection.getConnect();
         var conn = await MySqlConnection.connect(settings);
 
         var result = await conn.query('''
@@ -207,7 +207,7 @@ MessageStatus: ${responseJson['Confirmation']['MessageStatus']}
 
   Future<List<Map<String, dynamic>>> show() async {
     try {
-      var settings = Connection.getSettings();
+      var settings = Connection.getConnect();
       var conn = await MySqlConnection.connect(settings);
 
       var results = await conn.query('SELECT teks, sender_id, mobile_id, created_at, expired_at, response_api FROM ai_geo_chat');

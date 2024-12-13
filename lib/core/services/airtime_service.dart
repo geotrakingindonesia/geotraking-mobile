@@ -13,7 +13,7 @@ class AirtimeService {
   //   int memberId = currentUser?.id ?? 0;
   //   int isAdmin = currentUser?.isAdmin ?? 0;
 
-  //   var settings = Connection.getSettings();
+  //   var settings = Connection.getConnect();
   //   var conn = await MySqlConnection.connect(settings);
   //   var results = await conn.query('''
   //   SELECT
@@ -87,7 +87,7 @@ class AirtimeService {
     int memberId = currentUser?.id ?? 0;
     int isAdmin = currentUser?.isAdmin ?? 0; // Angka 0 atau 1
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     String query;
@@ -200,7 +200,7 @@ class AirtimeService {
   }
 
   Future<List<HistoryAirtime>> getHistoryAirtime(String idfull) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -233,7 +233,7 @@ class AirtimeService {
   Future<void> storePembayaranAirtime(String mobileId) async {
     final now = DateTime.now().toUtc().add(Duration(hours: 7));
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     MemberUser? currentUser = await _authService.getCurrentUser();

@@ -52,7 +52,8 @@ dependencies:
   # googleapis_auth: ^1.6.0 #package utk ai chatbot
   # google_generative_ai: ^0.4.6
   # web_socket_channel: ^3.0.1
-  device_preview: ^1.2.0
+  
+  device_preview: ^1.2.0 #package 
 
   dio: ^5.7.0
 
@@ -60,11 +61,9 @@ dependencies:
   flutter_chat_ui: ^1.6.15
 
   # mailer: ^6.2.0
-  email_otp: ^3.0.2
-
-  flutter_launcher_icons: ^0.14.2
-
-  flutter_map_marker_cluster: ^1.4.0
+  email_otp: ^3.0.2 #package sent otp code to email user
+  flutter_launcher_icons: ^0.14.2 #package launch icon aplikasi
+  flutter_map_marker_cluster: ^1.4.0 #package clustering vessel on map
 
 dev_dependencies:
   flutter_test:

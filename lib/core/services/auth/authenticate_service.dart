@@ -41,7 +41,7 @@ class AuthService {
   }
 
   Future<bool> validateLogin(String email, String password) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     final deviceId = await getDeviceId();
@@ -122,7 +122,7 @@ class AuthService {
     final memberId = prefs.getInt('id');
 
     if (memberId != null) {
-      var settings = Connection.getSettings();
+      var settings = Connection.getConnect();
       var conn = await MySqlConnection.connect(settings);
 
       final result = await conn
@@ -154,7 +154,7 @@ class AuthService {
 
   Future<void> saveLoginHistory(int memberId, String device, String model,
       String brand, String host) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     final create_at = DateTime.now().toUtc().add(Duration(hours: 7));
 
@@ -166,7 +166,7 @@ class AuthService {
   }
 
   Future<void> updateLogoutHistory(int memberId) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     final delete_at = DateTime.now().toUtc().add(Duration(hours: 7));
     await conn.query(
@@ -176,7 +176,7 @@ class AuthService {
 
   // Future<void> logoutFromOtherDevice(String deviceId) async {
   //   // Logout perangkat lain yang terhubung dengan akun yang sama
-  //   var settings = Connection.getSettings();
+  //   var settings = Connection.getConnect();
   //   var conn = await MySqlConnection.connect(settings);
 
   //   // Update status login perangkat lain
@@ -187,7 +187,7 @@ class AuthService {
   // }
 
   Future<void> logoutFromOtherDevice(String deviceId) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     // Update status login perangkat lain
@@ -214,7 +214,7 @@ class AuthService {
     final memberId = prefs.getInt('id');
 
     if (memberId != null) {
-      var settings = Connection.getSettings();
+      var settings = Connection.getConnect();
       var conn = await MySqlConnection.connect(settings);
 
       // Set `is_loggedin` menjadi 0 di database
@@ -230,7 +230,7 @@ class AuthService {
 
   Future<bool> register(
       String name, String email, String noHp, String password) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var result =
         await conn.query('SELECT * FROM ai_member WHERE email = ?', [email]);
@@ -260,7 +260,7 @@ class AuthService {
       throw Exception('User not logged in');
     }
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     if (newPassword != confirmPassword) {
@@ -288,7 +288,7 @@ class AuthService {
       throw Exception('User not logged in');
     }
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     await conn.query(

@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PortPelabuhanService {
   // fungsi get data port pelabuhan ri
   Future<List<PortPelabuhan>> getDataPortPelabuhan() async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('select * from ai_port_detail');
 
@@ -33,7 +33,7 @@ class PortPelabuhanService {
 
   // fungsi get detail data port pelabuhan ri
   Future<PortRi?> getDetailDataPortPelabuhan(String kodePelabuhan) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query(
         'select * from ai_port_ri where kd_pelabuhan =?', [kodePelabuhan]);

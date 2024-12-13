@@ -14,7 +14,7 @@ class TransactionAirtimeService {
 
     print('Current User ID: $memberId');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 

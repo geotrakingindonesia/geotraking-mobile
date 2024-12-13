@@ -3,7 +3,7 @@
 
 // class VmsMonitoringService {
 //   Future<Map<String, dynamic>?> index(String searchValue) async {
-//     var settings = Connection.getSettings();
+//     var settings = Connection.getConnect();
 //     var conn = await MySqlConnection.connect(settings);
 
 //     var results = await conn.query('''
@@ -51,7 +51,7 @@ import 'package:mysql1/mysql1.dart';
 
 class VmsMonitoringService {
   Future<Map<String, dynamic>?> index(String searchValue) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     String query = '''

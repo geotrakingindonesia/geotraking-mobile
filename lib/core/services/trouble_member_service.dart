@@ -16,7 +16,7 @@ class TroubleMemberService {
 
     print('Current User ID: $memberId');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -72,7 +72,7 @@ class TroubleMemberService {
 
     print('Current User ID: $memberId');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -123,7 +123,7 @@ class TroubleMemberService {
   }
 
   Future<List<TroubleMemberDetail>> getCommentsTroubleData(int id) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -181,7 +181,7 @@ class TroubleMemberService {
   }
 
   Future<List<TroubleAllMember>> getProcessTroubleDataAdmin() async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -238,7 +238,7 @@ class TroubleMemberService {
   }
 
   Future<List<TroubleAllMember>> getHistoryTroubleDataAdmin() async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -295,7 +295,7 @@ class TroubleMemberService {
   }
 
   Future<Map<String, dynamic>?> searchDataKapal(String idfull) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -339,7 +339,7 @@ class TroubleMemberService {
 
     print('Current User ID: $memberId');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     await conn.query('''
@@ -359,7 +359,7 @@ class TroubleMemberService {
 
     print('Current User ID: $memberId');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     await conn.query('''
@@ -376,7 +376,7 @@ class TroubleMemberService {
 
     print('Current User ID: $memberId');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     await conn.query('''
@@ -391,7 +391,7 @@ class TroubleMemberService {
   }
 
   Future<void> processingTroubleData(int id) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     await conn.query('''
       UPDATE ai_trouble_member
@@ -403,7 +403,7 @@ class TroubleMemberService {
   }
 
   Future<void> finishedTroubleData(int id) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     await conn.query('''
     UPDATE ai_trouble_member
@@ -420,7 +420,7 @@ class TroubleMemberService {
 
     print('Current User ID: $memberId');
 
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     DELETE FROM ai_trouble_member

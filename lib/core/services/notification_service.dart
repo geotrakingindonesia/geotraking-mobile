@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class NotificationService {
   // fungsi get notification
   Future<List<NotificationModel>> getNotification() async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('''
     SELECT 
@@ -42,7 +42,7 @@ class NotificationService {
 
   // insert data notif ke database
   Future<void> saveNotification(NotificationModel notification) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
 
     await conn.query('''

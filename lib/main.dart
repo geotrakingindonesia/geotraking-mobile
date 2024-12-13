@@ -1,4 +1,4 @@
-import 'package:device_preview/device_preview.dart';
+// import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:geotraking/core/routes/app_routes.dart';
 import 'package:geotraking/core/routes/on_generate_route.dart';

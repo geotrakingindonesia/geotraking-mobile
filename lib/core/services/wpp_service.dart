@@ -11,7 +11,7 @@ class WppRiService {
 
   // Fungsi get data wpp ri
   Future<List<WppRi>> getDataWpp() async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('select * from ai_wpp');
 
@@ -33,7 +33,7 @@ class WppRiService {
 
   // Fungsi get data zona wpp
   Future<List<WppLatLong>> getDetailDataWpp(int wppId) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn
         .query('select * from ai_wpp_detail where wpp_id =?', [wppId]);

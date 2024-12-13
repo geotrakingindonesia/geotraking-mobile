@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class BasarnasService {
   // Fungsi get data basarnas dari table ai_basarnas
   Future<List<Basarnas>> getDataBasarnas() async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var results = await conn.query('select * from ai_basarnas');
 

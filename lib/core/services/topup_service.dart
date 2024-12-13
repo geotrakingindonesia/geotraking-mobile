@@ -4,7 +4,7 @@ import 'package:mysql1/mysql1.dart';
 class TopupService {
   // fungsi get data topup
   Future<List<Map<String, dynamic>>?> getDataTopUp({int? typeSatelit, int? jenisSatelit}) async {
-    var settings = Connection.getSettings();
+    var settings = Connection.getConnect();
     var conn = await MySqlConnection.connect(settings);
     var query = '''
     SELECT 
